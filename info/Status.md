@@ -9,7 +9,7 @@ Samples: ✅ (done)   ⏹ (execution stopped)    ⏺ (in process)   ❌(not done
 
 ## SERVER
 
-- Database (MySQL)[E]:
+- Database (MySQL)[E]:⏹
 	- Username and password table (with hash).
 	- World status (user status, room status, etc.).
 - Connections and users array[J].
