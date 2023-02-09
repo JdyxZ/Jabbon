@@ -52,7 +52,7 @@ function draw() {
 
     var ctx = canvas.getContext('2d');
 
-    MYAPP.draw(ctx,canvas);
+    MYAPP.draw(canvas,ctx);
 }
 
 function update(dt)
