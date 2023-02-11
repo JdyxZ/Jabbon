@@ -17,7 +17,7 @@ function User( name)
     this.animation = "idle";
     this.room = "none";
 
-    this.target = [0,0];
+    this.target = [40,0];
 }
 
 function Room( name, background)
@@ -31,8 +31,8 @@ function Room( name, background)
 
 Room.prototype.addUser = function(user)
 {
-    this.people.push( user );
-    user.room = this;
+    this.people.push( user.name );
+    user.room = this.name;
 }
 
 var WORLD = {
@@ -40,6 +40,11 @@ var WORLD = {
     users:{},
     room_count: 0,
     last_id_room: 0,
+
+    getUser:function (name)
+    {
+        return this.users[name];
+    },
 
     createRoom:function (name, background)
     {

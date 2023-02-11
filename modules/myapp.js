@@ -7,9 +7,9 @@ var MYAPP = {
     {
         //TEST MODEL
         this.current_room = WORLD.createRoom("start","media/images/background.png");
-        this.myuser = WORLD.createUser("eric");
+        //this.myuser = WORLD.createUser("eric");
 
-        this.current_room.addUser(this.myuser);
+        //this.current_room.addUser(this.myuser);
 
         //INIT
         VIEW.init();
@@ -26,12 +26,12 @@ var MYAPP = {
         //Check if the user is already created
         if(this.myuser)
         {
-            this.updateUser(this.myuser);
+            this.updateUser(this.myuser,dt);
         }
 
     },
 
-    updateUser:function(user)
+    updateUser:function(user,dt)
     {
         var current_room = this.current_room;
 

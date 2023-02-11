@@ -51,7 +51,7 @@ var VIEW = {
         ctx.drawImage( background , background.width * this.scale_factor / -2, background.height * this.scale_factor / -2, background.width * this.scale_factor, background.height * this.scale_factor);
 
         //Draw all users in the room
-        for(var i = 0; i < room.people.length; i++) this.drawUser(ctx, room.people[i]);
+        for(var i = 0; i < room.people.length; i++) this.drawUser(ctx, WORLD.getUser(room.people[i]));
     },
 
     drawUser:function(ctx, user)
@@ -67,7 +67,7 @@ var VIEW = {
 
         //Or change all the scales or with a image editor modify all the images to have the same size more or less
         var scale = 1.5;
-        ctx.drawImage( img, frame*32, user.facing*64,32,64, user.position - 15, -22 , 32, 64);
+        ctx.drawImage( img, frame*32, user.facing*64,32,64, user.position, -22 , 32, 64);
 
         //To have a debugg and see the line
         // ctx.strokeStyle = "white";
