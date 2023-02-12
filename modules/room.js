@@ -22,11 +22,11 @@ function User( name)
 
 function Room( name, background)
 {
-    this.id= 0;
-    this.name= name;
-    this.background= background;
-    this.people = [];
-    this.range = [-100,100];
+    this.id= data.id;
+    this.name= data.name;
+    this.background= data.background;
+    this.people = data.people;
+    this.range = data.range;
 }
 
 Room.prototype.addUser = function(user)
@@ -46,17 +46,29 @@ var WORLD = {
         return this.users[name];
     },
 
-    createRoom:function (name, background)
+    // createRoom:function (name, background)
+    // {
+    //     var room = new Room( name, background);
+    //     room.id = this.last_id_room ++;
+
+    //     this.last_id_room ++ ;
+    //     this.room_count ++ ;
+    //     this.rooms[name] = room;
+
+    //     return room;
+    // },
+    createRoom:function (data)
     {
-        var room = new Room( name, background);
+        var room = new Room( data);
         room.id = this.last_id_room ++;
 
         this.last_id_room ++ ;
         this.room_count ++ ;
-        this.rooms[name] = room;
+        this.rooms[data.name] = room;
 
         return room;
     },
+    
 
     createUser:function (name)
     {
@@ -64,6 +76,15 @@ var WORLD = {
         this.users[name] = user;
 
         return user;
+    },
+
+    fromJSON: function( json )
+    {
+        for(var i in json.rooms)
+        {
+            this.createRoom(json.rooms)
+        }
+        this.last_id_room = json.last_id;
     }
 }
 

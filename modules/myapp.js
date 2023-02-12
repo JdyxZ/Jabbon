@@ -5,14 +5,25 @@ var MYAPP = {
 
     init:function()
     {
+        fetch("rooms.json")
+        .then(function(resp){ return resp.json(); })
+        .then(function(json){
+             WORLD.fromJSON(json);
+             MYAPP.onWorldLoaded();
+            });
         //TEST MODEL
-        this.current_room = WORLD.createRoom("start","media/images/background.png");
+        //this.current_room = WORLD.createRoom("start","media/images/background.png");
         //this.myuser = WORLD.createUser("eric");
 
         //this.current_room.addUser(this.myuser);
 
         //INIT
         VIEW.init();
+    },
+
+    onWorldLoaded():function()
+    {
+        this.current_room = WORLD.rooms.start;
     },
 
     draw: function(canvas,ctx) {
