@@ -42,6 +42,12 @@ Number.prototype.clamp = function(min, max)
 	return Math.min(Math.max(this.valueOf(), min), max);
 };
 
+Number.prototype.lerp = function(target, step) 
+{
+	const origin = this.valueOf();
+	return origin * (1 - step) + target * step;
+};
+
 Date.prototype.getTime = function() 
 {
 	return `${this.getHours().toString().padStart(2,"0")}:${this.getMinutes().toString().padStart(2, "0")}`

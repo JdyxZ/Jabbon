@@ -1,3 +1,6 @@
+
+/***************** VIEW *****************/
+
 var canvas = document.getElementById('canvas');
 var last = performance.now();
 var mouse_pos = [0,0];

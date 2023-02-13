@@ -1,55 +1,40 @@
-// Global vars
-var request_id = 0;
+// Server data
 const server_port = 9014;
 
-// Database
-var mysql = require('mysql');
-var client = mysql.createConnection({  database:'ecv-2019', user: 'ecv-user',  password: 'ecv-upf-2019',  host: '127.0.0.1'});
-
 // Good practice to know my process pid
-console.log("My pid is "+ process.pid);
+console.log(`Serving with pid ${process.pid}`);
 
-// Module import
+// External module imports
 const http = require('http');
 const url = require('url');
 const WebSocketServer = require('websocket').server;
 const express = require('express');
 
+// Own module imports
+const SERVER = require("server.js");
+SERVER.init();
+
 /***************** HTTP SERVER *****************/
 
-// Create
-const server = http.createServer(onHTTPRequest);
+// Create ExpressJS app
+const app = express(); // We use ExpressJS to deal with requests, since it allows us to manage request in a simpler way and easily serve files to the client
 
-// Request
-function onHTTPRequest(request, response)
-{
-    // Log the request in the terminal
-    console.log(`REQUEST: ${request.url}`);
+// Create HTTP server
+const server = http.createServer(app); // Instead of passing a custom function to manage requests as a callback, we pass the express app
 
-    // Get request params
-	const url_info = url.parse( request.url, true ); //all the request info is here
-	const pathname = url_info.pathname; //the address
-	const params = url_info.query; //the parameters
+/***************** EXPRESS JS *****************/
 
-    // Manage request
-    switch(request.pathname)
-    {
-       case "/restartDB":
-            // TODO: restart the DB
-            response.end("OK");
-        case "/login":
-            // TODO: try to log in the user and give him a response
-            response.end("OK");
-        default:
-            // Here should send an error and say something like "Sry, unknown url"
-            response.end("Request successfully received!"); // Send response
-    }
-}
+// To handle static files, redirect to public folder
+//app.use(express.static('public'));
+// TODO: create a public folder
 
-// Ready
-server.listen(server_port, function() {
-	console.log(`Server listening in port ${server_port}!`);
+// To handle request of type GET to path '/'
+app.get('/', function (req, res) {
+  res.send('Hello World!');
 });
+
+// Launch the server
+app.listen(server_port, () => SERVER.onReady(server_port));
 
 /***************** WEBSOCKET *****************/
 
@@ -58,42 +43,14 @@ const wss = new WebSocketServer({ // create the server
     httpServer: server	 //if we already have our HTTPServer in server variable...
 });
 
-
+// Client connection
 wss.on('request', function(request) {
-    var connection = request.accept(null, request.origin);
-    console.log("NEW WEBSOCKET USER!!!");
-    connection.sendUTF("welcome!");
+    
+    // Accept request and establish connection
+    const connection = request.accept(null, request.origin);
 
-    connection.on('message', function(message) {
-        if (message.type === 'utf8') {
-        const obj = JSON.parse(message.utf8Data);
-		console.log( "NEW MSG: " + Object.keys(obj) ); // process WebSocket message
-        }
-    });
-
-    connection.on('close', function(connection) {
-	  console.log("USER IS GONE");// close user connection
-    });
-
-    client.query('USE prueba');
-    client.query(
-    'INSERT INTO usuario SET nombre = ?, password = ?',
-    ['eric', 'miclave'] //important, avoids SQL-injects
-    );
-    
-    client.query( 'SELECT * FROM usuario',
-        function selectUsuario(err, results, fields) {
-    
-        if (err) {
-            console.log("Error: " + err.message);
-            throw err;
-        }
-    
-        console.log("Number of rows: "+results.length);
-        console.log(results);
-    
-        client.end();
-    });
+    // Websocket callbacks
+    SERVER.onUserConnected(connection);
+    connection.on('message', SERVER.onMessage(message));
+    connection.on('close', SERVER.onUserDisconnected(connection));
 });
-
-/***************** EXPRESS JS *****************/

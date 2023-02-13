@@ -1,3 +1,5 @@
+/***************** CONTROLLER *****************/
+
 var MYAPP = {
 
     current_room: null,
@@ -11,19 +13,21 @@ var MYAPP = {
              WORLD.fromJSON(json);
              MYAPP.onWorldLoaded();
             });
-        //TEST MODEL
-        //this.current_room = WORLD.createRoom("start","media/images/background.png");
-        //this.myuser = WORLD.createUser("eric");
+            
+        // TEST MODEL
+        // this.current_room = WORLD.createRoom("start","media/images/background.png");
+        // this.myuser = WORLD.createUser("eric");
 
-        //this.current_room.addUser(this.myuser);
+        // this.current_room.addUser(this.myuser, null, null, null, null, null, null);
 
         //INIT
         VIEW.init();
+        CLIENT.init();
     },
 
     onWorldLoaded():function()
     {
-        this.current_room = WORLD.rooms.start;
+        this.current_room = WORLD.rooms[WORLD.default_room];
     },
 
     draw: function(canvas,ctx) {
@@ -47,7 +51,7 @@ var MYAPP = {
         var current_room = this.current_room;
 
             //Clamp the movement of the user
-            user.target[0] = Clamp(user.target[0],current_room.range[0],current_room.range[1]);
+            user.target[0] = user.target[0].clamp(current_room.range[0],current_room.range[1]);
 
             //To manage the movement of the avatar
             var diff = (user.target[0] - user.position);
@@ -81,7 +85,7 @@ var MYAPP = {
             }
 
             //To interpolate the movement of the cam
-            VIEW.cam_offset = Lerp( VIEW.cam_offset, -user.position , 0.02);
+            VIEW.cam_offset = VIEW.cam_offset.lerp(-user.position , 0.02);
     },
 
     onMouse:function(e)

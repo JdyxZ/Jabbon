@@ -12,8 +12,25 @@ Samples: ✅ (done)   ⏹ (execution stopped)    ⏺ (in process)   ❌(not done
 - Database (MySQL)[E]:⏹
 	- Username and password table (with hash).
 	- World status (user status, room status, etc.).
+
 - Connections and users array[J].
-- Websocket requests (sendMessage, receiveMessages, serve files, onUserConnet, onUserLeft, etc.)[J].
+
+- ExpressJS [J]:
+	- Log in.
+	- Sign in.
+	- Log out (?)
+	- Fetch world data.
+	- Serve files: ?
+	- User connect.
+	- User left.
+
+- Websocket communications [J]:
+	- Typing.
+	- Send chat message.
+	- Receive chat message.
+	- User moving or changing facing.
+	- User chaging room.
+
 - updateValues[J/E].
 
 
