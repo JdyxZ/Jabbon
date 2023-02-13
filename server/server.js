@@ -17,7 +17,7 @@ var SERVER =
     init: async function(){
 
         // Load world data
-        const data = await fs.readFile("./public/rooms.json");
+        const data = await fs.readFile("../public/rooms.json");
         WORLD.fromJSON(JSON.parse(data));
         
         // Notify success
