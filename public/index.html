@@ -2,17 +2,30 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css/canvas.css"/>
+        <link rel="stylesheet" type="text/css" href="css/login.css"/>
     </head>
     <body>
-        <canvas id="canvas"></canvas>
+        <div id="grid-container">
+            <div class="login-display">
+                <div class="label-login">Log in</div>
+                <div class="input-username-login">
+                    <input type="text" id="fname" name="fname">
+                </div>
+                <div class="input-password-login">passwordinput</div>
+                <div class="submit-button-login">submitbutton</div>
+                <div class="change-signup">sign in</div>
+            </div>
+            
+        </div>
+        <canvas style="display:none"id="canvas"></canvas>
 
     <!-- <script scr="modules/server/init.js"></script> -->
-    <script type="application/javascript" src="room.js"></script> <!-- MODEL -->
-    <script type="application/javascript" src="view.js"></script> <!-- VIEW -->
-    <script type="application/javascript" src="myapp.js"></script> <!-- CONTROLLER -->
+    <!-- <script type="application/javascript" src="room.js"></script> MODEL
+    <script type="application/javascript" src="view.js"></script> VIEW
+    <script type="application/javascript" src="myapp.js"></script> CONTROLLER
     <script type="application/javascript" src="client.js"></script> 
     <script type="application/javascript" src="framework.js"></script>
-    <script type="application/javascript" src="canvas/canvas.js"></script>
+    <script type="application/javascript" src="canvas/canvas.js"></script> -->
 
     </body>
 </html>
