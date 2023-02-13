@@ -1,7 +1,7 @@
 // Imports
 const mysql = require('mysql');
 const fs = require('fs').promises;
-const model = require("./modules/room.js");
+const model = require("../public/room.js");
 const WORLD = model.WORLD;
 
 /***************** SERVER *****************/
@@ -14,22 +14,24 @@ var SERVER =
     last_id : 0,
 
     // Init server
-    init: function(){
+    init: async function(){
 
         // Load world data
-        const data = await fs.readFile("./modules/room.json");
+        const data = await fs.readFile("./public/rooms.json");
         WORLD.fromJSON(JSON.parse(data));
-        console.log(`Number of rooms ${WORLD.num_rooms}`);
+        
+        // Notify success
+        console.log(`World data successfully loadad! \nNumber of rooms ${WORLD.num_rooms}`);
 
         // SQL Database
-        this.DB = mysql.createConnection(
+        /*this.DB = mysql.createConnection(
             {  
                 database:'ecv-2019',
                 user: 'ecv-user',
                 password: 'ecv-upf-2019',
                 host: '127.0.0.1'
             }
-        );
+        );*/
     },
 
     // Server callbacks
@@ -64,7 +66,7 @@ var SERVER =
         room.addUser(user);
 
         // Insert new user
-        client.query('USE prueba');
+       /* client.query('USE prueba');
         client.query(
         'INSERT INTO usuario SET nombre = ?, password = ?',
         ['eric', 'miclave'] //important, avoids SQL-injects
@@ -82,7 +84,7 @@ var SERVER =
             console.log(results);
         
             client.end();
-        });
+        }); */
     },
 
     onUserDisconnected: function(connection)
@@ -91,3 +93,5 @@ var SERVER =
         // delete socket;
     }
 }
+
+module.exports = SERVER;

@@ -5,7 +5,7 @@ var MYAPP = {
     current_room: null,
     myuser: null,
 
-    init:function()
+    init: function()
     {
         fetch("rooms.json")
         .then(function(resp){ return resp.json(); })

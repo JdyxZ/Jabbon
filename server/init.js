@@ -1,17 +1,15 @@
-// Server data
-const server_port = 9014;
-
 // Good practice to know my process pid
 console.log(`Serving with pid ${process.pid}`);
 
 // External module imports
 const http = require('http');
 const url = require('url');
-const WebSocketServer = require('websocket').server;
 const express = require('express');
+const morgan = require('morgan');
+const WebSocketServer = require('websocket').server;
 
 // Own module imports
-const SERVER = require("server.js");
+const SERVER = require("./server.js");
 SERVER.init();
 
 /***************** HTTP SERVER *****************/
@@ -24,17 +22,49 @@ const server = http.createServer(app); // Instead of passing a custom function t
 
 /***************** EXPRESS JS *****************/
 
-// To handle static files, redirect to public folder
-//app.use(express.static('public'));
-// TODO: create a public folder
+// Settings
+app.set('port', process.env.PORT || 9014);
 
-// To handle request of type GET to path '/'
-app.get('/', function (req, res) {
-  res.send('Hello World!');
+// Middleware
+app.use(morgan('short')); // To see request content
+app.use(express.json()); // To parse json content
+app.use(express.urlencoded({extended: false})); // User send data
+app.use(express.static('public')); // To handle static files, redirect to public folder
+
+// Routes
+app.get('/user', function(req, res){ // User signin
+  res.json({
+    username: "Pedro",
+    password: 1234
+  })
+});
+
+app.post('/sigin', function(req, res){ // User signin
+  console.log(req.body);
+  //console.log(req.params);
+  res.end("Sigin request received");
+});
+
+app.post('/login', function(req, res){ // User login
+  console.log(req.body);
+  //console.log(req.params);
+  res.end("Login request received");
+});
+
+app.put('/user', function(req, res){ // User update
+  console.log(req.body);
+  //console.log(req.params);
+  res.end("User update request received");
+});
+
+app.delete('/user', function(req, res){ // User delete
+  console.log(req.body);
+  //console.log(req.params);
+  res.end("User delete request received");
 });
 
 // Launch the server
-app.listen(server_port, () => SERVER.onReady(server_port));
+app.listen(app.get('port'), () => SERVER.onReady(app.get('port')));
 
 /***************** WEBSOCKET *****************/
 

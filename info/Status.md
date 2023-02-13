@@ -15,6 +15,8 @@ Samples: ✅ (done)   ⏹ (execution stopped)    ⏺ (in process)   ❌(not done
 
 - Connections and users array[J].
 
+- Install Postman. J -> ✅ E -> ?
+
 - ExpressJS [J]:
 	- Log in.
 	- Sign in.

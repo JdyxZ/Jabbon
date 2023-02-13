@@ -1,5 +1,8 @@
 # Jabbon
  
+## Notes
+
+Run server with nodemon: npm run server
 
 ## Execution flow
 

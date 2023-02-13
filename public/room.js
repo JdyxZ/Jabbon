@@ -2,10 +2,10 @@
 
 /***************** USER *****************/
 
-var FACING_RIGHT = 0;
-var FACING_FRONT = 1;
-var FACING_LEFT = 2;
-var FACING_BACK = 3;
+const FACING_RIGHT = 0;
+const FACING_FRONT = 1;
+const FACING_LEFT = 2;
+const FACING_BACK = 3;
 
 function User(name, position, avatar, facing, animation, room, target)
 {
@@ -71,9 +71,11 @@ var WORLD = {
 
     fromJSON: function(json)
     {
-        Object.values(json.rooms).forEach(({name, data}) => this.createRoom(name, data));        
+        // Create rooms
+        for( const name in json.rooms)
+            this.createRoom(name, json.rooms[name]);
         
-        // Set room info
+        // Set room general info
         this.default_room = json.default_room;
         this.last_id_room = json.last_id;
     },
@@ -81,7 +83,7 @@ var WORLD = {
     getUser: function (name)
     {
         return this.users[name];
-    }
+    },
 
     getRoom: function(name)
     {
@@ -90,9 +92,9 @@ var WORLD = {
 
 }
 
-if(typeof(window) == undefined)
+if(typeof(window) == "undefined")
 {
     module.exports = {
-        WORLD, Room, User, FACING_RIGHT, FACING_LEFT, FACING_BACK, FACING_FRONT
+        WORLD, Room, User, FACING_RIGHT, FACING_FRONT, FACING_LEFT, FACING_BACK
     }
 }
