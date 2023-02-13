@@ -10,7 +10,7 @@ var SERVER =
     // Server data
     port: null,
     DB: null,
-    clients : [],
+    clients : {},
     last_id : 0,
 
     // Init server
@@ -34,22 +34,59 @@ var SERVER =
         );*/
     },
 
-    // Server callbacks
+    // Ready callback
     onReady: function(port)
     {
         console.log(`Server listening at port ${port}!`);
         this.port = port;
     },
 
-    onMessage: function(message)
+    // ExpressJS callbacks
+    signin: function(credentials)
     {
-        console.log("New user message");
+        console.log(credentials);
+    },
+
+    login: function(credentials)
+    {
+        console.log(credentials);
+    },
+
+    getUser: function(req, res)
+    {
+        res.json({
+            username: "Pedro",
+            password: 1234
+          })
+    },
+
+    updateUser: function(credentials)
+    {
+        console.log(credentials);
+    },
+
+    removeUser: function(credentials)
+    {
+        console.log(credentials);
+    },
+
+    // WebSocket callbacks
+
+    onMessage: function(connection, message)
+    {
+        // Check
+        if (message.type != 'utf8') 
+            return;
 
         // Process WebSocket message
-        if (message.type === 'utf8') 
-        {
+        try {
             const obj = JSON.parse(message.utf8Data);
-            console.log(`${obj}`); 
+        } 
+        catch (error) {
+            if (error instanceof SyntaxError)
+                connection.sendUTF("ERROR: The message you have sent is not a JSON Object, try again");
+            else
+                connection.sendUTF(`ERROR: ${error}`);
         }
     },
 
@@ -57,13 +94,13 @@ var SERVER =
     {
         console.log("User has joined");
 
-        // Push connection
-        this.clients.push(connection);
-
         // Create new user and store it
         const user = new model.User("hola", null, null, null, null, null, null);
         const room = WORLD.getRoom(WORLD.default_room);
         room.addUser(user);
+
+        // Store connection
+        this.clients[user.name] = connection;
 
         // Insert new user
        /* client.query('USE prueba');
@@ -91,6 +128,19 @@ var SERVER =
     {
         console.log("User has left");
         // delete socket;
+    },
+
+    // Methods
+    onTick: function()
+    {
+        Object.keys(this.clients).forEach(name => {
+            const user = WORLD.getUser(name);
+        })
+    },
+
+    sendMessage(addressee, type, content, sender, time)
+    {
+        const connection = this.clients[addressee];
     }
 }
 

@@ -6,6 +6,7 @@ var CLIENT =
     // Client data
     port: 9014,
     socket: null,
+    debug: null,
     
     init: function()
     {
@@ -20,7 +21,14 @@ var CLIENT =
 
     onMessage: function(message)
     {
-        console.log(`New message received: ${message}`);
+        // Process message
+        if(message.data.includes("ERROR"))
+            console.log(message.data);
+        else
+        {
+            const obj = JSON.parse(message.data);
+            console.log("New message received: ", obj);
+        }
     },
 
     onOpen: function()

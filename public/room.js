@@ -41,7 +41,7 @@ var WORLD = {
 
     // Objects
     rooms: {},
-    users:{},
+    users: {},
 
     // Room info
     default_room: null,
@@ -88,6 +88,28 @@ var WORLD = {
     getRoom: function(name)
     {
         return this.rooms[name];
+    },
+
+    addUser: function(user)
+    {
+        if(users[user.name] != undefined)
+        {
+            console.error(`The user ${user.name} already exists`);
+            return;
+        }
+
+        users[user.name] = user;
+    },
+
+    addRoom: function(room)
+    {
+        if(rooms[room.name] != undefined)
+        {
+            console.error(`The room ${room.name} already exists`);
+            return;
+        }
+
+        rooms[room.name] = room;
     }
 
 }

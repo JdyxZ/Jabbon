@@ -25,7 +25,7 @@ var MYAPP = {
         CLIENT.init();
     },
 
-    onWorldLoaded():function()
+    onWorldLoaded:function()
     {
         this.current_room = WORLD.rooms[WORLD.default_room];
     },

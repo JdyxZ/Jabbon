@@ -32,39 +32,30 @@ app.use(express.urlencoded({extended: false})); // User send data
 app.use(express.static('public')); // To handle static files, redirect to public folder
 
 // Routes
-app.get('/user', function(req, res){ // User signin
-  res.json({
-    username: "Pedro",
-    password: 1234
-  })
-});
+app.get('/user', SERVER.getUser);
 
 app.post('/sigin', function(req, res){ // User signin
-  console.log(req.body);
-  //console.log(req.params);
+  SERVER.singin(req.body);
   res.end("Sigin request received");
 });
 
 app.post('/login', function(req, res){ // User login
-  console.log(req.body);
-  //console.log(req.params);
+  SERVER.login(req.body);
   res.end("Login request received");
 });
 
 app.put('/user', function(req, res){ // User update
-  console.log(req.body);
-  //console.log(req.params);
+  SERVER.updateUser(req.body);
   res.end("User update request received");
 });
 
 app.delete('/user', function(req, res){ // User delete
-  console.log(req.body);
-  //console.log(req.params);
+  SERVER.deleteUser(req.body);
   res.end("User delete request received");
 });
 
 // Launch the server
-app.listen(app.get('port'), () => SERVER.onReady(app.get('port')));
+server.listen(app.get('port'), () => SERVER.onReady(app.get('port')));
 
 /***************** WEBSOCKET *****************/
 
@@ -81,6 +72,6 @@ wss.on('request', function(request) {
 
     // Websocket callbacks
     SERVER.onUserConnected(connection);
-    connection.on('message', SERVER.onMessage(message));
-    connection.on('close', SERVER.onUserDisconnected(connection));
+    connection.on('message', (message) => SERVER.onMessage(connection, message));
+    connection.on('close', SERVER.onUserDisconnected);
 });
