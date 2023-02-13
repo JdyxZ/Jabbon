@@ -114,6 +114,15 @@ var WORLD = {
 
 }
 
+/***************** MESSAGE *****************/
+function Message(sender, type, content, time)
+{
+    this.sender = sender || "";
+    this.type = type || "ERROR";
+    this.content = content || "";
+    this.time = time || "";
+}
+
 if(typeof(window) == "undefined")
 {
     module.exports = {

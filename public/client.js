@@ -19,16 +19,28 @@ var CLIENT =
         this.socket.onclose = this.onClose.bind(this);
     },
 
-    onMessage: function(message)
+    // WebSocket callbacks
+    onMessage: function(ws_message)
     {
         // Process message
-        if(message.data.includes("ERROR"))
-            console.log(message.data);
-        else
+        const message = JSON.parse(ws_message.data);
+
+        switch(message.type)
         {
-            const obj = JSON.parse(message.data);
-            console.log("New message received: ", obj);
-        }
+            case "TEXT":
+                console.log(`New TEXT message received: ${message.content}`);
+                break;
+            case "TYPING":
+                console.log(`New TYPING message received: ${message.content}`);
+                break;
+            case "PROFILE":
+                console.log(`New PROFILE message received: ${message.content}`);
+                break;
+            case "ERROR":
+                console.log(obj.content);
+                break;
+        }        
+        
     },
 
     onOpen: function()
@@ -39,6 +51,33 @@ var CLIENT =
     onClose: function()
     {
         console.log("Disconnecting!");
+    },
+
+    // Methods
+    sendMessage: function(sender, type, content, date)
+    {
+        // Build message
+        if (date == null) date = (new Date()).getTime();
+        let message = new model.Message(sender, type, content, date);
+
+        // Appned addresses to the message
+        message.addressees = [];
+
+        // Send message to user
+        this.socket.sendUTF(JSON.stringify(message));
+    },
+
+    sendMessage: function(sender, type, content, date, addressees)
+    {
+        // Build message
+        if (date == null) date = (new Date()).getTime();
+        let message = new model.Message(sender, type, content, date);
+
+        // Appned addresses to the message
+        message.addressees = addressees;
+
+        // Send message to user
+        this.socket.sendUTF(JSON.stringify(message));
     }
 
 }

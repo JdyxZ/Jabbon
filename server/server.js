@@ -72,7 +72,7 @@ var SERVER =
 
     // WebSocket callbacks
 
-    onMessage: function(connection, message)
+    onMessage: function(connection, ws_message)
     {
         // Check
         if (message.type != 'utf8') 
@@ -80,13 +80,15 @@ var SERVER =
 
         // Process WebSocket message
         try {
-            const obj = JSON.parse(message.utf8Data);
+            const message = JSON.parse(ws_message.utf8Data);
+            this.sendMessage(message.sender, message.type, message.content, message.date, message.addressees);
+
         } 
         catch (error) {
             if (error instanceof SyntaxError)
-                connection.sendUTF("ERROR: The message you have sent is not a JSON Object, try again");
+                connection.sendUTF("system", "ERROR", "The message you have sent is not a JSON Object, try again", null);
             else
-                connection.sendUTF(`ERROR: ${error}`);
+            connection.sendUTF("system", "ERROR", error, null);
         }
     },
 
@@ -138,9 +140,40 @@ var SERVER =
         })
     },
 
-    sendMessage(addressee, type, content, sender, time)
+    sendMessage: function(sender, type, content, date, addressees)
     {
-        const connection = this.clients[addressee];
+        if(addressees.length == 0)
+        {
+            // Iterate through connections
+            Object.values(this.clients).forEach(connection => {
+            
+                // Build message
+                if (date == null) date = (new Date()).getTime();
+                const message = new model.Message(sender, type, content, date);
+
+                // Send message to user
+                connection.sendUTF(JSON.stringify(message));
+
+                // Return
+                return;
+
+            });
+        }
+
+        // Iterate through addresses
+        for(addressee of addressees)
+        {
+            // Get connection
+            const connection = this.clients[addressee];
+    
+            // Build message
+            if (date == null) date = (new Date()).getTime();
+            const message = new model.Message(sender, type, content, date);
+    
+            // Send message to user
+            connection.sendUTF(JSON.stringify(message));
+        }
+
     }
 }
 
