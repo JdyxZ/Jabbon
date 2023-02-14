@@ -17,13 +17,25 @@ var SERVER =
     init: async function(){
 
         // Load world data
-        const data = await fs.readFile("../public/rooms.json");
+        const data = await fs.readFile("./public/rooms.json");
         WORLD.fromJSON(JSON.parse(data));
         
         // Notify success
         console.log(`World data successfully loadad! \nNumber of rooms ${WORLD.num_rooms}`);
 
         // SQL Database
+        // Temporary local DB
+        this.DB = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Cacahuete200$",
+            database: "mydb"
+          });
+
+        this.DB.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected! TO THE DB");
+        });
         /*this.DB = mysql.createConnection(
             {  
                 database:'ecv-2019',
@@ -44,13 +56,52 @@ var SERVER =
     // ExpressJS callbacks
     signin: function(credentials)
     {
-        console.log(credentials);
+        var self = this;
+        this.DB.query("SELECT * FROM users", function (err, result, fields) {
+        if (err) throw err;
+        users = JSON.parse(JSON.stringify(result));
+
+        for (i = 0; i < users.length ; i++)
+        {
+            console.log(users[i]['name']);
+            if(users[i]['name'] == credentials['user'] && users[i]['password'] == credentials['password'])
+            {
+                console.log("User found, sing up incorrect");
+            }
+        }
+
+        var insert_user = "INSERT INTO users SET userId = ?, name = ?, password = ?";
+        
+        self.DB.query(insert_user,['2',credentials['user'],credentials['password']], function(err) {
+            if (err) throw err;
+            console.log("Data inserted");
+        });
+
+        console.log("sing in done");
+
+      });
     },
+
+    
 
     login: function(credentials)
     {
-        console.log(credentials);
-    },
+        this.DB.query("SELECT * FROM users", function (err, result, fields) {
+            if (err) throw err;
+            users = JSON.parse(JSON.stringify(result));
+
+            for (i = 0; i < users.length ; i++)
+            {
+                console.log(users[i]['name']);
+                if(users[i]['name'] == credentials['user'] && users[i]['password'] == credentials['password'])
+                {
+                    console.log("User found, login correct");
+                    return;
+                }
+            }
+            console.log("Wrong credentials");
+          });
+    }, 
 
     getUser: function(req, res)
     {

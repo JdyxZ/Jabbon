@@ -35,7 +35,7 @@ app.use(express.static('public')); // To handle static files, redirect to public
 app.get('/user', SERVER.getUser);
 
 app.post('/sigin', function(req, res){ // User signin
-  SERVER.singin(req.body);
+  SERVER.signin(req.body);
   res.end("Sigin request received");
 });
 
