@@ -18,13 +18,12 @@ Samples: ✅ (done)   ⏹ (execution stopped)    ⏺ (in process)   ❌(not done
 - Install Postman. J -> ✅ E -> ?
 
 - ExpressJS [J]:
-	- Log in.
-	- Sign in.
-	- Log out (?)
-	- Fetch world data.
+	- Log in.✅
+	- Sign in.✅
+	- getUser, updateUser, removeUser. ✅
+	- Log out (?). 
+	- Fetch world data. 
 	- Serve files: ?
-	- User connect.
-	- User left.
 
 - Websocket communications [J]:
 	- Typing.
@@ -32,6 +31,8 @@ Samples: ✅ (done)   ⏹ (execution stopped)    ⏺ (in process)   ❌(not done
 	- Receive chat message.
 	- User moving or changing facing.
 	- User chaging room.
+	- User connect.✅
+	- User left.✅
 
 - updateValues[J/E].
 

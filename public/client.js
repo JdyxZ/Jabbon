@@ -54,26 +54,25 @@ var CLIENT =
     },
 
     // Methods
-    sendMessage: function(sender, type, content, date)
+    sendRoomMessage: function(message)
     {
-        // Build message
-        if (date == null) date = (new Date()).getTime();
-        let message = new model.Message(sender, type, content, date);
-
-        // Appned addresses to the message
+        // Append addresses to the message
         message.addressees = [];
 
         // Send message to user
         this.socket.sendUTF(JSON.stringify(message));
     },
 
-    sendMessage: function(sender, type, content, date, addressees)
+    sendPrivateMessage: function(message, addressees)
     {
-        // Build message
-        if (date == null) date = (new Date()).getTime();
-        let message = new model.Message(sender, type, content, date);
+        // Check addressees
+        if (!addressees instanceof Array)
+        {
+            console.error("The addressees of your message must be an array of ids");
+            return;
+        }
 
-        // Appned addresses to the message
+        // Append addresses to the message
         message.addressees = addressees;
 
         // Send message to user

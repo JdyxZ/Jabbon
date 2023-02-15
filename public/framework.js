@@ -53,10 +53,22 @@ Date.prototype.getTime = function()
 	return `${this.getHours().toString().padStart(2,"0")}:${this.getMinutes().toString().padStart(2, "0")}`
 };
 
+function getTime()
+{
+	const date = new Date();
+	return date.getTime();
+}
+
 Date.prototype.getDate = function() 
 {
 	return `${this.getDay().toString().padStart(2,"0")}/${this.getMonth().toString().padStart(2, "0")}/${this.getFullYear()}`;
 };
+
+function getDate()
+{
+	const date = new Date();
+	return date.getDate();
+}
 
 HTMLElement.prototype.getParents = function()
 {
@@ -176,3 +188,21 @@ String.prototype.reverseString = function()
 		return acc;
 	}, -1);
  }
+
+ function getKeyFromValue(array, value)
+ {
+	 const result = Object.entries(array).filter(([current_key, current_value]) => current_value == value);
+ 
+	 switch(result.length)
+	 {
+		 case 0:
+			 return result;
+		 case 1:
+			 return result[0][1];
+		 default:
+			 throw Error("The array you are trying to filter hasn't unique values");
+			 return result;
+	 }
+	 
+ };
+ 

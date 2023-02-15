@@ -1,14 +1,16 @@
+
 {
 
-"last_id" : 1,
-"default_room": "start",
+  "last_id" : 1,
+  "default_room": "start",
 
-"rooms":{
-    "start": {
-      "id": 0,
-      "background": "media/images/background.png",
-      "people": [],
-      "range": [-100,100]
-    }
-  }
+  "rooms":
+  [
+      {
+        "name": "start",
+        "background": "media/images/background.png",
+        "people": [],
+        "range": [-100,100]
+      }
+  ]
 }

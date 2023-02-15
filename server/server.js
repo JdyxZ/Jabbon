@@ -1,8 +1,13 @@
 // Imports
 const mysql = require('mysql');
 const fs = require('fs').promises;
-const model = require("../public/room.js");
+const model = require("../public/model.js");
+
+// Model vars
+const User = model.User;
+const Room = model.Room;
 const WORLD = model.WORLD;
+const Message = model.Message;
 
 /***************** SERVER *****************/
 var SERVER = 
@@ -24,6 +29,7 @@ var SERVER =
         console.log(`World data successfully loadad! \nNumber of rooms ${WORLD.num_rooms}`);
 
         // SQL Database
+        /*
         // Temporary local DB
         this.DB = mysql.createConnection({
             host: "localhost",
@@ -82,8 +88,6 @@ var SERVER =
       });
     },
 
-    
-
     login: function(credentials)
     {
         this.DB.query("SELECT * FROM users", function (err, result, fields) {
@@ -122,7 +126,6 @@ var SERVER =
     },
 
     // WebSocket callbacks
-
     onMessage: function(connection, ws_message)
     {
         // Check
@@ -131,15 +134,57 @@ var SERVER =
 
         // Process WebSocket message
         try {
+            // Parse message
             const message = JSON.parse(ws_message.utf8Data);
-            this.sendMessage(message.sender, message.type, message.content, message.date, message.addressees);
 
+            // Get some vars
+            const user_id = getKeyFromValue(this.clients, connection);
+            const user_current_room = WORLD.rooms[WORLD.users[user_id].room];
+
+            // Check the sender id and the connection user id matches
+            if (message.sender != user_id)
+            {
+                const message = Message("system", "ERROR", "Eres muy perrito y me la has intentado colar", null);
+                connection.sendUTF(JSON.stringify(message));
+                return;
+            };
+
+            // Check the sender is sending messages to people of the same room
+            if(message.addressees != [])
+            {
+                message.addressees.forEach(addressee => {
+                    if(!user_current_room.people.includes(addressee))
+                    {
+                        const message = Message("system", "ERROR", "¿A quién le intentas enviar tú un mensaje, perrito?", null);
+                        connection.sendUTF(JSON.stringify(message));
+                        return;
+                    }
+                });
+            };
+
+            // TODO: If a sender is sending a private message, check that the addressee is within the fov of the sender.
+
+            // Prepare the message to be broadcasted
+            const addressees = message.addressees;
+            if(message.addressees != undefined) delete message.addressees;
+            if(message.date == null) message.date = getTime();
+            
+            // Eventually, message has passed all checkings and is ready to be sent!
+            switch(message.addressees.length)
+            {
+                case 0:
+                    this.sendRoomMessage(message);
+                    break;
+                default:            
+                    this.sendPrivateMessage(message, addressees);
+                    break;                    
+            };       
         } 
-        catch (error) {
-            if (error instanceof SyntaxError)
-                connection.sendUTF("system", "ERROR", "The message you have sent is not a JSON Object, try again", null);
-            else
-            connection.sendUTF("system", "ERROR", error, null);
+        // Catch errors
+        catch (error) 
+        {
+            const message = Message("system", "ERROR", error, null);
+            connection.sendUTF(JSON.stringify(message));
         }
     },
 
@@ -148,12 +193,12 @@ var SERVER =
         console.log("User has joined");
 
         // Create new user and store it
-        const user = new model.User("hola", null, null, null, null, null, null);
+        const user = WORLD.createUser(null);
         const room = WORLD.getRoom(WORLD.default_room);
         room.addUser(user);
 
         // Store connection
-        this.clients[user.name] = connection;
+        this.clients[user.id] = connection;
 
         // Insert new user
        /* client.query('USE prueba');
@@ -186,42 +231,35 @@ var SERVER =
     // Methods
     onTick: function()
     {
-        Object.keys(this.clients).forEach(name => {
-            const user = WORLD.getUser(name);
+        Object.values(this.clients).forEach(connection => {
+            const x = 10;
+            // TODO
         })
     },
 
-    sendMessage: function(sender, type, content, date, addressees)
+    sendRoomMessage: function(message)
     {
-        if(addressees.length == 0)
-        {
-            // Iterate through connections
-            Object.values(this.clients).forEach(connection => {
-            
-                // Build message
-                if (date == null) date = (new Date()).getTime();
-                const message = new model.Message(sender, type, content, date);
+         // Iterate through connections
+         Object.values(this.clients).forEach(connection => {
 
-                // Send message to user
-                connection.sendUTF(JSON.stringify(message));
+            // Send message to the user
+            connection.sendUTF(JSON.stringify(message));
 
-                // Return
-                return;
+            // Return
+            return;
+        });   
+    },
 
-            });
-        }
-
+    sendPrivateMessage: function(message, addressees)
+    {
         // Iterate through addresses
         for(addressee of addressees)
         {
             // Get connection
             const connection = this.clients[addressee];
+            if(connection == undefined) continue;
     
-            // Build message
-            if (date == null) date = (new Date()).getTime();
-            const message = new model.Message(sender, type, content, date);
-    
-            // Send message to user
+            // Send message to the user
             connection.sendUTF(JSON.stringify(message));
         }
 
