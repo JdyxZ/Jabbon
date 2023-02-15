@@ -8,7 +8,7 @@ Document.prototype.get = function(selector)	{
 
 	if(query == null)
 	{
-		console.log(`WARNING: Selector '${selector}' has not been found in the DOM. Returning an empty div`);
+		console.error(`WARNING: Selector '${selector}' has not been found in the DOM. Returning an empty div`);
 		return this.createElement("div");
 	}
 	else
@@ -24,7 +24,7 @@ Document.prototype.getAll = function(selector)
 
 	if(query == null)
 	{
-		console.log(`WARNING: Selector '${selector}' has not been found in the DOM. Returning an empty div`);
+		console.error(`WARNING: Selector '${selector}' has not been found in the DOM. Returning an empty div`);
 		return this.createElement("div");
 	}
 	else
@@ -92,12 +92,12 @@ HTMLElement.prototype.get = function(selector)	{
 
 	if (this == null)
 	{
-		console.log("WARNING: The HTML Element you are trying to use is null");
+		console.error("WARNING: The HTML Element you are trying to use is null");
 		return null;
 	}
 	else if (query == null)
 	{
-		console.log(`WARNING: Selector '${selector}' has not been found in the following HTML Element:
+		console.error(`WARNING: Selector '${selector}' has not been found in the following HTML Element:
 		\t - tag: ${this.tagName} 
 		\t - id: ${this.id ? this.id : 'none'} 
 		\t - class: ${this.className ? this.className : 'none'}
@@ -120,12 +120,12 @@ HTMLElement.prototype.getAll = function(selector)	{
 
 	if (this == null)
 	{
-		console.log("WARNING: The HTML Element you are trying to use is null");
+		console.error("WARNING: The HTML Element you are trying to use is null");
 		return null;
 	}
 	else if (query == null)
 	{
-		console.log(`WARNING: Selector '${selector}' has not been found in the DOM. Returning an empty div`);
+		console.error(`WARNING: Selector '${selector}' has not been found in the DOM. Returning an empty div`);
 		return this.appendChild(document.createElement("div"));
 	}
 	else
@@ -187,6 +187,11 @@ String.prototype.reverseString = function()
 		if (element[property] == value) acc = index;
 		return acc;
 	}, -1);
+ }
+
+ Array.prototype.clone = function()
+ {
+	return this.concat();
  }
 
  function getKeyFromValue(array, value)

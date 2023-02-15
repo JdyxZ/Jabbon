@@ -1,34 +1,13 @@
-var mysql = require('mysql');
-
-//DATABASE
-
-function DataBase() 
-{
-
-}
-
-DataBase.prototype.getUsers = function(username)
-{
-  this.connection.query("SELECT * FROM users", function (err, result, fields) {
-      if (err) throw err;
-      console.log(result);
-    });
-}
-
-//users = JSON.parse(JSON.stringify(result));
-
-//  Yo me refería a hacer esto:
+/***************** CLIENT *****************/
 
 // Imports
 var mysql = require('mysql');
 
 var DATABASE = {
-
-  // atributos necesarios
+  // Properties
   connection: null,
-  [...]
 
-  // métodos
+  // Methods
   initConnection: function()
   {
     //Create the connection
@@ -41,172 +20,118 @@ var DATABASE = {
     });
 
     //Connect to the db
-    this.connection.connect(function(err) {
-      if (err) throw err;
+    return Promise((resolve, fail) => {
+      this.connection.connect(function(err) {
+        if (err) return fail(err);
         console.log("Connected! TO THE DB");
+        resolve();
+      });
     });
-
   },
   
-  pushUser: async function(user_info) // es decir, signin
+  pushUser: function(user, password) 
   {
-    //Save the self for the second query callback
-    var self = this;
-    var query = "SELECT * FROM users WHERE name = ?";
-    //First check if the username exists
-    this.connection.query(query,user_info['username'], function (err, result, fields) {
-      if (err) throw err;
-      if (!JSON.parse(JSON.stringify(result))){
-
-        /* ******************************************** */
-        //Para insertar usuarios AÑADIR propiedades para guardar de momento position, avatar, target "maybe"
-        /* ******************************************** */
-
-        var query_2 = "INSERT INTO users SET userId = ?, name = ?, password = ?";
-        //Now insert the user to the db
-        self.connection.query(query_2,['2',user_info['user'],user_info['password']], function(err) {
-          if (err) throw err;
-          //return 2
-        });
-      }
-
-      //return 0
-
+    return Promise((resolve, fail) => {
+      //Save the self for the second query callback
+      const query = "INSERT INTO users SET userId = ?, name = ?, password = ?";
+        
+      //Now insert the user to the db
+      this.connection.query(query,['2', user.name, password], function(err) {
+        if (err) return fail(err);
+        resolve();
+      });
     });
   },
 
-  validateUser: async function(username) // es decir, login
+  validateUsername: function(username) 
+  {
+    const query = "SELECT * FROM users WHERE name = ?";
+
+    return Promise( (resolve,fail) => {
+      this.connection.query(query, [username], function (err, result, fields) {
+
+        if (err) return fail(err);
+        resolve(result);    
+      });
+    });
+  },
+
+  validateUser: function(username) 
   {
     var query = "SELECT * FROM users WHERE name = ?, password = ?";
+
+    return Promise( (resolve, fail) => )
     this.connection.query(query,[username['user'],username['password']] function (err, result, fields) {
-      if (err) throw err;
-      user = JSON.parse(JSON.stringify(result));
-      //if (!user) console.log("Wrong credentials");
-      //return user
+      if (err) return fail(err);
+      resolve(result);
     });
   },
 
-  updateUser: async function(user_json)
+  updateUser: function(user_json)
   {
     // TODO
   },
 
-  removeUser: async function(user_id)
+  removeUser: function(user_id)
   {
-    var query = "DELETE FROM users WHERE id = ?"
-    this.connection.query(query,[user_id], function (err, result, fields) {
-      if (err) throw err;
+    const query = "DELETE FROM users WHERE id = ?";
+
+    return Promise((resolve, fail) => {
+      this.connection.query(query,[user_id], function (err, result, fields) {
+        if (err) return fail(err);
+        resolve();
+      });
+    });   
+  },
+
+  fetchUser: function(user_id)
+  {
+    const query = "SELECT * FROM users WHERE userId = ?";
+
+    return Promise((resolve, fail) => {
+      this.connection.query(query,[user_id], function (err, result, fields) {
+        if (err) return fail(err);
+        return resolve(result);
+      });
     });
   },
 
-  fetchUser: async function(user_id)
+  fetchUsers: function()
   {
-    var query = "SELECT * FROM users WHERE userId = ?"
-    this.connection.query(query,[user_id], function (err, result, fields) {
-      if (err) throw err;
-      return result;
+    const query = "SELECT * FROM users";
+
+    return Promise((resolve, fail) => {
+      this.connection.query(query, function (err, result, fields) {
+        if(err) return fail(err);
+        users = JSON.parse(JSON.stringify(result));
+        resolve(result);
+      });
     });
   },
 
-  fetchUsers: async function()
-  {
-    var query = "SELECT * FROM users"
-    this.connection.query(query, function (err, result, fields) {
-      if (err) throw err;
-      users = JSON.parse(JSON.stringify(result));
-      return users
-    });
-  },
-
-  fetchModel: async function()
+  fetchModel: function()
   {
     // TODO: get and return la model info
   },
 
-  updateModel: async function(model_json)
+  updateModel: function(model_json)
   {
     // TODO: update model info
   },
 
-  fetchLog: async function()
+  fetchLog: function()
   {
     // TODO: get and return del log de las conversaciones
   },
 
-  updateLog: async function(log_json)
+  updateLog: function(log_json)
   {
     // TODO: update log de las conversaciones
   },
 
-  getInfo: async function()
+  getInfo: function()
   {
     // TODO: toda la información de la database
   },
 
 }
-
-module.exports = DATABASE;
-
-// Entonces, luego en server, por ejemplo en la función signin:
-
-// Imports
-[...]
-const DATABASE = require(./database.js);
-
-var SERVER = {
-  [...]
-
-  signin: function(user_info)
-  {
-    [...] // Lo que tengamos que hacer previamente.
-    DATABASE.pushUser(user_info);
-    [...] // Lo que después hagamos.
-  }
-}
-
-// Y así evitamos embedear código de la database en el namespace del server :)
-
-
-
-
-
-
-
-
-
-
-// con.connect(function(err) {
-//   if (err) throw err;
-//   console.log("Connected!");
-//   // con.query("CREATE DATABASE mydb", function (err, result) {
-//   //   if (err) throw err;
-//   //   console.log("Database created");
-//   // });
-
-//   // var sql = "CREATE TABLE users (userId INT PRIMARY KEY, name VARCHAR(255), password VARCHAR(255))";
-//   // con.query(sql, function (err, result) {
-//   //   if (err) throw err;
-//   //   console.log("Table created");
-//   // });
-
-//   // var sql = "CREATE TABLE users (userId INT PRIMARY KEY, name VARCHAR(255), password VARCHAR(255))";
-//   // con.query(sql, function (err, result) {
-//   //   if (err) throw err;
-//   //   console.log("Table created");
-//   // });
-
-//   //Query to insert user into db
-//   // var insert_user = "INSERT INTO users SET userId = ?, name = ?, password = ?"
-//   // con.query(insert_user,['1','javier','4321'], function(err) {
-//   //   if (err) throw err;
-//   //   console.log("Data inserted");
-//   // });
-
-//   //Query get user into db
-//   // con.query("SELECT * FROM users", function (err, result, fields) {
-//   //   if (err) throw err;
-//   //   console.log(result);
-//   // });
-
-  
-// });

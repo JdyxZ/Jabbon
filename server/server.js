@@ -2,6 +2,8 @@
 const mysql = require('mysql');
 const fs = require('fs').promises;
 const model = require("../public/model.js");
+const DATABASE = require("./database.js");
+require("../public/framework.js");
 
 // Model vars
 const User = model.User;
@@ -27,30 +29,9 @@ var SERVER =
         // Notify success
         console.log(`World data successfully loadad! \nNumber of rooms ${WORLD.num_rooms}`);
 
+        // SQL Database
         DATABASE.initConnection();
 
-        // SQL Database
-        /*
-        // Temporary local DB
-        this.DB = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Cacahuete200$",
-            database: "mydb"
-          });
-
-        this.DB.connect(function(err) {
-            if (err) throw err;
-            console.log("Connected! TO THE DB");
-        });
-        /*this.DB = mysql.createConnection(
-            {  
-                database:'ecv-2019',
-                user: 'ecv-user',
-                password: 'ecv-upf-2019',
-                host: '127.0.0.1'
-            }
-        );*/
     },
 
     // Ready callback
@@ -61,22 +42,55 @@ var SERVER =
     },
 
     // ExpressJS callbacks
-    signin: function(credentials)
+    signin: async function(credentials)
     {
-        DATABASE.pushUser(credentials)
+        // Database check
+        const result = await DATABASE.validateUsername(credentials.username);
+
+        // Create new user and store it
+        const user = WORLD.createUser(null);
+        user.name = credentials.username;
+        user.avatar = credentials.avatar;
+        const room = WORLD.getRoom(WORLD.default_room);
+        room.addUser(user);
+
+        // Database push
+        await DATABASE.pushUser(user, credentials.password);
     },
 
     login: function(credentials)
     {
         DATABASE.validateUser(credentials)
+        .then((result) => {
+            
+            if(result == null)
+            {
+                res.json({
+                    type: "ERROR",
+                    error_code: 0
+                });
+            }
+            else
+            {
+                res.json({
+                    type: "CORRECT",
+                    error_code: 0
+                });
+            }
+        })
+        .catch((err) => {
+            res.json({
+                type: "ERROR",
+                error_code: 1
+            });
+
+            console.log(err);
+        });
     }, 
 
     getUser: function(req, res)
     {
-        res.json({
-            username: "Pedro",
-            password: 1234
-          })
+        // TODO
     },
 
     updateUser: function(credentials)
@@ -155,35 +169,9 @@ var SERVER =
     onUserConnected: function(connection)
     {
         console.log("User has joined");
-
-        // Create new user and store it
-        const user = WORLD.createUser(null);
-        const room = WORLD.getRoom(WORLD.default_room);
-        room.addUser(user);
-
+       
         // Store connection
-        this.clients[user.id] = connection;
-
-        // Insert new user
-       /* client.query('USE prueba');
-        client.query(
-        'INSERT INTO usuario SET nombre = ?, password = ?',
-        ['eric', 'miclave'] //important, avoids SQL-injects
-        );
-        
-        client.query( 'SELECT * FROM usuario',
-            function selectUsuario(err, results, fields) {
-        
-            if (err) {
-                console.log("Error: " + err.message);
-                throw err;
-            }
-        
-            console.log("Number of rows: "+results.length);
-            console.log(results);
-        
-            client.end();
-        }); */
+        this.clients[user.id] = connection;       
     },
 
     onUserDisconnected: function(connection)
