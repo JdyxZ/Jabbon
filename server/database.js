@@ -101,7 +101,7 @@ var DATABASE = {
 
 module.exports = DATABASE;
 
-// Entonces, luego en server:
+// Entonces, luego en server, por ejemplo en la función signin:
 
 // Imports
 [...]
@@ -112,13 +112,13 @@ var SERVER = {
 
   signin: function(credentials)
   {
-    [...]
+    [...] // Lo que tengamos que hacer previamente.
     DATABASE.pushUser(credentials);
-    [...]
+    [...] // Lo que después hagamos.
   }
 }
 
-// Y así embedear código de la database en el namespace del server :)
+// Y así evitamos embedear código de la database en el namespace del server :)
 
 
 */
