@@ -10,13 +10,13 @@ const FACING_BACK = 3;
 function User(data)
 {
     this.id = WORLD.last_user_id++;
-    this.name = data.name || "unnamed";
-    this.position = data.position || 40;
-    this.avatar = data.avatar || "./media/images/char1.png";
-    this.facing = data.facing || FACING_FRONT;
-    this.animation = data.animation || "idle";
-    this.room = data.room || "none";
-    this.target = data.target || [40,0];
+    this.name = data == undefined ? "unnamed" : data.name || "unamed";
+    this.position = data == undefined ? 40 : data.position || 40;
+    this.avatar = data == undefined ? "./media/images/char1.png" : data.avatar || "./media/images/char1.png";
+    this.facing = data == undefined ? FACING_FRONT : data.facing || FACING_FRONT;
+    this.animation = data == undefined ? "idle" : data.animation || "idle";
+    this.room = data == undefined ? "none" : data.room || "none";
+    this.target = data == undefined ? [40,0] : data.target || [40,0];
 }
 
 User.prototype.toJSON = function()

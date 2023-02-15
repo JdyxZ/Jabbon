@@ -20,7 +20,7 @@ var DATABASE = {
     });
 
     //Connect to the db
-    return Promise((resolve, fail) => {
+    return new Promise((resolve, fail) => {
       this.connection.connect(function(err) {
         if (err) return fail(err);
         console.log("Connected! TO THE DB");
@@ -31,8 +31,7 @@ var DATABASE = {
   
   pushUser: function(user, password) 
   {
-    return Promise((resolve, fail) => {
-      //Save the self for the second query callback
+    return new Promise((resolve, fail) => {
       const query = "INSERT INTO users SET userId = ?, name = ?, password = ?";
         
       //Now insert the user to the db
@@ -47,11 +46,11 @@ var DATABASE = {
   {
     const query = "SELECT * FROM users WHERE name = ?";
 
-    return Promise( (resolve,fail) => {
+    return new Promise( (resolve,fail) => {
       this.connection.query(query, [username], function (err, result, fields) {
 
         if (err) return fail(err);
-        resolve(result);    
+        resolve(result.length == 0);    
       });
     });
   },
@@ -60,11 +59,14 @@ var DATABASE = {
   {
     var query = "SELECT * FROM users WHERE name = ?, password = ?";
 
-    return Promise( (resolve, fail) => )
-    this.connection.query(query,[username['user'],username['password']] function (err, result, fields) {
-      if (err) return fail(err);
-      resolve(result);
-    });
+    return new Promise( (resolve, fail) => 
+    {
+      this.connection.query(query,[username['user'],username['password']], function (err, result, fields) {
+        if (err) return fail(err);
+        resolve(result);
+      });
+    }
+    );
   },
 
   updateUser: function(user_json)
@@ -76,7 +78,7 @@ var DATABASE = {
   {
     const query = "DELETE FROM users WHERE id = ?";
 
-    return Promise((resolve, fail) => {
+    return new Promise((resolve, fail) => {
       this.connection.query(query,[user_id], function (err, result, fields) {
         if (err) return fail(err);
         resolve();
@@ -88,7 +90,7 @@ var DATABASE = {
   {
     const query = "SELECT * FROM users WHERE userId = ?";
 
-    return Promise((resolve, fail) => {
+    return new Promise((resolve, fail) => {
       this.connection.query(query,[user_id], function (err, result, fields) {
         if (err) return fail(err);
         return resolve(result);
@@ -100,7 +102,7 @@ var DATABASE = {
   {
     const query = "SELECT * FROM users";
 
-    return Promise((resolve, fail) => {
+    return new Promise((resolve, fail) => {
       this.connection.query(query, function (err, result, fields) {
         if(err) return fail(err);
         users = JSON.parse(JSON.stringify(result));
@@ -135,3 +137,5 @@ var DATABASE = {
   },
 
 }
+
+module.exports = DATABASE;

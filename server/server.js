@@ -3,6 +3,7 @@ const mysql = require('mysql');
 const fs = require('fs').promises;
 const model = require("../public/model.js");
 const DATABASE = require("./database.js");
+console.log(require.resolve("./database.js"))
 require("../public/framework.js");
 
 // Model vars
@@ -46,7 +47,7 @@ var SERVER =
     {
         // Database check
         const result = await DATABASE.validateUsername(credentials.username);
-
+        console.log(result)
         // Create new user and store it
         const user = WORLD.createUser(null);
         user.name = credentials.username;
