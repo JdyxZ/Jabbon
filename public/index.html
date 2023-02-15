@@ -5,9 +5,9 @@
         <link rel="stylesheet" type="text/css" href="css/login.css"/>
     </head>
     <body>
-        <div id="container">
+        <div id="container" style ="display:none">
                 <div class="label">Log in</div>
-                <span class="loginspan">
+                <span style ="display:none" class="loginspan">
                     <div class="input-username-login">
                         <input type="text" placeholder="username" id="input" name="lusername">
                     </div>
@@ -35,7 +35,14 @@
 
                 <div class="change">sign up</div>
         </div>
-        <canvas style="display:none"id="canvas"></canvas>
+        <span class="canvas">
+            <div class="menu_bar">
+                <div class="chat template">eric</div>
+                <div class="chat template">javi</div>
+                <div class="chat template">room</div>
+            </div>
+            <canvas id="canvas"></canvas>
+        </span>
 
     <!-- <script scr="modules/server/init.js"></script> -->
     <!-- <script type="application/javascript" src="room.js"></script> MODEL

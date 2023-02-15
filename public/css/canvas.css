@@ -1,3 +1,4 @@
+/* CANVAS */
 * {
     margin: 0px;
     padding: 0px;
@@ -5,7 +6,31 @@
 
 html,body {
     width: 100%;
-    height: 100%;
+    height: 94%;
     overflow: hidden;
     background-color: rgb(44, 52, 49);
+}
+
+/* MENU + CHATS */
+
+.menu_bar{
+    width: 100%;
+    height: 6%;
+    background-color: #581845;
+}
+
+.chat:hover {
+    background-color: #C70039;
+  }
+
+.chat{
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    width: 10%;
+    background-color: #900C3F;
+    float: left;
+    font-size: x-large;
+    font-weight: bold;
+    text-align: center;
 }
