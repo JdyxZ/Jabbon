@@ -5,14 +5,6 @@ var mysql = require('mysql');
 function DataBase() 
 {
 
-  this.connection = mysql.createConnection
-    ({
-      host: "localhost",
-      user: "root",
-      password: "Cacahuete200$",
-      database: "mydb"
-    });
-
 }
 
 DataBase.prototype.getUsers = function(username)
@@ -23,7 +15,7 @@ DataBase.prototype.getUsers = function(username)
     });
 }
 
-/*
+//users = JSON.parse(JSON.stringify(result));
 
 //  Yo me refería a hacer esto:
 
@@ -37,19 +29,61 @@ var DATABASE = {
   [...]
 
   // métodos
-  initConnection: function([...])
+  initConnection: function()
   {
-    // TODO
+    //Create the connection
+    this.connection = mysql.createConnection
+    ({
+      host: "localhost",
+      user: "root",
+      password: "Cacahuete200$",
+      database: "mydb"
+    });
+
+    //Connect to the db
+    this.connection.connect(function(err) {
+      if (err) throw err;
+        console.log("Connected! TO THE DB");
+    });
+
   },
   
   pushUser: async function(user_info) // es decir, signin
   {
-    // TODO: El código que has puesto en server
+    //Save the self for the second query callback
+    var self = this;
+    var query = "SELECT * FROM users WHERE name = ?";
+    //First check if the username exists
+    this.connection.query(query,user_info['username'], function (err, result, fields) {
+      if (err) throw err;
+      if (!JSON.parse(JSON.stringify(result))){
+
+        /* ******************************************** */
+        //Para insertar usuarios AÑADIR propiedades para guardar de momento position, avatar, target "maybe"
+        /* ******************************************** */
+
+        var query_2 = "INSERT INTO users SET userId = ?, name = ?, password = ?";
+        //Now insert the user to the db
+        self.connection.query(query_2,['2',user_info['user'],user_info['password']], function(err) {
+          if (err) throw err;
+          //return 2
+        });
+      }
+
+      //return 0
+
+    });
   },
 
   validateUser: async function(username) // es decir, login
   {
-    // TODO: el código que has puesto en server
+    var query = "SELECT * FROM users WHERE name = ?, password = ?";
+    this.connection.query(query,[username['user'],username['password']] function (err, result, fields) {
+      if (err) throw err;
+      user = JSON.parse(JSON.stringify(result));
+      //if (!user) console.log("Wrong credentials");
+      //return user
+    });
   },
 
   updateUser: async function(user_json)
@@ -59,17 +93,29 @@ var DATABASE = {
 
   removeUser: async function(user_id)
   {
-    // TODO
+    var query = "DELETE FROM users WHERE id = ?"
+    this.connection.query(query,[user_id], function (err, result, fields) {
+      if (err) throw err;
+    });
   },
 
   fetchUser: async function(user_id)
   {
-    // TODO: información del usuario
+    var query = "SELECT * FROM users WHERE userId = ?"
+    this.connection.query(query,[user_id], function (err, result, fields) {
+      if (err) throw err;
+      return result;
+    });
   },
 
-  fetchUsers: async function(user_id)
+  fetchUsers: async function()
   {
-    // TODO: información de los usuarios
+    var query = "SELECT * FROM users"
+    this.connection.query(query, function (err, result, fields) {
+      if (err) throw err;
+      users = JSON.parse(JSON.stringify(result));
+      return users
+    });
   },
 
   fetchModel: async function()
@@ -110,10 +156,10 @@ const DATABASE = require(./database.js);
 var SERVER = {
   [...]
 
-  signin: function(credentials)
+  signin: function(user_info)
   {
     [...] // Lo que tengamos que hacer previamente.
-    DATABASE.pushUser(credentials);
+    DATABASE.pushUser(user_info);
     [...] // Lo que después hagamos.
   }
 }
@@ -121,7 +167,7 @@ var SERVER = {
 // Y así evitamos embedear código de la database en el namespace del server :)
 
 
-*/
+
 
 
 
@@ -135,6 +181,12 @@ var SERVER = {
 //   // con.query("CREATE DATABASE mydb", function (err, result) {
 //   //   if (err) throw err;
 //   //   console.log("Database created");
+//   // });
+
+//   // var sql = "CREATE TABLE users (userId INT PRIMARY KEY, name VARCHAR(255), password VARCHAR(255))";
+//   // con.query(sql, function (err, result) {
+//   //   if (err) throw err;
+//   //   console.log("Table created");
 //   // });
 
 //   // var sql = "CREATE TABLE users (userId INT PRIMARY KEY, name VARCHAR(255), password VARCHAR(255))";

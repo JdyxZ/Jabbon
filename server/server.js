@@ -14,7 +14,6 @@ var SERVER =
 {
     // Server data
     port: null,
-    DB: null,
     clients : {},
     last_id : 0,
 
@@ -27,6 +26,8 @@ var SERVER =
         
         // Notify success
         console.log(`World data successfully loadad! \nNumber of rooms ${WORLD.num_rooms}`);
+
+        DATABASE.initConnection();
 
         // SQL Database
         /*
@@ -62,49 +63,12 @@ var SERVER =
     // ExpressJS callbacks
     signin: function(credentials)
     {
-        var self = this;
-        this.DB.query("SELECT * FROM users", function (err, result, fields) {
-        if (err) throw err;
-        users = JSON.parse(JSON.stringify(result));
-
-        for (i = 0; i < users.length ; i++)
-        {
-            console.log(users[i]['name']);
-            if(users[i]['name'] == credentials['user'] && users[i]['password'] == credentials['password'])
-            {
-                console.log("User found, sing up incorrect");
-            }
-        }
-
-        var insert_user = "INSERT INTO users SET userId = ?, name = ?, password = ?";
-        
-        self.DB.query(insert_user,['2',credentials['user'],credentials['password']], function(err) {
-            if (err) throw err;
-            console.log("Data inserted");
-        });
-
-        console.log("sing in done");
-
-      });
+        DATABASE.pushUser(credentials)
     },
 
     login: function(credentials)
     {
-        this.DB.query("SELECT * FROM users", function (err, result, fields) {
-            if (err) throw err;
-            users = JSON.parse(JSON.stringify(result));
-
-            for (i = 0; i < users.length ; i++)
-            {
-                console.log(users[i]['name']);
-                if(users[i]['name'] == credentials['user'] && users[i]['password'] == credentials['password'])
-                {
-                    console.log("User found, login correct");
-                    return;
-                }
-            }
-            console.log("Wrong credentials");
-          });
+        DATABASE.validateUser(credentials)
     }, 
 
     getUser: function(req, res)
