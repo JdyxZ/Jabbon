@@ -6,17 +6,34 @@
     </head>
     <body>
         <div id="container">
-                <div class="label-login">Log in</div>
-                <div class="input-username-login">
-                    <input type="text" id="input" name="username">
-                </div>
-                <div class="input-password-login">
-                    <input type="text" id="input" name="password">
-                </div>
-                <div class="submit-button-login">
-                    <button type="button" id="button">Log in</button>
-                </div>
-                <div class="change-signup">sign in</div>
+                <div class="label">Log in</div>
+                <span class="loginspan">
+                    <div class="input-username-login">
+                        <input type="text" placeholder="username" id="input" name="lusername">
+                    </div>
+                    <div class="input-password-login">
+                        <input type="text" placeholder="password" id="input" name="lpassword">
+                    </div>
+                    <div class="submit-button-login">
+                        <button type="button" id="button">Log in</button>
+                    </div>
+                </span>
+                <span style ="display:none" class="signupspan">
+                    <div class="input-username-signup">
+                        <input type="text" placeholder="username" id="input" name="susername">
+                    </div>
+                    <div class="input-password-signup">
+                        <input type="text" placeholder="password" id="input" name="spassword">
+                    </div>
+                    <div class="input-password-signup">
+                        <input type="text" placeholder="repeat the password" id="input" name="spassword">
+                    </div>
+                    <div class="submit-button-signup">
+                        <button type="button" id="button">Sign up</button>
+                    </div>
+                </span>
+
+                <div class="change">sign up</div>
         </div>
         <canvas style="display:none"id="canvas"></canvas>
 
