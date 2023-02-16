@@ -16,6 +16,8 @@ const mysqlsession = require('express-mysql-session')(session);
 
 // Own module imports
 const SERVER = require("./server.js");
+
+// Init server services
 SERVER.init();
 
 /***************** HTTP SERVER *****************/
@@ -30,36 +32,27 @@ const server = http.createServer(app); // Instead of passing a custom function t
 
 // Settings
 app.set('port', process.env.PORT || 9014);
+app.set("views", path.join(__dirname, "views"));
+
+// View Engine
+//TODO
 
 // Middleware
 app.use(morgan('short')); // To see request content
 app.use(express.json()); // To parse json content
 app.use(cors());
 app.use(express.urlencoded({extended: false})); // User send data
-app.use(express.static('public')); // To handle static files, redirect to public folder
+
+// Global variables
+app.use((req, res, next) =>{
+  next();
+});
 
 // Routes
-app.get('/user', SERVER.getUser);
+app.use(require("./routes/index"));
 
-app.post('/sigin', function(req, res){ // User signin
-  SERVER.signin(req.body);
-  res.end("Sigin request received");
-});
-
-app.post('/login', function(req, res){ // User login
-  SERVER.login(req.body);
-  res.end("Login request received");
-});
-
-app.put('/user', function(req, res){ // User update
-  SERVER.updateUser(req.body);
-  res.end("User update request received");
-});
-
-app.delete('/user', function(req, res){ // User delete
-  SERVER.deleteUser(req.body);
-  res.end("User delete request received");
-});
+// Public
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Launch the server
 server.listen(app.get('port'), () => SERVER.onReady(app.get('port')));

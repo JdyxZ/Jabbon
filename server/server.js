@@ -1,7 +1,7 @@
 // Imports
 const fs = require('fs').promises;
 const model = require("../public/model.js");
-const DATABASE = require("./database.js");
+const DATABASE = require("./database/database.js");
 require("../public/framework.js");
 
 // Model vars
