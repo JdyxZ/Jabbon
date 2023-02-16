@@ -23,7 +23,7 @@ Samples: ✅ (done)   ⏹ (execution stopped)    ⏺ (in process)   ❌(not done
 	- getUser, updateUser, removeUser. ✅
 	- Log out (?). 
 	- Fetch world data. 
-	- Serve files: ?
+	- Serve files ✅
 
 - Websocket communications [J]:
 	- Typing.

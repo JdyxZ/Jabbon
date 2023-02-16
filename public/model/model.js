@@ -8,8 +8,8 @@ const FACING_LEFT = 2;
 const FACING_BACK = 3;
 
 function User(data)
-{
-    this.id = WORLD.last_user_id++;
+{   
+    this.id = -1;
     this.name = data == undefined ? "unnamed" : data.name || "unamed";
     this.position = data == undefined ? 40 : data.position || 40;
     this.avatar = data == undefined ? "./media/images/char1.png" : data.avatar || "./media/images/char1.png";
@@ -97,7 +97,6 @@ var WORLD = {
     num_users: 0,
     num_rooms: 0,
     last_room_id: 0,
-    last_user_id: 0,
 
     // Methods
     createUser: function (data)

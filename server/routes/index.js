@@ -22,12 +22,14 @@ router.get('/canvas', async (req, res) => {
 
 // Post routes
 router.post('/signup', async function(req, res){ // User signin
-  SERVER.signup(req.body);
+  //SERVER.signup(req.body);
+  console.log(req.body);
   res.end("Sigin request received");
 });
 
 router.post('/login', async function(req, res){ // User login
-  SERVER.login(req.body);
+  //SERVER.login(req.body);
+  console.log(req.body);
   res.end("Login request received");
 });
 
