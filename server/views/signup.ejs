@@ -5,38 +5,28 @@
     </head>
     <body>
         <div id="container" >
-                <div class="label">Log in</div>
-                <span class="loginspan">
-                    <div class="input-username-login">
-                        <input type="text" placeholder="username" id="input" name="lusername">
-                        <div class="pnlerroriput">Fill the input</div>
-                    </div>
-                    <div class="input-password-login">
-                        <input type="password" placeholder="password" id="input" name="lpassword">
-                        <div class="pnlerroriput">Your credentials don't match</div>
-                    </div>
-                    <div class="submit-button-login">
-                        <button type="button" id="button">Log in</button>
-                    </div>
-                </span>
-                <span style ="display:none" class="signupspan">
+                <div class="label">Sign up</div>
+                <span class="signupspan">
                     <div class="input-username-signup">
-                        <input type="text" placeholder="username" id="input" name="susername">
-                        <div class="pnlerroriput">This name is already in use, please select other</div>
+                        <input type="text" placeholder="username" id="input" name="username">
+                        <div class="pnlerroriput" id="pnl1" style="display:none"></div>
                     </div>
                     <div class="input-password-signup">
-                        <input type="password" placeholder="password" id="input" name="spassword1">
+                        <input type="password" placeholder="password" id="input" name="password1">
                     </div>
                     <div class="input-password-signup">
-                        <input type="password" placeholder="repeat the password" id="input" name="spassword2">
-                        <div class="pnlerroriput">The passwords don't match...</div>
+                        <input type="password" placeholder="repeat the password" id="input" name="password2">
+                        <div class="pnlerroriput" id="pnl2" style="display:none"></div>
                     </div>
                     <div class="submit-button-signup">
-                        <button type="button" id="button">Sign up</button>
+                        <button type="button" id="button">Log in</button>
                     </div>
                 </span>
 
                 <div class="change">sign in</div>
         </div>
     </body>
+    <script src="./framework.js"></script>
+    <script src="./js/signup.js"></script>
+    <script>signup.init()</script>
 </html>

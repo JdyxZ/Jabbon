@@ -13,6 +13,7 @@ const session = require('express-session');
 const validator = require('express-validator');
 const passport = require('passport');
 const mysqlsession = require('express-mysql-session')(session);
+const bodyParser = require('body-parser');
 const ejs = require('ejs');
 
 // Own module imports
@@ -44,6 +45,7 @@ app.use(morgan('short')); // To see request content
 app.use(express.json()); // To parse json content
 app.use(cors());
 app.use(express.urlencoded({extended: false})); // User send data
+app.use(bodyParser.json());// Parse the data directly
 
 // Global variables
 app.use((req, res, next) =>{

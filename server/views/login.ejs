@@ -8,35 +8,22 @@
                 <div class="label">Log in</div>
                 <span class="loginspan">
                     <div class="input-username-login">
-                        <input type="text" placeholder="username" id="input" name="lusername">
-                        <div class="pnlerroriput">Fill the input</div>
+                        <input type="text" placeholder="username" id="input" name="username">
+                        <div style="display:none" class="pnlerroriput" id="pnl1"></div>
                     </div>
                     <div class="input-password-login">
-                        <input type="password" placeholder="password" id="input" name="lpassword">
-                        <div class="pnlerroriput">Your credentials don't match</div>
+                        <input type="password" placeholder="password" id="input" name="password">
+                        <div style="display:none" class="pnlerroriput" id="pnl2"></div>
                     </div>
                     <div class="submit-button-login">
                         <button type="button" id="button">Log in</button>
                     </div>
                 </span>
-                <span style ="display:none" class="signupspan">
-                    <div class="input-username-signup">
-                        <input type="text" placeholder="username" id="input" name="susername">
-                        <div class="pnlerroriput">This name is already in use, please select other</div>
-                    </div>
-                    <div class="input-password-signup">
-                        <input type="password" placeholder="password" id="input" name="spassword1">
-                    </div>
-                    <div class="input-password-signup">
-                        <input type="password" placeholder="repeat the password" id="input" name="spassword2">
-                        <div class="pnlerroriput">The passwords don't match...</div>
-                    </div>
-                    <div class="submit-button-signup">
-                        <button type="button" id="button">Sign up</button>
-                    </div>
-                </span>
 
-                <div class="change">sign in</div>
+                <div class="change">sign un</div>
         </div>
     </body>
+    <script src="./framework.js"></script>
+    <script src="./js/login.js"></script>
+    <script>login.init()</script>
 </html>
