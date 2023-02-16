@@ -1,7 +1,7 @@
 // Imports
 const fs = require('fs').promises;
 const model = require("../public/model.js");
-const DATABASE = require("./database.js");
+const QUERIES = require("./queries.js");
 require("../public/framework.js");
 
 // Model vars
@@ -27,9 +27,6 @@ var SERVER =
         
         // Notify success
         console.log(`World data successfully loadad! \nNumber of rooms ${WORLD.num_rooms}`);
-
-        // SQL Database
-        //DATABASE.initConnection();
     },
 
     // Ready callback
@@ -40,10 +37,11 @@ var SERVER =
     },
 
     // ExpressJS callbacks
-    signin: async function(credentials)
+    signin: function(credentials)
     {
         // Database check
-        const result = await DATABASE.validateUsername(credentials.username);
+        const result = QUERIES.validateUsername(credentials.username);
+        console.log(result);
      
         // Create new user and store it
         const user = WORLD.createUser(null);
@@ -53,37 +51,14 @@ var SERVER =
         room.addUser(user);
 
         // Database push
-        await DATABASE.pushUser(user, credentials.password);
+        const result = QUERIES.pushUser(user, credentials.password);
+        console.log(result);
     },
 
     login: function(credentials)
     {
-        DATABASE.validateUser(credentials)
-        .then((result) => {
-            
-            if(result == null)
-            {
-                res.json({
-                    type: "ERROR",
-                    error_code: 0
-                });
-            }
-            else
-            {
-                res.json({
-                    type: "CORRECT",
-                    error_code: 0
-                });
-            }
-        })
-        .catch((err) => {
-            res.json({
-                type: "ERROR",
-                error_code: 1
-            });
-
-            console.log(err);
-        });
+       const result = QUERIES.validateUser(credentials);
+       console.log(result);
     }, 
 
     getUser: function(req, res)

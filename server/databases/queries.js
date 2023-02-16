@@ -1,151 +1,141 @@
-/***************** CLIENT *****************/
+/***************** REST API *****************/
 
 // Imports
-var mysql = require('mysql');
+import { pool } from "./database.js";
 
-var DATABASE = {
-
-    // Properties
-    connection: null,
+var QUERIES = {
 
     // Methods
-    initConnection: function()
+    pushUser: async function(user, password) 
     {
-        //Create the connection
-        this.connection = mysql.createConnection(
+        try
         {
-            host: "localhost",
-            user: "root",
-            password: "Cacahuete200$",
-            database: "mydb"
-        });
-
-        //Connect to the db
-        return new Promise((resolve, fail) => 
+            // Query
+            await pool.query( "INSERT INTO users SET userId = ?, name = ?, password = ?", ['2', user.name, password]);
+            return "OK";
+        }
+        catch(err)
         {
-            this.connection.connect(function(err) {
-                if (err) return fail(err);
-                resolve();
-            });
-        });
+            return "ERROR";
+        }
     },
 
-    pushUser: function(user, password) 
+    validateUsername: async function(username) 
     {
-        // Query
-        const query = "INSERT INTO users SET userId = ?, name = ?, password = ?";
-
-        //Now insert the user to the db
-        return new Promise((resolve, fail) => 
+        try
         {
-            this.connection.query(query,['2', user.name, password], function(err) {
-                if (err) return fail(err);
-                resolve();
-            });
-        });
+            // Query
+            const [res] = await pool.query("SELECT * FROM users WHERE name = ?", [username]);
+            
+            // Result
+            if(res.length <= 0) return "NOT EXISTS";
+            else return "EXISTS";
+        }
+        catch(err)
+        {
+            console.log(`ERROR: ${err}`);
+            return "ERROR";
+        }
     },
 
-    validateUsername: function(username) 
+    validateUser: async function(user) 
     {
-        // Query
-        const query = "SELECT * FROM users WHERE name = ?";
-
-        return new Promise( (resolve,fail) => 
+        try
         {
-            this.connection.query(query, [username], function (err, result, fields) {
-                if (err) return fail(err);
-                resolve(result.length == 0);    
-            });
-        });
+            // Query
+            const [res] = await pool.query("SELECT * FROM users WHERE name = ?, password = ?", [user['user'],user['password']]);
+            
+            // Result
+            if(res.length <= 0) return "NOT EXISTS";
+            else return "EXISTS";
+        }
+        catch(err)
+        {
+            console.log(`ERROR: ${err}`);
+            return "ERROR";
+        }
     },
 
-    validateUser: function(username) 
-    {
-        // Query
-        var query = "SELECT * FROM users WHERE name = ?, password = ?";
-
-        return new Promise( (resolve, fail) => 
-        {
-            this.connection.query(query,[username['user'],username['password']], function (err, result, fields) {
-                if (err) return fail(err);
-                resolve(result);
-            });
-        });
-    },
-
-    updateUser: function(user_json)
+    updateUser: async function(user_json)
     {
     // TODO
     },
 
-    removeUser: function(user_id)
+    removeUser: async function(user_id)
     {
-        // Query
-        const query = "DELETE FROM users WHERE id = ?";
-
-        return new Promise((resolve, fail) => 
+        try
         {
-            this.connection.query(query,[user_id], function (err, result, fields) {
-                if (err) return fail(err);
-                resolve();
-            });
-        });   
-    },
-
-    fetchUser: function(user_id)
-    {
-        // Query
-        const query = "SELECT * FROM users WHERE userId = ?";
-
-        return new Promise((resolve, fail) => 
-        {
-            this.connection.query(query,[user_id], function (err, result, fields) {
-                if (err) return fail(err);
-                return resolve(result);
-            });
-        });
-    },
-
-    fetchUsers: function()
-    {
-        // Query
-        const query = "SELECT * FROM users";
-
-        return new Promise((resolve, fail) => {
+            // Query
+            const [res] = await pool.query("DELETE FROM users WHERE id = ?", [user_id]);
             
-            this.connection.query(query, function (err, result, fields) {
-                if(err) return fail(err);
-                users = JSON.parse(JSON.stringify(result));
-                resolve(result);
-            });
-        });
+            // Result
+            if(res.affectedRows <= 0) return "NOT EXISTS";
+            else return "OK";
+        }
+        catch(err)
+        {
+            console.log(`ERROR: ${err}`);
+            return "ERROR";
+        }
     },
 
-    fetchModel: function()
+    fetchUser: async function(user_id)
+    {
+        try
+        {
+            // Query
+            const [res] = await pool.query("SELECT * FROM users WHERE userId = ?", user_id);
+            
+            // Result
+            if(res.length <= 0) return "NOT EXISTS";
+            else return "EXISTS";
+        }
+        catch(err)
+        {
+            console.log(`ERROR: ${err}`);
+            return "ERROR";
+        }
+    },
+
+    fetchUsers: async function()
+    {
+        try
+        {
+            // Query
+            return await pool.query("SELECT * FROM users");
+        }
+        catch(err)
+        {
+            console.log(`ERROR: ${err}`);
+            return "ERROR";
+        }
+    },
+
+    fetchModel: async function()
     {
         // TODO: get and return la model info
     },
 
-    updateModel: function(model_json)
+    updateModel: async function(model_json)
     {
         // TODO: update model info
     },
 
-    fetchLog: function()
+    fetchLog: async function()
     {
         // TODO: get and return del log de las conversaciones
     },
 
-    updateLog: function(log_json)
+    updateLog: async function(log_json)
     {
         // TODO: update log de las conversaciones
     },
 
-    getInfo: function()
+    getInfo: async function()
     {
         // TODO: toda la información de la database
     },
 
 }
 
-module.exports = DATABASE;
+module.exports = QUERIES;
