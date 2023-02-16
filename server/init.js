@@ -13,6 +13,7 @@ const session = require('express-session');
 const validator = require('express-validator');
 const passport = require('passport');
 const mysqlsession = require('express-mysql-session')(session);
+const ejs = require('ejs');
 
 // Own module imports
 const SERVER = require("./server.js");
@@ -31,11 +32,12 @@ const server = http.createServer(app); // Instead of passing a custom function t
 /***************** EXPRESS JS *****************/
 
 // Settings
+app.set('appName', 'Jabbon');
 app.set('port', process.env.PORT || 9014);
-app.set("views", path.join(__dirname, "views"));
 
 // View Engine
-//TODO
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 // Middleware
 app.use(morgan('short')); // To see request content
@@ -48,11 +50,12 @@ app.use((req, res, next) =>{
   next();
 });
 
-// Routes
+// Routers
 app.use(require("./routes/index"));
 
 // Public
-app.use(express.static(path.join(__dirname, 'public')));
+console.log(path.join(__dirname, '../public'));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Launch the server
 server.listen(app.get('port'), () => SERVER.onReady(app.get('port')));

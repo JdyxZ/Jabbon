@@ -1,8 +1,9 @@
 // Imports
 const fs = require('fs').promises;
-const model = require("../public/model.js");
+const path = require("path");
+const model = require(path.join(__dirname, "../core/model/model.js"));
 const DATABASE = require("./database/database.js");
-require("../public/framework.js");
+require(path.join(__dirname, "../core/framework.js"));
 
 // Model vars
 const User = model.User;
@@ -22,7 +23,7 @@ var SERVER =
     init: async function(){
 
         // Load world data
-        const data = await fs.readFile("./public/rooms.json");
+        const data = await fs.readFile(path.join(__dirname, "../core/model/rooms.json"));
         WORLD.fromJSON(JSON.parse(data));
         
         // Notify success
