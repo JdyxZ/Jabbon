@@ -7,7 +7,7 @@ var MYAPP = {
 
     init: function()
     {
-        fetch("rooms.json")
+        fetch("model/rooms.json")
         .then(function(resp){ return resp.json(); })
         .then(function(json){
              WORLD.fromJSON(json);

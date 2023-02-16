@@ -1,9 +1,9 @@
 // Imports
 const fs = require('fs').promises;
 const path = require("path");
-const model = require(path.join(__dirname, "../core/model/model.js"));
+const model = require(path.join(__dirname, "../public/model/model.js"));
 const DATABASE = require("./database/database.js");
-require(path.join(__dirname, "../core/framework.js"));
+require(path.join(__dirname, "../public/framework.js"));
 
 // Model vars
 const User = model.User;
@@ -23,7 +23,7 @@ var SERVER =
     init: async function(){
 
         // Load world data
-        const data = await fs.readFile(path.join(__dirname, "../core/model/rooms.json"));
+        const data = await fs.readFile(path.join(__dirname, "../public/model/rooms.json"));
         WORLD.fromJSON(JSON.parse(data));
         
         // Notify success
@@ -41,7 +41,7 @@ var SERVER =
     },
 
     // ExpressJS callbacks
-    signin: function(credentials)
+    signup: function(credentials)
     {
         // Database check
         const result = DATABASE.validateUsername(credentials.username);

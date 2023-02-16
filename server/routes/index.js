@@ -3,15 +3,26 @@ const SERVER = require("../server.js");
 const express = require('express');
 const router = express.Router();
 
-// Routes
+// Get routes
 router.get('/', async (req, res) => {
-  res.render("../views/index");
-})
+  res.render("../views/login");
+});
 
-router.get('/user', SERVER.getUser);
+router.get('/login', async (req, res) => {
+  res.render("../views/login");
+});
 
-router.post('/sigin', async function(req, res){ // User signin
-  SERVER.signin(req.body);
+router.get('/signup', async (req, res) => {
+  res.render("../views/signup");
+});
+
+router.get('/canvas', async (req, res) => {
+  res.render("../views/canvas");
+});
+
+// Post routes
+router.post('/signup', async function(req, res){ // User signin
+  SERVER.signup(req.body);
   res.end("Sigin request received");
 });
 
@@ -19,6 +30,10 @@ router.post('/login', async function(req, res){ // User login
   SERVER.login(req.body);
   res.end("Login request received");
 });
+
+// Util routes
+
+router.get('/user', SERVER.getUser);
 
 router.put('/user', async function(req, res){ // User update
   SERVER.updateUser(req.body);
