@@ -6,6 +6,7 @@ const http = require('http');
 const url = require('url');
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors')
 const WebSocketServer = require('websocket').server;
 
 // Own module imports
@@ -28,6 +29,7 @@ app.set('port', process.env.PORT || 9014);
 // Middleware
 app.use(morgan('short')); // To see request content
 app.use(express.json()); // To parse json content
+app.use(cors());
 app.use(express.urlencoded({extended: false})); // User send data
 app.use(express.static('public')); // To handle static files, redirect to public folder
 
@@ -66,7 +68,7 @@ const wss = new WebSocketServer({ // create the server
 
 // Client connection
 wss.on('request', function(request) {
-    
+      
     // Accept request and establish connection
     const connection = request.accept(null, request.origin);
 

@@ -31,8 +31,7 @@ var SERVER =
         console.log(`World data successfully loadad! \nNumber of rooms ${WORLD.num_rooms}`);
 
         // SQL Database
-        DATABASE.initConnection();
-
+        //DATABASE.initConnection();
     },
 
     // Ready callback
@@ -47,7 +46,7 @@ var SERVER =
     {
         // Database check
         const result = await DATABASE.validateUsername(credentials.username);
-        console.log(result)
+     
         // Create new user and store it
         const user = WORLD.createUser(null);
         user.name = credentials.username;
