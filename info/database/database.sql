@@ -13,4 +13,4 @@ CREATE TABLE users (
     PRIMARY KEY (user_id)
 );
 
-DELETE DATABASE mydb;
+-- DELETE DATABASE mydb;

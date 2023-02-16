@@ -22,7 +22,7 @@ var login = {
 
     changeToSingUp: function()
     {
-        this.switchToSign();
+        //this.switchToSign();
     },
     
     onLoginReady: function()
@@ -37,7 +37,6 @@ var login = {
                 return
             }
             else
-                alert("Send data to the server");
                 this.sendCredentials();
         }   
         else
