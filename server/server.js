@@ -1,7 +1,7 @@
 // Imports
 const fs = require('fs').promises;
 const model = require("../public/model.js");
-const QUERIES = require("./queries.js");
+const DATABASE = require("./database.js");
 require("../public/framework.js");
 
 // Model vars
@@ -27,6 +27,9 @@ var SERVER =
         
         // Notify success
         console.log(`World data successfully loadad! \nNumber of rooms ${WORLD.num_rooms}`);
+
+        // MySQL Connection
+        DATABASE.initConnection();
     },
 
     // Ready callback
@@ -40,7 +43,7 @@ var SERVER =
     signin: function(credentials)
     {
         // Database check
-        const result = QUERIES.validateUsername(credentials.username);
+        const result = DATABASE.validateUsername(credentials.username);
         console.log(result);
      
         // Create new user and store it
@@ -51,13 +54,13 @@ var SERVER =
         room.addUser(user);
 
         // Database push
-        const result = QUERIES.pushUser(user, credentials.password);
-        console.log(result);
+        const result2 = DATABASE.pushUser(user, credentials.password);
+        console.log(result2);
     },
 
     login: function(credentials)
     {
-       const result = QUERIES.validateUser(credentials);
+       const result = DATABASE.validateUser(credentials);
        console.log(result);
     }, 
 

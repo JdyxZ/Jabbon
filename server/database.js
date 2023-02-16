@@ -1,17 +1,28 @@
-/***************** REST API *****************/
+/***************** DATABASE *****************/
+const mysql = require('mysql2');
 
-// Imports
-import { pool } from "./database.js";
+var DATABASE = {
 
-var QUERIES = {
+    // Properties
+    pool: null,
 
     // Methods
+    initConnection: async function()
+    {
+        this.pool = await mysql.createPool({
+            host: process.env.DB_HOST || "localhost",
+            user: process.env.DB_USER || "root",
+            password: process.env.DB_PASSWORD || "Cacahuete200$",
+            database: process.env.DB_DATABASE || "mydb"
+        })
+    },
+    
     pushUser: async function(user, password) 
     {
         try
         {
             // Query
-            await pool.query( "INSERT INTO users SET userId = ?, name = ?, password = ?", ['2', user.name, password]);
+            await this.pool.query( "INSERT INTO users SET userId = ?, name = ?, password = ?", ['2', user.name, password]);
             return "OK";
         }
         catch(err)
@@ -25,7 +36,7 @@ var QUERIES = {
         try
         {
             // Query
-            const [res] = await pool.query("SELECT * FROM users WHERE name = ?", [username]);
+            const [res] = await this.pool.query("SELECT * FROM users WHERE name = ?", [username]);
             
             // Result
             if(res.length <= 0) return "NOT EXISTS";
@@ -43,7 +54,7 @@ var QUERIES = {
         try
         {
             // Query
-            const [res] = await pool.query("SELECT * FROM users WHERE name = ?, password = ?", [user['user'],user['password']]);
+            const [res] = await this.pool.query("SELECT * FROM users WHERE name = ?, password = ?", [user['user'],user['password']]);
             
             // Result
             if(res.length <= 0) return "NOT EXISTS";
@@ -66,7 +77,7 @@ var QUERIES = {
         try
         {
             // Query
-            const [res] = await pool.query("DELETE FROM users WHERE id = ?", [user_id]);
+            const [res] = await this.pool.query("DELETE FROM users WHERE id = ?", [user_id]);
             
             // Result
             if(res.affectedRows <= 0) return "NOT EXISTS";
@@ -84,7 +95,7 @@ var QUERIES = {
         try
         {
             // Query
-            const [res] = await pool.query("SELECT * FROM users WHERE userId = ?", user_id);
+            const [res] = await this.pool.query("SELECT * FROM users WHERE userId = ?", user_id);
             
             // Result
             if(res.length <= 0) return "NOT EXISTS";
@@ -102,7 +113,7 @@ var QUERIES = {
         try
         {
             // Query
-            return await pool.query("SELECT * FROM users");
+            return await this.pool.query("SELECT * FROM users");
         }
         catch(err)
         {
@@ -138,4 +149,4 @@ var QUERIES = {
 
 }
 
-module.exports = QUERIES;
+module.exports = DATABASE;
