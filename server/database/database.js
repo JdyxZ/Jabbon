@@ -22,7 +22,7 @@ var DATABASE = {
         try
         {
             // Query
-            await this.pool.query( "INSERT INTO users SET userId = ?, name = ?, password = ?", ['2', user.name, password]);
+            await this.pool.query( "INSERT INTO users SET name = ?, password = ?, avatar = ?, room_name = ?, position = ?", [user.name, password,"deafult.png","start",0]);
             return "OK";
         }
         catch(err)
@@ -69,7 +69,16 @@ var DATABASE = {
 
     updateUser: async function(user_json)
     {
-    // TODO
+        try 
+        {
+            // Query
+            cost [res] = await this.pool.query("UPDATE FROM users SET room_name = ?, position = ?, WHERE name = ?",["","",""]);
+            return "OK";
+        } 
+        catch(err)
+        {
+            return "ERROR";
+        }
     },
 
     removeUser: async function(user_id)

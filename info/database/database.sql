@@ -7,7 +7,10 @@ CREATE TABLE users (
     name VARCHAR(255) UNIQUE,
     password VARCHAR(255),
     avatar VARCHAR(255),
-    position JSON,
+    room_name VARCHAR(255),
+    position INT,
 
     PRIMARY KEY (user_id)
 );
+
+DELETE DATABASE mydb;
