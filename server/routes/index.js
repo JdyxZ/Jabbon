@@ -29,8 +29,15 @@ router.post('/signup', async function(req, res){ // User signin
 
 router.post('/login', async function(req, res){ // User login
   //SERVER.login(req.body);
-  console.log(req.body);
-  res.end("Login request received");
+  console.log(req.body.type);
+  if(req.body.type == "signup")
+  {
+    res.render("../views/signup");
+  } 
+  else 
+  {
+    res.end("Login request received");
+  }
 });
 
 // Util routes

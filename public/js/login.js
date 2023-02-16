@@ -22,7 +22,7 @@ var login = {
 
     changeToSingUp: function()
     {
-        alert("CARGAR VIEW LOG IN")
+        this.switchToSign();
     },
     
     onLoginReady: function()
@@ -101,6 +101,25 @@ var login = {
               password: this.loginp.value
             })
           })
+          .then(response => {
+            console.log('Server response:', response);
+          })
+          .catch(error => {
+            console.error('Error sending data to server:', error);
+          });
+    },
+
+    switchToSign: function()
+    {
+        fetch('http://localhost:9014/LOGIN', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              type: "signup"
+            })
+            })
           .then(response => {
             console.log('Server response:', response);
           })
