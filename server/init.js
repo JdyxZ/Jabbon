@@ -8,6 +8,11 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors')
 const WebSocketServer = require('websocket').server;
+const path = require('path');
+const session = require('express-session');
+const validator = require('express-validator');
+const passport = require('passport');
+const mysqlsession = require('express-mysql-session')(session);
 
 // Own module imports
 const SERVER = require("./server.js");

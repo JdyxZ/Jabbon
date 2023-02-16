@@ -1,9 +1,7 @@
 // Imports
-const mysql = require('mysql');
 const fs = require('fs').promises;
 const model = require("../public/model.js");
 const DATABASE = require("./database.js");
-console.log(require.resolve("./database.js"))
 require("../public/framework.js");
 
 // Model vars
