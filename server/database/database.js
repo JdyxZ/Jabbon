@@ -86,7 +86,7 @@ var DATABASE = {
         try
         {
             // Query
-            const [res] = await this.pool.query("DELETE FROM users WHERE id = ? ;", [user_id]);
+            const [res] = await this.pool.query("DELETE FROM users WHERE user_id = ? ;", [user_id]);
             
             // Result
             if(res.affectedRows <= 0) return "NOT EXISTS";
@@ -104,7 +104,7 @@ var DATABASE = {
         try
         {
             // Query
-            const [res] = await this.pool.query("SELECT * FROM users WHERE userId = ? ;", user_id);
+            const [res] = await this.pool.query("SELECT * FROM users WHERE user_id = ? ;", user_id);
             
             // Result
             if(res.length <= 0) return "NOT EXISTS";
