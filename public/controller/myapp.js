@@ -4,6 +4,7 @@ var MYAPP = {
 
     current_room: null,
     myuser: null,
+    user_list: [],
 
     init: function()
     {

@@ -34,10 +34,21 @@ var CLIENT =
                 console.log(`New TYPING message received: ${message.content}`);
                 break;
             case "PROFILE":
+                //user_list
                 console.log(`New PROFILE message received: ${message.content}`);
+                MYAPP.user_list.push(message.content);
                 break;
             case "ERROR":
                 console.log(obj.content);
+                break;
+            case "ENTER":
+                console.log(`New USER in the room: ${message.content}`);
+                MYAPP.user_list.push(message.content);
+                MYAPP.myuser = message.content;
+                break;
+            case "LEAVE":
+                console.log(`User LEAVED the room: ${message.content}`);
+                WORLD.removeUser(JSON.stringify(message.content));
                 break;
         }        
         

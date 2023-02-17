@@ -108,13 +108,33 @@ var SERVER =
         console.log("User has joined");
        
         // Store connection
-        this.clients[user.id] = connection;       
+        const user = WORLD.getUser(0);
+        if(user)
+        {
+            this.clients[user.id] = connection; 
+
+            this.sendRoomMessage( new Message("system", "ENTER", user.toJSON(), getTime()), user.room,user.id);
+            this.sendPrivateMessage(new Message("system", "ENTER", user.toJSON(), getTime()), connection);
+        };
+
     },
+    
 
     onUserDisconnected: function(connection)
     {
         console.log("User has left");
-        // delete socket;
+        // get necesary data of the leaving user
+        const uid = getKeyFromValue(this.clients, connection);
+        const user = WORLD.getUser(uid);
+
+        //delete the connection
+        delete this.clients.uid;
+
+        //Update info to the other users
+        this.sendRoomMessage( new Message("system", "LEAVE", JSON.parse(user.name), getTime()), user.room);
+
+        //Update user info in the DB
+        DATABASE.updateUser(user.toJSON());
     },
 
     // Methods
@@ -126,17 +146,18 @@ var SERVER =
         })
     },
 
-    sendRoomMessage: function(message)
+    sendRoomMessage: function(message, room_name, id_)
     {
-         // Iterate through connections
-         Object.values(this.clients).forEach(connection => {
+        // Get room
+        const room = WORLD.getRoom(room_name);
 
-            // Send message to the user
+        // Iterate through room people
+        for(id of room.people)
+        {
+            if(id == id_) continue;
+            const connection = this.clients[id];
             connection.sendUTF(JSON.stringify(message));
-
-            // Return
-            return;
-        });   
+        }
     },
 
     sendPrivateMessage: function(message, addressees)

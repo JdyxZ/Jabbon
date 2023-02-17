@@ -37,7 +37,7 @@ User.prototype.toJSON = function()
     return user_json;
 }
 
-User.prototypetoJSONSimplified = function()
+User.prototype.toJSONSimplified = function()
 {
     // Make a copy of the properties that we want to share
     const user_json =
@@ -82,6 +82,11 @@ Room.prototype.toJSON = function()
 
     // Output JSON
     return room_json;
+}
+
+Room.prototype.getUsers = function()
+{
+    return this.people;
 }
 
 /***************** WORLD *****************/
@@ -146,6 +151,11 @@ var WORLD = {
 
         rooms[room.name] = room;
     },
+    
+    removeUser: function(name)
+    {
+        delete users.name;
+    },
 
     fromJSON: function(json)
     {
@@ -178,6 +188,6 @@ function Message(sender, type, content, time)
 if(typeof(window) == "undefined")
 {
     module.exports = {
-        WORLD, Room, User, FACING_RIGHT, FACING_FRONT, FACING_LEFT, FACING_BACK
+        WORLD, Room, User, FACING_RIGHT, FACING_FRONT, FACING_LEFT, FACING_BACK, Message
     }
 }
