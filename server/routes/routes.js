@@ -27,7 +27,7 @@ router.post('/signup', function(req, res){ // User signin
   res.end("Sigin request received");
 });
 
-router.post('/login', function(req, res){ // User login
+router.post('/login', function(req, res){ // User login 
   //SERVER.login(req.body);
   console.log(req.body);
   res.end("Login request received");

@@ -49,11 +49,12 @@ app.use(bodyParser.json());// Parse the data directly
 
 // Global variables
 app.use((req, res, next) =>{
+
   next();
 });
 
 // Routers
-app.use(require("./routes/index"));
+app.use(require("./routes/routes"));
 
 // Public
 console.log(path.join(__dirname, '../public'));
