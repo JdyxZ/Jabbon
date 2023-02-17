@@ -7,6 +7,9 @@ Path module: https://www.digitalocean.com/community/tutorials/nodejs-how-to-use_
 Node.js and ExpressJS: https://www.youtube.com/watch?v=794Q71KVw1k& 
 SQL Queries and Routing Authentication (2:11): https://www.youtube.com/watch?v=qJ5R9WTW0_E&list=PLL0TiOXBeDahTsuVTKGV8SLG4XiCGnstS&index=6 
 EJS (3:10): https://www.youtube.com/watch?v=JmJ1WUoUIK4&list=PLL0TiOXBeDahTsuVTKGV8SLG4XiCGnstS&index=19& 
+Destructuring assignment: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
+HTTP methods: https://developer.mozilla.org/es/docs/Web/HTTP/Methods 
+NPM verbosity: https://docs.npmjs.com/cli/v9/using-npm/logging 
 
 
 # Sr.OjeteSucio

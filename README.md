@@ -34,6 +34,30 @@ createRoom:function (name, background)
 },
 */
 
+// SERVER
+/*
+    signup: function(credentials)
+    {
+     
+        // Create new user and store it
+        const user = WORLD.createUser(null);
+        user.name = credentials.username;
+        user.avatar = credentials.avatar;
+        const room = WORLD.getRoom(WORLD.default_room);
+        room.addUser(user);
+
+        // Database push
+        const result2 = DATABASE.pushUser(user, credentials.password);
+        console.log(result2);
+    },
+
+    login: function(credentials)
+    {
+       const result = DATABASE.validateUser(credentials);
+       console.log(result);
+    }
+*/
+
 
 //DATABASE
 

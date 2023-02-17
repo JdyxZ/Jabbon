@@ -29,3 +29,8 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- DROP DATABASE IF EXISTS Jabbon;
+
+-- QUERIES
+USE JabbonDB;
+
+TABLE users;

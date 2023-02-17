@@ -1,5 +1,5 @@
 /***************** DATABASE *****************/
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
 var DATABASE = {
 
@@ -54,7 +54,7 @@ var DATABASE = {
         try
         {
             // Query
-            const [res] = await this.pool.query("SELECT * FROM users WHERE name = ? AND password = ? ;", [user['user'],user['password']]);
+            const [res] = await this.pool.query("SELECT * FROM users WHERE name = ? AND password = ? ;", [user.name, user.password]);
             
             // Result
             if(res.length <= 0) return "NOT EXISTS";
@@ -71,8 +71,11 @@ var DATABASE = {
     {
         try 
         {
+            // Get user meaningful properties 
+            const { name, position, room } = user_json; 
+
             // Query
-            cost [res] = await this.pool.query("UPDATE users SET room_name = ?, position = ? WHERE name = ? ;",["","",""]);
+            await this.pool.query("UPDATE users SET room_name = ?, position = ? WHERE name = ? ;",[room, position, name]);
             return "OK";
         } 
         catch(err)
@@ -104,11 +107,7 @@ var DATABASE = {
         try
         {
             // Query
-            const [res] = await this.pool.query("SELECT * FROM users WHERE user_id = ? ;", user_id);
-            
-            // Result
-            if(res.length <= 0) return "NOT EXISTS";
-            else return "EXISTS";
+            return await this.pool.query("SELECT * FROM users WHERE user_id = ? ;", user_id);
         }
         catch(err)
         {
