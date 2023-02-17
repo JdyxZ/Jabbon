@@ -22,7 +22,7 @@ var DATABASE = {
         try
         {
             // Query
-            await this.pool.query( "INSERT INTO users SET name = ?, password = ?, avatar = ?, room_name = ?, position = ?", [user.name, password,"deafult.png","start",0]);
+            await this.pool.query( "INSERT INTO users SET name = ?, password = ?, avatar = ?, room_name = ?, position = ? ;", [user.name, password,"deafult.png","start",0]);
             return "OK";
         }
         catch(err)
@@ -36,7 +36,7 @@ var DATABASE = {
         try
         {
             // Query
-            const [res] = await this.pool.query("SELECT * FROM users WHERE name = ?", [username]);
+            const [res] = await this.pool.query("SELECT * FROM users WHERE name = ? ;", [username]);
             
             // Result
             if(res.length <= 0) return "NOT EXISTS";
@@ -54,7 +54,7 @@ var DATABASE = {
         try
         {
             // Query
-            const [res] = await this.pool.query("SELECT * FROM users WHERE name = ?, password = ?", [user['user'],user['password']]);
+            const [res] = await this.pool.query("SELECT * FROM users WHERE name = ? AND password = ? ;", [user['user'],user['password']]);
             
             // Result
             if(res.length <= 0) return "NOT EXISTS";
@@ -72,7 +72,7 @@ var DATABASE = {
         try 
         {
             // Query
-            cost [res] = await this.pool.query("UPDATE FROM users SET room_name = ?, position = ?, WHERE name = ?",["","",""]);
+            cost [res] = await this.pool.query("UPDATE users SET room_name = ?, position = ? WHERE name = ? ;",["","",""]);
             return "OK";
         } 
         catch(err)
@@ -86,7 +86,7 @@ var DATABASE = {
         try
         {
             // Query
-            const [res] = await this.pool.query("DELETE FROM users WHERE id = ?", [user_id]);
+            const [res] = await this.pool.query("DELETE FROM users WHERE id = ? ;", [user_id]);
             
             // Result
             if(res.affectedRows <= 0) return "NOT EXISTS";
@@ -104,7 +104,7 @@ var DATABASE = {
         try
         {
             // Query
-            const [res] = await this.pool.query("SELECT * FROM users WHERE userId = ?", user_id);
+            const [res] = await this.pool.query("SELECT * FROM users WHERE userId = ? ;", user_id);
             
             // Result
             if(res.length <= 0) return "NOT EXISTS";
@@ -122,7 +122,7 @@ var DATABASE = {
         try
         {
             // Query
-            return await this.pool.query("SELECT * FROM users");
+            return await this.pool.query("SELECT * FROM users ;");
         }
         catch(err)
         {
