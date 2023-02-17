@@ -11,9 +11,9 @@ var DATABASE = {
     {
         this.pool = await mysql.createPool({
             host: process.env.DB_HOST || "localhost",
-            user: process.env.DB_USER || "root",
+            user: process.env.DB_USER || "Jabbon",
             password: process.env.DB_PASSWORD || "Cacahuete200$",
-            database: process.env.DB_DATABASE || "mydb"
+            database: process.env.DB_DATABASE || "JabbonDB"
         });
     },
     
