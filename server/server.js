@@ -107,14 +107,20 @@ var SERVER =
     {
         console.log("User has joined");
        
-        // Store connection
         const user = WORLD.getUser(0);
         if(user)
-        {
+        {   // Store connection
             this.clients[user.id] = connection; 
 
-            this.sendRoomMessage( new Message("system", "ENTER", user.toJSON(), getTime()), user.room,user.id);
-            this.sendPrivateMessage(new Message("system", "ENTER", user.toJSON(), getTime()), connection);
+            // Send room data
+            this.sendPrivateMessage(new Message("system", "ROOM", user.toJSON(), getTime()), connection);
+
+            // Send myinfo data
+            this.sendPrivateMessage(new Message("system", "YOUR_INFO", user.toJSON(), getTime()), connection);
+
+            // Send New user info
+            this.sendRoomMessage( new Message("system", "USER_JOIN", user.toJSON(), getTime()), user.room,user.id);
+            
         };
 
     },
@@ -131,10 +137,10 @@ var SERVER =
         delete this.clients.uid;
 
         //Update info to the other users
-        this.sendRoomMessage( new Message("system", "LEAVE", JSON.parse(user.name), getTime()), user.room);
+        this.sendRoomMessage( new Message("system", "USER_LEFT", JSON.parse(user.name), getTime()), user.room,uid);
 
-        //Update user info in the DB
-        DATABASE.updateUser(user.toJSON());
+        //Update the state of the user in word
+        //World
     },
 
     // Methods
