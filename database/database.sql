@@ -18,29 +18,47 @@ CREATE DATABASE IF NOT EXISTS JabbonDB;
 USE JabbonDB;
 
 CREATE TABLE IF NOT EXISTS users (
-    user_id INT NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) UNIQUE,
     password VARCHAR(255),
-    avatar VARCHAR(255),
-    room_name VARCHAR(255),
     position INT,
+    avatar VARCHAR(255),
+    room VARCHAR(255),
 
-    PRIMARY KEY (user_id)
+    PRIMARY KEY (id)
 );
 
--- DROP DATABASE IF EXISTS Jabbon;
+CREATE TABLE IF NOT EXISTS rooms (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) UNIQUE,
+    background VARCHAR(255),
+    exits JSON,
+    people JSON,
+    range_left INT,
+    range_right INT,
+
+    PRIMARY KEY (id)
+);
+
+-- DROP DATABASE IF EXISTS JabbonDB;
 
 -- INSERTS
 
 USE JabbonDB;
 
-INSERT INTO users (user_id, name, password, avatar, room_name, position)
-VALUES (0, "javi", "Cacahuete", "2", "hola", 40);
+INSERT INTO users (name, password, position, avatar, room)
+VALUES ('javi', 'Cacahuete', 40, '2', 'Camping');
 
-INSERT INTO users (user_id, name, password, avatar, room_name, position)
-VALUES (0, "eric", "Avocado", "4", "foo", 40);
+INSERT INTO users (name, password, position, avatar, room)
+VALUES ('eric', 'Avocado', 40, '4', 'Camping');
+
+INSERT INTO rooms (name, background, exits, people, range_left, range_right)
+VALUES ('Camping', './public/media/images/background.png', '{"exit1": -100, "exit2" : 100}', '{"user1": 0, "user2": 1}', -100, 100);
+
 
 -- QUERIES
 USE JabbonDB;
 
 TABLE users;
+
+TABLE rooms;

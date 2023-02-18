@@ -147,7 +147,7 @@ var DATABASE = {
         try
         {
             // Query
-            return {type: "OK", content: await this.pool.query("SELECT * FROM users ;")};
+            return {type_users: "OK", users: await this.pool.query("SELECT * FROM users ;")};
         }
         catch(err)
         {
@@ -157,12 +157,22 @@ var DATABASE = {
         }
     },
 
-    fetchModel: async function()
+    fetchRooms: async function()
     {
-        // TODO: get and return la model info
+        try
+        {
+            // Query
+            return {type_rooms: "OK", rooms: await this.pool.query("SELECT * FROM rooms ;")};
+        }
+        catch(err)
+        {
+            // Error
+            console.log(`${err}`);
+            return {type: "ERROR", content: `${err}`};
+        } 
     },
 
-    updateModel: async function(model_json)
+    updateModel: async function(user_json, room_json)
     {
         // TODO: update model info
     },
@@ -175,13 +185,7 @@ var DATABASE = {
     updateLog: async function(log_json)
     {
         // TODO: update log de las conversaciones
-    },
-
-    getInfo: async function()
-    {
-        // TODO: toda la información de la database
-    },
-
+    }
 }
 
 module.exports = DATABASE;

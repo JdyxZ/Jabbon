@@ -5,16 +5,16 @@ console.log(`Serving with pid ${process.pid}`);
 const http = require('http');
 const url = require('url');
 const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors')
+const morgan = require('morgan'); // ?
+const cors = require('cors');
 const WebSocketServer = require('websocket').server;
 const path = require('path');
-const session = require('express-session');
-const validator = require('express-validator');
-const passport = require('passport');
-const mysqlsession = require('express-mysql-session')(session);
+const session = require('express-session'); // ?
+const validator = require('express-validator'); // ?
+const passport = require('passport'); // ?
+const mysqlsession = require('express-mysql-session')(session); // ?
 const bodyParser = require('body-parser');
-const ejs = require('ejs');
+const ejs = require('ejs'); // ?
 
 // Own module imports
 const SERVER = require("./server.js");

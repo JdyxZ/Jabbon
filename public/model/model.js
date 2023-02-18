@@ -54,11 +54,12 @@ User.prototype.toJSONSimplified = function()
 
 function Room(data)
 {
-    this.id = WORLD.last_room_id ++;
-    this.name = data.name || "unnamed";
-    this.background = data.background;
-    this.people = data.people; //ids
-    this.range = data.range;
+    this.id = data == undefined ? -1 : data.id || -1;
+    this.name = data == undefined ? "unnamed" : data.name || "unnamed";
+    this.background = data == undefined ? "./public/media/images/background.png" : data.background || "./public/media/images/background.png";
+    this.exits = data == undefined ? [] : data.exits || [];
+    this.people = data == undefined ? [] : data.people || []; //ids
+    this.range = data == undefined ? [] : data.range || [];
 }
 
 Room.prototype.addUser = function(user)
@@ -94,19 +95,39 @@ var WORLD = {
     // Objects
     rooms: {},
     users: {},
-
-    // Room info
-    default_room: null,
     num_users: 0,
     num_rooms: 0,
-    last_room_id: 0,
 
     // Methods
+    init: function(rooms_array, users_array)
+    {
+        rooms_array.map( room => 
+        {
+            room.exits = Object.values(room.exits);
+            room.people = Object.values(room.people);
+            room.range = [room.range_left, room.range_right];
+            delete room.range_left;
+            delete room.range_right;
+            return room
+        });
+
+        const world_json =
+        {
+            rooms: rooms_array,
+            users: users_array
+        }
+
+        this.fromJSON(world_json);
+
+        // Notify success
+        console.log(`World data successfully loadad! \nNumber of rooms ${WORLD.num_rooms}`);
+    },
+
     createUser: function (data)
     {
         var user = new User(data);
         this.num_users++;
-        this.users[user.id] = user;
+        this.users[user.name] = user;
         return user;
     },
 
@@ -114,7 +135,7 @@ var WORLD = {
     {
         var room = new Room(data);
         this.num_rooms++;
-        this.rooms[room.id] = room;
+        this.rooms[room.name] = room;
         return room;
     },
 
@@ -155,22 +176,40 @@ var WORLD = {
         delete users.name;
     },
 
-    fromJSON: function(json)
+    addUsertoRoom: function(user_name, room_name)
+    {
+        const user = this.getUser(user_name);
+        const room = this.getRoom(room_name);
+        room.addUser(user);
+    },
+
+    fromJSON: function(world_json)
     {
         // Create rooms
-        json.rooms.forEach(room => {
-            this.createRoom(room);
-        });            
-        
-        // Set room general info
-        this.default_room = json.default_room;
-        this.last_id_room = json.last_id;
+        world_json.rooms.forEach(room_json => {
+            this.createRoom(room_json);
+        }); 
+    
+        // Create users
+        world_json.users.forEach(user_json => {
+            const user = this.createUser(user_json);
+            this.addUsertoRoom(user.name, user.room);
+        }); 
     },
 
     toJSON: function()
     {
-        // TODO
-        return JSON.stringify(WORLD);
+        const{rooms, users, num_rooms, num_users} = this;
+
+        world_json =
+        {
+            num_rooms,
+            num_users,
+            rooms,
+            users
+        }
+
+        return JSON.stringify(world_json, null, 2);
     }
 }
 

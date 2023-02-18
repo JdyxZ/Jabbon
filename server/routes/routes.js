@@ -33,6 +33,10 @@ router.post('/login', function(req, res){ // User login
 });
 
 // Util routes
+router.get('/mr_worldwide', async function(req, res){ // Users info
+    res.end(SERVER.world.toJSON());
+});
+
 router.get('/user/:id', async function(req,res) { // User info
     const {type, content} = await DATABASE.fetchUser(req.params.id);
 
@@ -48,18 +52,18 @@ router.get('/user/:id', async function(req,res) { // User info
 });
 
 router.get('/users', async function(req, res){ // Users info
-    const {type, content} = await DATABASE.fetchUsers();
+    const {type_users, users} = await DATABASE.fetchUsers();
     
-    switch(type)
+    switch(type_users)
     {
         case("OK"):
-            res.end(JSON.stringify(content[0], null, 2));
+            res.end(JSON.stringify(users[0], null, 2));
             break;
         case("ERROR"):
-            res.end(content);
+            res.end(users);
             break;
     }
-})
+});
 
 router.post('/user', async function(req,res){ // User insert
     console.log(req.body);
@@ -74,7 +78,7 @@ router.post('/user', async function(req,res){ // User insert
             res.end(content);
             break;
     }
-})
+});
 
 router.put('/user', async function(req, res){ // User update
     const {type, content} = await DATABASE.updateUser(req.body);
