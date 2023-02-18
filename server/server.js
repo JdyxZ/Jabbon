@@ -22,23 +22,12 @@ var SERVER =
         DATABASE.initConnection();
 
         // Load world data
-        const {type_rooms, rooms} = await DATABASE.fetchRooms();
-        const {type_users, users} = await DATABASE.fetchUsers();
-        if(type_rooms == "ERROR")
-        {
-            console.log(rooms);
-            return;
-        } 
-        else if (type_users == "ERROR")
-        {
-            console.log(users);
-            return;
-        }
-        else
-        {
-            WORLD.init(rooms[0], users[0]);
-            this.world = WORLD;
-        }
+        const {type, model} = await DATABASE.fetchModel();
+        if(type == "ERROR") console.log(model);
+        else WORLD.init(model.rooms, model.users);
+
+        // Assign world to the SERVER
+        this.world = WORLD;
     },
 
     // Ready callback
