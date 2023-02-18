@@ -110,7 +110,6 @@ var SERVER =
         };
 
     },
-    
 
     onUserDisconnected: function(connection)
     {
