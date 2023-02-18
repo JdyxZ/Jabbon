@@ -1,10 +1,7 @@
-// External module imports
-const path = require("path");
-
-// Own module imports
-const {User, Room, WORLD, Message} = require(path.join(__dirname, "../public/model/model.js"));
+// Module imports
+const {User, Room, WORLD, Message} = require("../public/model/model.js");
 const DATABASE = require("./database/database.js");
-require(path.join(__dirname, "../public/framework.js"));
+require("../public/framework.js");
 
 /***************** SERVER *****************/
 var SERVER = 
@@ -22,8 +19,8 @@ var SERVER =
         DATABASE.initConnection();
 
         // Load world data
-        const {type, model} = await DATABASE.fetchModel();
-        if(type == "ERROR") console.log(model);
+        const [status, model] = await DATABASE.fetchModel();
+        if(status == "ERROR") console.log(model);
         else WORLD.init(model.rooms, model.users);
 
         // Assign world to the SERVER

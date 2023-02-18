@@ -1,5 +1,7 @@
 
-/***************** FRAMEWORK *****************/
+/********************************** FRAMEWORK **********************************/
+
+/***************** HTML ElEMENTS *****************/
 
 if(typeof(Document) != "undefined")
 {
@@ -35,48 +37,9 @@ if(typeof(Document) != "undefined")
 		}
 	};
 
-
 	Document.prototype.when = function(event, callback)	{
 		document.addEventListener(event, callback);
 	};
-
-}
-
-Number.prototype.clamp = function(min, max) 
-{
-	return Math.min(Math.max(this.valueOf(), min), max);
-};
-
-Number.prototype.lerp = function(target, step) 
-{
-	const origin = this.valueOf();
-	return origin * (1 - step) + target * step;
-};
-
-Date.prototype.getTime = function() 
-{
-	return `${this.getHours().toString().padStart(2,"0")}:${this.getMinutes().toString().padStart(2, "0")}`
-};
-
-function getTime()
-{
-	const date = new Date();
-	return date.getTime();
-}
-
-Date.prototype.getDate = function() 
-{
-	return `${this.getDay().toString().padStart(2,"0")}/${this.getMonth().toString().padStart(2, "0")}/${this.getFullYear()}`;
-};
-
-function getDate()
-{
-	const date = new Date();
-	return date.getDate();
-}
-
-if(typeof(HTMLElement) != "undefined")
-{
 
 	HTMLElement.prototype.getParents = function()
 	{
@@ -157,15 +120,22 @@ if(typeof(HTMLElement) != "undefined")
 		this.style.display = "none";
 	};
 
-}
+};
 
-Array.prototype.remove = function(element)
+/***************** NUMBER *****************/
+
+Number.prototype.clamp = function(min, max) 
 {
-	return this.filter( (value) =>
-	{
-		return value != element;
-	});
-}
+	return Math.min(Math.max(this.valueOf(), min), max);
+};
+
+Number.prototype.lerp = function(target, step) 
+{
+	const origin = this.valueOf();
+	return origin * (1 - step) + target * step;
+};
+
+/***************** STRING *****************/
 
 String.prototype.reverseString = function() 
 {
@@ -178,17 +148,39 @@ String.prototype.reverseString = function()
 		reversed_string[index++] = this.charAt(i);
 	}
 	return reversed_string.join("");
- }
+ };
+
+/***************** DATE *****************/
+
+Date.prototype.getTime = function() 
+{
+	return `${this.getHours().toString().padStart(2,"0")}:${this.getMinutes().toString().padStart(2, "0")}`
+};
+
+Date.prototype.getDate = function() 
+{
+	return `${this.getDay().toString().padStart(2,"0")}/${this.getMonth().toString().padStart(2, "0")}/${this.getFullYear()}`;
+};
+
+/***************** ARRAY *****************/
+
+Array.prototype.remove = function(element)
+{
+	return this.filter( (value) =>
+	{
+		return value != element;
+	});
+};
 
  Array.prototype.containsObject = function(property, value)
  {
 	return this.reduce((acc, {property, _}) => acc | property == value, false) 
- }
+ };
 
  Array.prototype.getObject = function(property, value)
  {
 	return this.filter(({property, _}) => property == value);
- }
+ };
 
  Array.prototype.getObjectIndex = function(property, value)
  {
@@ -196,12 +188,34 @@ String.prototype.reverseString = function()
 		if (element[property] == value) acc = index;
 		return acc;
 	}, -1);
- }
+ };
 
  Array.prototype.clone = function()
  {
 	return this.concat();
- }
+ };
+
+ Array.prototype.toObject = function(prefix)
+ {
+	return this.reduce((obj, element, index) => {
+		obj[`${prefix}${index}`] = element;
+		return obj;
+	}, {})
+ };
+
+ /***************** FUNCTIONS *****************/
+
+ function getTime()
+{
+	const date = new Date();
+	return date.getTime();
+}
+
+function getDate()
+{
+	const date = new Date();
+	return date.getDate();
+}
 
  function getKeyFromValue(array, value)
  {
@@ -219,4 +233,6 @@ String.prototype.reverseString = function()
 	 }
 	 
  };
+
+ module.exports = {getTime, getDate, getKeyFromValue};
  

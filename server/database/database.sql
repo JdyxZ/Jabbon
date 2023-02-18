@@ -42,15 +42,15 @@ CREATE TABLE IF NOT EXISTS rooms (
 
 -- DROP DATABASE IF EXISTS JabbonDB;
 
--- INSERTS
+-- QUERIES
 
 USE JabbonDB;
 
 INSERT INTO users (name, password, position, avatar, room)
-VALUES ('javi', 'Cacahuete', 40, '2', 1);
+VALUES ('javi', 'Cacahuete', 40, '2', 8);
 
 INSERT INTO users (name, password, position, avatar, room)
-VALUES ('eric', 'Avocado', 40, '4', 1);
+VALUES ('eric', 'Avocado', 40, '4', 8);
 
 INSERT INTO rooms (name, background, exits, people, range_left, range_right)
 VALUES ('Camping', './public/media/images/background.png', '{"exit1": -100, "exit2" : 100}', '{"user1": 0, "user2": 1}', -100, 100);
@@ -61,9 +61,16 @@ INSERT into users (id, name, position, avatar, room)
 VALUES (1, 'Haylo', 30, '1', 'Hall'), (2, 'Sr.OjeteSucio', 30, '2', 'Hall')
 ON DUPLICATE KEY UPDATE name = VALUES(name), position = VALUES(position), avatar = VALUES(avatar), room = VALUES(room);
 
--- QUERIES
+-- TABLE SHOW
 USE JabbonDB;
 
 TABLE users;
-
 TABLE rooms;
+
+-- TABLE DELETE CONTENT
+
+USE JabbonDB;
+
+DELETE FROM users;
+DELETE FROM rooms;
+

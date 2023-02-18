@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "tests": "nodemon server/database/tests.js",
     "server": "nodemon server/init.js"
   },
   "dependencies": {

@@ -9,7 +9,7 @@ const FACING_BACK = 3;
 
 function User(data)
 {   
-    this.id = -1;
+    this.id = data == undefined ? -1 : data.id || -1;
     this.name = data == undefined ? "unnamed" : data.name || "unamed";
     this.position = data == undefined ? 40 : data.position || 40;
     this.avatar = data == undefined ? "./media/images/char1.png" : data.avatar || "./media/images/char1.png";
@@ -180,7 +180,6 @@ var WORLD = {
     {
         const user = this.getUser(user_id);
         const room = this.getRoom(room_id);
-        console.log(room_id)
         room.addUser(user);
     },
 
