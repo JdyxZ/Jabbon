@@ -43,8 +43,6 @@ User.prototype.toJSONSimplified = function()
     const user_json =
     {
         id : this.id,
-        facing: this.facing,
-        room: this.room,
         target: this.target
     }
 
@@ -59,7 +57,7 @@ function Room(data)
     this.id = WORLD.last_room_id ++;
     this.name = data.name || "unnamed";
     this.background = data.background;
-    this.people = data.people;
+    this.people = data.people; //ids
     this.range = data.range;
 }
 

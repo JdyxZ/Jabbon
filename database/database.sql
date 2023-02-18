@@ -30,6 +30,16 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- DROP DATABASE IF EXISTS Jabbon;
 
+-- INSERTS
+
+USE JabbonDB;
+
+INSERT INTO users (user_id, name, password, avatar, room_name, position)
+VALUES (0, "javi", "Cacahuete", "2", "hola", 40);
+
+INSERT INTO users (user_id, name, password, avatar, room_name, position)
+VALUES (0, "eric", "Avocado", "4", "foo", 40);
+
 -- QUERIES
 USE JabbonDB;
 

@@ -9,25 +9,37 @@ var DATABASE = {
     // Methods
     initConnection: async function()
     {
-        this.pool = await mysql.createPool({
+        this.pool = mysql.createPool({
             host: process.env.DB_HOST || "localhost",
             user: process.env.DB_USER || "Jabbon",
             password: process.env.DB_PASSWORD || "Cacahuete200$",
-            database: process.env.DB_DATABASE || "JabbonDB"
+            database: process.env.DB_DATABASE || "JabbonDB",
+            port: process.env.DB_PORT || 3306
         });
     },
     
-    pushUser: async function(user, password) 
+    pushUser: async function(user_json) 
     {
         try
         {
-            // Query
-            await this.pool.query( "INSERT INTO users SET name = ?, password = ?, avatar = ?, room_name = ?, position = ? ;", [user.name, password,"deafult.png","start",0]);
-            return "OK";
+            // Destructure json
+            const { name, password, avatar, room, position} = user_json; 
+
+            // Throw errors
+            if(!name) throw "You must send a name";
+            if(!password) throw "You must send a password";
+            if(!avatar) throw "You must send an avatar";
+            if(!room) throw "You must send a room";
+            if(!position) throw "You must send a position";
+            
+            // Query            
+            return {type: "OK", content: await this.pool.query( "INSERT INTO users SET name = ?, password = ?, avatar = ?, room_name = ?, position = ? ;", [name, password, avatar, room, position])};
         }
         catch(err)
         {
-            return "ERROR";
+            // Error
+            console.log(err);
+            return {type: "ERROR", content: `${err}`};
         }
     },
 
@@ -35,35 +47,39 @@ var DATABASE = {
     {
         try
         {
-            // Query
-            const [res] = await this.pool.query("SELECT * FROM users WHERE name = ? ;", [username]);
+            // Throw errors
+            if(!username) throw "You must send a username";
             
-            // Result
-            if(res.length <= 0) return "NOT EXISTS";
-            else return "EXISTS";
+            // Query
+            return {type: "OK", content: await this.pool.query("SELECT * FROM users WHERE name = ? ;", [username])};
         }
         catch(err)
         {
-            console.log(`ERROR: ${err}`);
-            return "ERROR";
+            // Error
+            console.log(`${err}`);
+            return {type: "ERROR", content: `${err}`};
         }
     },
 
-    validateUser: async function(user) 
+    validateUser: async function(user_json) 
     {
         try
         {
+            // Destructure json
+            const {name, password} = user_json;
+
+            // Throw errors
+            if(!name) throw "You must send a username";
+            if(!password) throw "You must send a password";
+
             // Query
-            const [res] = await this.pool.query("SELECT * FROM users WHERE name = ? AND password = ? ;", [user.name, user.password]);
-            
-            // Result
-            if(res.length <= 0) return "NOT EXISTS";
-            else return "EXISTS";
+            return {type: "OK", content: await this.pool.query("SELECT * FROM users WHERE name = ? AND password = ? ;", [name, password])};
         }
         catch(err)
         {
-            console.log(`ERROR: ${err}`);
-            return "ERROR";
+            // Error
+            console.log(`${err}`);
+            return {type: "ERROR", content: `${err}`};
         }
     },
 
@@ -74,13 +90,19 @@ var DATABASE = {
             // Get user meaningful properties 
             const { name, position, room } = user_json; 
 
+            // Throw errors
+            if(!name) throw "You must send a name";
+            if(!position) throw "You must send a position";
+            if(!room) throw "You must send a room";
+
             // Query
-            await this.pool.query("UPDATE users SET room_name = ?, position = ? WHERE name = ? ;",[room, position, name]);
-            return "OK";
+            return {type: "OK", content: await this.pool.query("UPDATE users SET room_name = ?, position = ? WHERE name = ? ;",[room, position, name])};
         } 
         catch(err)
         {
-            return "ERROR";
+            // Error
+            console.log(`${err}`);
+            return {type: "ERROR", content: `${err}`};
         }
     },
 
@@ -88,17 +110,17 @@ var DATABASE = {
     {
         try
         {
+            // Throw errors
+            if(!user_id) throw "You must send a user_id";
+
             // Query
-            const [res] = await this.pool.query("DELETE FROM users WHERE user_id = ? ;", [user_id]);
-            
-            // Result
-            if(res.affectedRows <= 0) return "NOT EXISTS";
-            else return "OK";
+            return {type: "OK", content: await this.pool.query("DELETE FROM users WHERE user_id = ? ;", [user_id])};
         }
         catch(err)
         {
-            console.log(`ERROR: ${err}`);
-            return "ERROR";
+            // Error
+            console.log(`${err}`);
+            return {type: "ERROR", content: `${err}`};
         }
     },
 
@@ -106,13 +128,17 @@ var DATABASE = {
     {
         try
         {
+            // Throw errors
+            if(!user_id) throw "You must send a user_id";
+
             // Query
-            return await this.pool.query("SELECT * FROM users WHERE user_id = ? ;", user_id);
+            return {type: "OK", content: await this.pool.query("SELECT * FROM users WHERE user_id = ? ;", user_id)};
         }
         catch(err)
         {
-            console.log(`ERROR: ${err}`);
-            return "ERROR";
+            // Error
+            console.log(`${err}`);
+            return {type: "ERROR", content: `${err}`};
         }
     },
 
@@ -121,12 +147,13 @@ var DATABASE = {
         try
         {
             // Query
-            return await this.pool.query("SELECT * FROM users ;");
+            return {type: "OK", content: await this.pool.query("SELECT * FROM users ;")};
         }
         catch(err)
         {
-            console.log(`ERROR: ${err}`);
-            return "ERROR";
+            // Error
+            console.log(`${err}`);
+            return {type: "ERROR", content: `${err}`};
         }
     },
 

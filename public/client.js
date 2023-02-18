@@ -20,40 +20,6 @@ var CLIENT =
     },
 
     // WebSocket callbacks
-    onMessage: function(ws_message)
-    {
-        // Process message
-        const message = JSON.parse(ws_message.data);
-
-        switch(message.type)
-        {
-            case "TEXT":
-                console.log(`New TEXT message received: ${message.content}`);
-                break;
-            case "TYPING":
-                console.log(`New TYPING message received: ${message.content}`);
-                break;
-            case "PROFILE":
-                //user_list
-                console.log(`New PROFILE message received: ${message.content}`);
-                MYAPP.user_list.push(message.content);
-                break;
-            case "ERROR":
-                console.log(obj.content);
-                break;
-            case "ENTER":
-                console.log(`New USER in the room: ${message.content}`);
-                MYAPP.user_list.push(message.content);
-                MYAPP.myuser = message.content;
-                break;
-            case "LEAVE":
-                console.log(`User LEAVED the room: ${message.content}`);
-                WORLD.removeUser(JSON.stringify(message.content));
-                break;
-        }        
-        
-    },
-
     onOpen: function()
     {
         console.log("Connecting!");
@@ -62,6 +28,98 @@ var CLIENT =
     onClose: function()
     {
         console.log("Disconnecting!");
+    },
+    
+    onMessage: function(ws_message)
+    {
+        // Process message
+        const message = JSON.parse(ws_message.data);
+
+        switch(message.type)
+        {
+            case "ROOM":
+                this.setRoom(message);
+                break;
+            case "YOUR_INFO":
+                this.setMyUser(message);
+                break;
+            case "USER_JOIN":
+                this.onUserJoin(message);
+                break;
+            case "USER_LEFT":
+                this.onUserLeft(message);
+                break;
+            case "TICK":
+                this.onTick(message);
+                break;
+            case "PRIVATE":
+                this.onPrivateMessage(message);
+                break;
+            case "PUBLIC":
+                this.onRoomMessage(message);
+                break;
+            case "SHUT_DOWN":
+                this.onShutDown(message);
+                break;
+            case "TYPING":
+                this.onTyping(message);
+                break;
+            case "ERROR":
+                this.onError(message);
+                break;
+        }        
+        
+    },
+    
+    // Message callbacks
+    setRoom: function(message)
+    {
+        console.log(`New ROOM message received: ${message.content}`);
+    },
+
+    setMyUser: function(message)
+    {
+        console.log(`New YOUR_INFO message received: ${message.content}`);
+    },
+
+    onUserJoin: function(message)
+    {
+        console.log(`New USER_JOIN message received: ${message.content}`);
+    },
+
+    onUserLeft: function(message)
+    {
+        console.log(`New USER_LEFT message received: ${message.content}`);
+    },
+
+    onTick: function(message)
+    {
+        console.log(`New TICK message received: ${message.content}`);
+    },
+
+    onPrivateMessage: function(message)
+    {
+        console.log(`New PRIVATE message received: ${message.content}`);
+    },
+
+    onRoomMessage: function(message)
+    {
+        console.log(`New PUBLIC message received: ${message.content}`);
+    },
+
+    onShutDown: function(message)
+    {
+        console.log(`New SHUT DOWN message received: ${message.content}`);
+    },
+
+    onTyping: function(message)
+    {
+        console.log(`New TYPING message received: ${message.content}`);
+    },
+
+    onError: function(message)
+    {
+        console.log(obj.content);
     },
 
     // Methods

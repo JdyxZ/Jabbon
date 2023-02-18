@@ -33,29 +33,77 @@ router.post('/login', function(req, res){ // User login
 });
 
 // Util routes
-router.get('/user/:id', function(req,res) { // User info
-    const result = DATABASE.fetchUser(req.params.id);
-    res.end(result);
+router.get('/user/:id', async function(req,res) { // User info
+    const {type, content} = await DATABASE.fetchUser(req.params.id);
+
+    switch(type)
+    {
+        case("OK"):
+            res.end(JSON.stringify(content[0], null, 2));
+            break;
+        case("ERROR"):
+            res.end(content);
+            break;
+    }
 });
 
-router.get('/users', function(req, res){ // Users info
-    const result = DATABASE.fetchUsers();
-    res.end(result);
+router.get('/users', async function(req, res){ // Users info
+    const {type, content} = await DATABASE.fetchUsers();
+    
+    switch(type)
+    {
+        case("OK"):
+            res.end(JSON.stringify(content[0], null, 2));
+            break;
+        case("ERROR"):
+            res.end(content);
+            break;
+    }
 })
 
-router.post('/user', function(req,res){ // User insert
-    const result = DATABASE.pushUser(req.body);
-    res.end(result);
+router.post('/user', async function(req,res){ // User insert
+    console.log(req.body);
+    const {type, content} = await DATABASE.pushUser(req.body);
+
+    switch(type)
+    {
+        case("OK"):
+            res.end(`User ${req.body.name} successfully inserted`);
+            break;
+        case("ERROR"):
+            res.end(content);
+            break;
+    }
 })
 
-router.put('/user', function(req, res){ // User update
-    const result = DATABASE.updateUser(req.body);
-    res.end(result);
+router.put('/user', async function(req, res){ // User update
+    const {type, content} = await DATABASE.updateUser(req.body);
+
+    switch(type)
+    {
+        case("OK"):
+            const [result] = content;
+            res.end(result.affectedRows <= 0 ? `User ${req.body.name} has not been found in the database` : `User ${req.body.name} successfully updated`);
+            break;
+        case("ERROR"):
+            res.end(content);
+            break;
+    }
 });
 
-router.delete('/user/:id', function(req, res){ // User delete
-    const result = DATABASE.removeUser(req.params.id);
-    res.end(result);
+router.delete('/user/:id', async function(req, res){ // User delete
+    const {type, content} = await DATABASE.removeUser(req.params.id);
+    
+    switch(type)
+    {
+        case("OK"):
+            const [result] = content;
+            res.end(result.affectedRows <= 0 ? `User ${req.body.name} has not been found in the database` : `User ${req.body.name} successfully removed`);
+            break;
+        case("ERROR"):
+            res.end(content);
+            break;
+    }
 });
 
 // Export module
