@@ -2,6 +2,7 @@
 const SERVER = require("../server.js");
 const DATABASE = require("../database/database.js");
 const express = require('express');
+const passport = require("passport");
 const router = express.Router();
 
 // Get routes
@@ -23,8 +24,11 @@ router.get('/canvas', (req, res) => {
 
 // Post routes
 router.post('/signup', function(req, res){ // User signin
-    console.log(req.body);
-    res.end("Sigin request received");
+    passport.authenticate("signup", {
+        successRedirect: "/canvas",
+        failureRedirect: "/signup",
+        failureFlash: true
+    });
 });
 
 router.post('/login', function(req, res){ // User login 

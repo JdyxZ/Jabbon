@@ -5,19 +5,21 @@ console.log(`Serving with pid ${process.pid}`);
 const http = require('http');
 const url = require('url');
 const express = require('express');
-const morgan = require('morgan'); // ?
+const morgan = require('morgan'); 
 const cors = require('cors');
 const WebSocketServer = require('websocket').server;
 const path = require('path');
-const session = require('express-session'); // ?
-const validator = require('express-validator'); // ?
-const passport = require('passport'); // ?
-const mysqlsession = require('express-mysql-session')(session); // ?
+const session = require('express-session'); 
+const passport = require('passport');
+const validator = require('express-validator');  
+const MySQLSession = require('express-mysql-session')(session); 
 const bodyParser = require('body-parser');
-const ejs = require('ejs'); // ?
+const ejs = require('ejs'); 
 
 // Own module imports
 const SERVER = require("./server.js");
+const CREDENTIALS = require("./database/credentials.js");
+require('./utils/passport');
 
 // Init server services
 SERVER.init();
@@ -40,12 +42,21 @@ app.set('port', process.env.PORT || 9014);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// Session
+app.use(session({
+  secret: 'JabbonSessionCacahuete200$',
+  resave: false,
+  saveUninitialized: false,
+  store: new MySQLSession(CREDENTIALS)
+}));
+
 // Middleware
 app.use(morgan('short')); // To see request content
 app.use(express.json()); // To parse json content
-app.use(cors());
-app.use(express.urlencoded({extended: false})); // User send data
+app.use(cors()); // To process cors restrictions
+app.use(express.urlencoded({extended: false})); // To catch post methods
 app.use(bodyParser.json());// Parse the data directly
+app.use(passport.session()); // Process signup and login request
 
 // Global variables
 app.use((req, res, next) =>{
