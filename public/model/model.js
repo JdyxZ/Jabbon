@@ -127,7 +127,7 @@ var WORLD = {
     {
         var user = new User(data);
         this.num_users++;
-        this.users[user.name] = user;
+        this.users[user.id] = user;
         return user;
     },
 
@@ -135,18 +135,18 @@ var WORLD = {
     {
         var room = new Room(data);
         this.num_rooms++;
-        this.rooms[room.name] = room;
+        this.rooms[room.id] = room;
         return room;
     },
 
-    getUser: function (name)
+    getUser: function (id)
     {
-        return this.users[name];
+        return this.users[id];
     },
 
-    getRoom: function(name)
+    getRoom: function(id)
     {
-        return this.rooms[name];
+        return this.rooms[id];
     },
 
     addUser: function(user)
@@ -157,7 +157,7 @@ var WORLD = {
             return;
         }
 
-        users[user.name] = user;
+        users[user.id] = user;
     },
 
     addRoom: function(room)
@@ -168,18 +168,19 @@ var WORLD = {
             return;
         }
 
-        rooms[room.name] = room;
+        rooms[room.id] = room;
     },
     
-    removeUser: function(name)
+    removeUser: function(id)
     {
-        delete users.name;
+        delete users.id;
     },
 
-    addUsertoRoom: function(user_name, room_name)
+    addUsertoRoom: function(user_id, room_id)
     {
-        const user = this.getUser(user_name);
-        const room = this.getRoom(room_name);
+        const user = this.getUser(user_id);
+        const room = this.getRoom(room_id);
+        console.log(room_id)
         room.addUser(user);
     },
 
@@ -193,7 +194,7 @@ var WORLD = {
         // Create users
         world_json.users.forEach(user_json => {
             const user = this.createUser(user_json);
-            this.addUsertoRoom(user.name, user.room);
+            this.addUsertoRoom(user.id, user.room);
         }); 
     },
 
@@ -216,10 +217,10 @@ var WORLD = {
 /***************** MESSAGE *****************/
 function Message(sender, type, content, time)
 {
-    this.sender = sender || "";
+    this.sender = sender || ""; //ID
     this.type = type || "ERROR";
     this.content = content || "";
-    this.time = time || getTime();
+    this.time = time || "getTime()";
 }
 
 if(typeof(window) == "undefined")

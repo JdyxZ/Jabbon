@@ -96,6 +96,8 @@ var MYAPP = {
             var worldMouse = VIEW.canvasToWorld(mouse_pos)
             this.myuser.target[0] = worldMouse[0];
             this.myuser.target[1] = worldMouse[1];
+            const message = new Message(this.myuser.id,"TICK",{"target":this.myuser.target},getTime());
+            this.sendRoomMessage(message);
         }
         else if(e.type == "mousemove")
         {

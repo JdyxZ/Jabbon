@@ -82,8 +82,9 @@ var SERVER =
         console.log("User has joined");
        
         // Get vars
-        const user = WORLD.getUser(0);
-        const current_room = WORLD.getRoom(user.room);
+        const user = this.world.getUser(-1);
+       
+        const current_room = this.world.getRoom(user.room);
 
         // Check that user exists
         if(user)
@@ -91,24 +92,31 @@ var SERVER =
             // Store connection
             this.clients[user.id] = connection; 
             connection.user_id = user.id;
-
-            // Send room data
-            this.sendPrivateMessage(new Message("system", "ROOM", user.toJSON(), getTime()), connection.user_id);
-
-            // Send myinfo data
-            this.sendPrivateMessage(new Message("system", "YOUR_INFO", user.toJSON(), getTime()), connection.user_id);
-
-            // Send room users data to my user
-            current_room.people.forEach(people_id => {
-                const connection = this.clients[people_id];
-                this.sendPrivateMessage(new Message("system", "USER_JOIN", user.toJSON(), getTime()), connection.user_id);
-            });
-
-            // Send New user info
-            this.sendRoomMessage( new Message("system", "USER_JOIN", user.toJSON(), getTime()), user.room, connection.user_id);
+            console.log(user);
+            console.log(user.id);
+            console.log(current_room);
+            this.OnNewUserEnter( user, user.id, current_room);
             
         };
 
+    },
+
+    OnNewUserEnter: function(user, user_id, current_room)
+    {
+        // Send room data
+        this.sendPrivateMessage(new Message("system", "ROOM", user.toJSON(), ), user_id);
+
+        // Send myinfo data
+        this.sendPrivateMessage(new Message("system", "YOUR_INFO", user.toJSON(), ), user_id);
+
+        // Send room users data to my user
+        current_room.people.forEach(people_id => {
+            const connection = this.clients[people_id];
+            this.sendPrivateMessage(new Message("system", "USER_JOIN", user.toJSON(), ), user_id);
+        });
+
+        // Send New user info
+        this.sendRoomMessage( new Message("system", "USER_JOIN", user.toJSON(), ), user.room, user_id);
     },
 
     onUserDisconnected: function(connection)
@@ -118,7 +126,7 @@ var SERVER =
 
         // Get necesary data of the leaving user
         const uid = connection.user_id;
-        const user = WORLD.getUser(uid);
+        const user = this.world.getUser(uid);
 
         // Delete the connection
         delete this.clients[uid];
@@ -157,37 +165,75 @@ var SERVER =
 
     },
 
-    onTick: function()
+    onTick: function(message)
+    {
+        // Necessary information to compute the task
+        const sender_id = message.sender;
+        const content = message.content;
+        room = this.world.getRoom(this.world.users[sender_id].id);
+
+        // Update the WORLD state
+        this.world.users[sender_id].target = content.target;
+    
+        // Send the message to the other users
+        this.sendRoomMessage(message,room.name,sender_id)
+    },
+
+    // NOTI NOTI
+    onPrivateMessage: function(message)
     {
         // TODO
     },
 
-    onPrivateMessage: function()
+    //NOT YET MAI FRIEND
+    onPublicMessage: function(message)
     {
         // TODO
     },
 
-    onPublicMessage: function()
+    onExit: function(message)
     {
-        // TODO
+        // Necessary information to compute the task
+        const sender_id = message.sender;
+        const content = message.content;
+
+        // Dada la exit, encontrar la room
+        // const exit = content.exit[1];
+        exit = 0;
+        var new_room = this.world.getRoom(exit);
+        var user = this.world.users[sender_id];
+        var last_room = this.world.getRoom(content.room);
+
+        // Update server data from users
+        user.room = new_room.id;
+        user.position = room.range[0];
+        user.target = user.position;
+
+        // Update server data from room
+        // Remove the user from last room
+        const index = last_room.people.indexOf(sender_id)
+        last_room.people.splice(index,1);
+
+        // Add user to new room 
+        new_room.people.push(user);
+
+        // Update clients info
+        this.OnNewUserEnter(user,sender_id,new_room);
+
     },
 
-    onExit: function()
-    {
-        // TODO
-    },
-
-    onTyping: function()
+    //MAYBE IN A FUTURE
+    onTyping: function(message)
     {
         // TODO
     },
 
     // Check message
-    checkMessage: function()
+    checkMessage: function(message)
     {
         // Get some vars
         const user_id = connection.user_id;
-        const user_current_room = WORLD.rooms[WORLD.users[user_id].room];
+        const user_current_room = this.world.rooms[this.world.users[user_id].room];
 
         // Check the sender id and the connection user id matches
         if (message.sender != user_id)
@@ -226,7 +272,7 @@ var SERVER =
     sendRoomMessage: function(message, room_name, id_)
     {
         // Get room
-        const room = WORLD.getRoom(room_name);
+        const room = this.world.getRoom(room_name);
 
         // Iterate through room people
         for(id of room.people)

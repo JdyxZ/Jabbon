@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255),
     position INT,
     avatar VARCHAR(255),
-    room VARCHAR(255),
+    room INT,
 
     PRIMARY KEY (id)
 );
@@ -47,10 +47,10 @@ CREATE TABLE IF NOT EXISTS rooms (
 USE JabbonDB;
 
 INSERT INTO users (name, password, position, avatar, room)
-VALUES ('javi', 'Cacahuete', 40, '2', 'Camping');
+VALUES ('javi', 'Cacahuete', 40, '2', 1);
 
 INSERT INTO users (name, password, position, avatar, room)
-VALUES ('eric', 'Avocado', 40, '4', 'Camping');
+VALUES ('eric', 'Avocado', 40, '4', 1);
 
 INSERT INTO rooms (name, background, exits, people, range_left, range_right)
 VALUES ('Camping', './public/media/images/background.png', '{"exit1": -100, "exit2" : 100}', '{"user1": 0, "user2": 1}', -100, 100);

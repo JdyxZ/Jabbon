@@ -75,43 +75,55 @@ var CLIENT =
     setRoom: function(message)
     {
         console.log(`New ROOM message received: ${message.content}`);
+        MYAPP.current_room = message.content;
     },
 
     setMyUser: function(message)
     {
         console.log(`New YOUR_INFO message received: ${message.content}`);
+        MYAPP.myuser = message.content;
     },
 
     onUserJoin: function(message)
     {
         console.log(`New USER_JOIN message received: ${message.content}`);
+        MYAPP.users.push(message.content);
     },
 
     onUserLeft: function(message)
     {
         console.log(`New USER_LEFT message received: ${message.content}`);
+        const usr = MYAPP.users.getObjectIndex("id",message.content);
+        MYAPP.users.splice(usr,1);
     },
 
     onTick: function(message)
     {
         console.log(`New TICK message received: ${message.content}`);
+        //Mirar bien el mensaje que recibo
+        var moving_user = MYAPP.users[message.sender];
+        moving_user.target = message.content.target;
     },
 
+    // De momento no
     onPrivateMessage: function(message)
     {
         console.log(`New PRIVATE message received: ${message.content}`);
     },
 
+    // De momento no
     onRoomMessage: function(message)
     {
         console.log(`New PUBLIC message received: ${message.content}`);
     },
 
+    // Diria que esta no la usaremos
     onShutDown: function(message)
     {
         console.log(`New SHUT DOWN message received: ${message.content}`);
     },
 
+    // Future implementation
     onTyping: function(message)
     {
         console.log(`New TYPING message received: ${message.content}`);
