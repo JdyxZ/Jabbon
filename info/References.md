@@ -10,6 +10,7 @@ EJS (3:10): https://www.youtube.com/watch?v=JmJ1WUoUIK4&list=PLL0TiOXBeDahTsuVTK
 Destructuring assignment: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
 HTTP methods: https://developer.mozilla.org/es/docs/Web/HTTP/Methods 
 NPM verbosity: https://docs.npmjs.com/cli/v9/using-npm/logging 
-
+Bulk insert values MySQL: https://stackoverflow.com/questions/8899802/how-do-i-do-a-bulk-insert-in-mysql-using-node-js 
+Bulk update values MySQL: https://stackoverflow.com/questions/8899802/how-do-i-do-a-bulk-insert-in-mysql-using-node-js 
 
 # Sr.OjeteSucio

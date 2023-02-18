@@ -169,7 +169,6 @@ Array.prototype.remove = function(element)
 
 String.prototype.reverseString = function() 
 {
-
 	// Declare some vars
 	var length = this.length;
 	reversed_string = [];

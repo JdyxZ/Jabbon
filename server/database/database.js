@@ -1,3 +1,4 @@
+
 /***************** DATABASE *****************/
 const mysql = require('mysql2/promise');
 
@@ -17,7 +18,9 @@ var DATABASE = {
             port: process.env.DB_PORT || 3306
         });
     },
-    
+
+    /***************** USER *****************/
+
     pushUser: async function(user_json) 
     {
         try
@@ -142,12 +145,100 @@ var DATABASE = {
         }
     },
 
+    /***************** USERS *****************/
+
+    updateUsers: async function(users_json) 
+    {
+        try
+        {
+            // Wrap values into an array
+            const values = Object.values(users_json).reduce((values, user) => {
+                values.push([user.id, user.name, user.position, user.avatar, user.room]);
+                return values;
+            }, []);
+
+            // Query
+            await this.pool.query( "INSERT INTO users (id, name, position, avatar, room) VALUES ? ON DUPLICATE KEY UPDATE name = VALUES(name), position = VALUES(position), avatar = VALUES(avatar), room = VALUES(room);", values);
+            
+            // Output
+            return {type: "OK", content: null};
+        }
+        catch(err)
+        {
+            // Error
+            console.log(err);
+            return {type: "ERROR", content: `${err}`};
+        }
+    },
+
+    removeUsers: async function()
+    {
+        try
+        {
+            // Query
+            await this.pool.query("DELETE FROM users;");
+
+            // Output
+            return {type: "OK", content: null};
+        }
+        catch(err)
+        {
+            // Error
+            console.log(`${err}`);
+            return {type: "ERROR", content: `${err}`};
+        }
+    },
+
     fetchUsers: async function()
     {
         try
         {
             // Query
-            return {type_users: "OK", users: await this.pool.query("SELECT * FROM users ;")};
+            return {type: "OK", content: await this.pool.query("SELECT * FROM users ;")};
+        }
+        catch(err)
+        {
+            // Error
+            console.log(`${err}`);
+            return {type: "ERROR", content: `${err}`};
+        }
+    },
+
+    /***************** ROOMS *****************/
+
+    updateRooms: async function(rooms_json) 
+    {
+        try
+        {
+            // Wrap values into an array
+            const values = Object.values(rooms_json).reduce((values, room) => {
+                values.push([room.id, room.people]);
+                return values;
+            }, []);
+
+            // Query            
+            await this.pool.query( "INSERT INTO rooms (id, people) VALUES ? ON DUPLICATE KEY UPDATE people = VALUES(people);", values);
+
+            // Output
+            return {type: "OK", content: null};
+        }
+        catch(err)
+        {
+            // Error
+            console.log(err);
+            return {type: "ERROR", content: `${err}`};
+        }
+    },
+
+    removeRooms: async function()
+    {
+        try
+        {
+            // Query
+            await this.pool.query("DELETE FROM rooms;");
+
+            // Output
+            return {type: "OK", content: null};
         }
         catch(err)
         {
@@ -162,7 +253,7 @@ var DATABASE = {
         try
         {
             // Query
-            return {type_rooms: "OK", rooms: await this.pool.query("SELECT * FROM rooms ;")};
+            return {type: "OK", content: await this.pool.query("SELECT * FROM rooms ;")};
         }
         catch(err)
         {
@@ -172,10 +263,31 @@ var DATABASE = {
         } 
     },
 
-    updateModel: async function(user_json, room_json)
+    /***************** MODEL *****************/
+
+    fetchModel: async function()
     {
-        // TODO: update model info
+        const {type, content} = await DATABASE.fetchRooms();
+        if(type == "ERROR") return {type: "ERROR", model: content};
+
+        const {type, content} = await DATABASE.fetchUsers();
+        if (type == "ERROR") return {type: "ERROR", model: content};
+
+        return {type: "OK", model: {rooms: rooms[0], users: users[0]}};
     },
+
+    updateModel: async function(world_json)
+    {
+        const {type, content} = await DATABASE.updateRooms(world_json.rooms);
+        if(type == "ERROR") return {type: "ERROR", model: content};
+
+        const {type, content} = await DATABASE.updateUsers(world_json.users);
+        if (type == "ERROR") return {type: "ERROR", model: content};
+
+        return {type: "OK", model: null};  
+    },
+
+    /***************** CONVERSATION LOG *****************/
 
     fetchLog: async function()
     {
