@@ -7,43 +7,76 @@ var mouse_pos = [0,0];
 var mouse_buttons = 0;
 var imgs = {};
 
-
 //last stores timestamp from previous frame
 
 
 function loop()
 {
-   //update our canvas
+   // Update our canvas
    draw();
 
-   //to compute seconds since last loop
+   // Compute elapsed time
    var now = performance.now();
-   //compute difference and convert to seconds
    var elapsed_time = (now - last) / 1000; 
-   //store current time into last time
+
+   // Update last time
    last = now;
 
-   //now we can execute our update method
+   // Update model
    update( elapsed_time );
 
-   //request to call loop() again before next frame
+   // Request to call loop() again before next frame
    requestAnimationFrame( loop );
 }
 
-//start loop
+// Start loop
 loop();
 
-//example of images manager
+// Fetch image
+async function fetchImage(url)
+{
+    try
+    {
+        // Fetch image from url    
+        const response = await fetch(url, {method: "GET"}); 
+    
+        // Check response
+        if (response.status !== 200) {
+            console.log(`HTTP-Error ${response.satus} upon fetching url ${url} `);
+        };
+            
+        // Convert response into binary image
+        const imageBlob = await response.blob()
+
+        // Create a local URL for the image
+        const imageObjectURL = URL.createObjectURL(imageBlob);
+
+        // Create image and attach url
+        const img = new Image();
+        img.src = imageObjectURL;
+
+        // Return image
+        return img;
+    }
+    catch(error)
+    {
+        console.log(error);
+        return null;
+    }
+}
+
+// Image manager
 function getImage(url)
 {
-	//check if already loaded
+	// If the image is already loaded return it
 	if(imgs[url])
 		return imgs[url];
-    // Get project
-	//if no loaded, load and store
-	var img = imgs[url] = new Image();
-	img.src = url;
-	return img;
+    
+	// Create new image and attach url
+    const img = imgs[url] = document.createElement("img");
+    img.src = url;
+    return img;
+    
 }
 
 function draw() {
@@ -51,7 +84,6 @@ function draw() {
     var rect = parent.getBoundingClientRect();
     canvas.width = rect.width;
     canvas.height = rect.height;
-
     var ctx = canvas.getContext('2d');
 
     MYAPP.draw(canvas,ctx);
@@ -60,7 +92,6 @@ function draw() {
 function update(dt)
 {
     MYAPP.update(dt);
-
 }
 
 function onMouse( e ) { 

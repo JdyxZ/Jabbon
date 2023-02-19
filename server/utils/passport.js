@@ -19,29 +19,15 @@ async (req, name, password, flush) => {
     // Check username
     let [status, result] = await DATABASE.validateUsername(name);
 
-    if (status == "ERROR")
-    {
-        console.log(result);
-        return;
-    }
-    
-    if (result[0].length != 0)
-    {
-        console.log(`Username ${name} already exists`);
-        return;
-    }
+    if (status == "ERROR") return flush(result);
+    if (result[0].length != 0) return flush(`Username ${name} already exists`);
 
     // Check password
     const [check, error] = CRYPTO.check(password);
-
-    if(check == "ERROR")
-    {
-        console.log(error);
-        return;
-    }
+    if(check == "ERROR") return flush(error);
 
     // Hash password
-    const hashed_password = await CRYPTO.encrypt(password);  
+    const hashed_password = await CRYPTO.encrypt(password);
 
     // Get other user properties from body
     //const {avatar} = req.body;
@@ -59,11 +45,7 @@ async (req, name, password, flush) => {
     [status, result] = await DATABASE.pushUser(user_obj);
 
     // Check push query result
-    if(status == "ERROR")
-    {
-        console.log(result);
-        return;
-    }
+    if(status == "ERROR") return flush(result);
 
     // Set push query user ID to object and delete password from it
     user_obj.id = result[0].insertId;
@@ -91,17 +73,8 @@ async (name, password, flush) => {
     // Validate user
     let [status, result] = await DATABASE.validateUsername(name, hashed_password);
 
-    if (status == "ERROR")
-    {
-        console.log(result);
-        return;
-    }
-    
-    if (result[0].length != 0)
-    {
-        console.log(`Username ${name} already exists`);
-        return;
-    }
+    if (status == "ERROR") return flush(result);
+    if (result[0].length != 0) return flush(`User ${name} with password ${password} doesn't exists`);
 
     // Pass user id to the serializer
     return flush(null, user.id);
@@ -116,16 +89,8 @@ passport.serializeUser((user_id,flush) => {
 passport.deserializeUser(async(user_id, flush) => {
     const [status, result] = await DATABASE.validateUserID(user_id);
     
-    if(status == "ERROR")
-    {
-        console.log(result);
-        return;
-    }
-
-    if(result[0].length == 0)
-    {
-        return;
-    }
+    if(status == "ERROR") return flush(result);
+    if(result[0].length == 0) return flush("ID not valid");
 
     flush(null, result[0].id);
 });

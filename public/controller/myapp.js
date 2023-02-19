@@ -8,19 +8,6 @@ var MYAPP = {
 
     init: function()
     {
-        // fetch("model/rooms.json")
-        // .then(function(resp){ return resp.json(); })
-        // .then(function(json){
-        //      WORLD.fromJSON(json);
-        //      MYAPP.onWorldLoaded();
-        //     });
-            
-        // TEST MODEL
-        // this.current_room = WORLD.createRoom("start","media/images/background.png");
-        // this.myuser = WORLD.createUser("eric");
-
-        // this.current_room.addUser(this.myuser, null, null, null, null, null, null);
-
         //INIT
         VIEW.init();
         CLIENT.init();
@@ -32,8 +19,7 @@ var MYAPP = {
     },
 
     draw: function(canvas,ctx) {
-        VIEW.draw(canvas,ctx,this.current_room)
-
+        VIEW.draw(canvas,ctx,this.current_room);
     },
 
     update:function(dt)
@@ -43,7 +29,6 @@ var MYAPP = {
         {
             this.updateUser(this.myuser,dt);
         }
-
     },
 
     updateUser:function(user,dt)

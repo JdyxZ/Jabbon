@@ -28,6 +28,8 @@ CREATE TABLE IF NOT EXISTS users (
     PRIMARY KEY (id)
 );
 
+USE JabbonDB;
+
 CREATE TABLE IF NOT EXISTS rooms (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) UNIQUE,
@@ -47,16 +49,18 @@ CREATE TABLE IF NOT EXISTS rooms (
 USE JabbonDB;
 
 INSERT INTO users (name, password, position, avatar, room)
-VALUES ('javi', 'Cacahuete', 40, './media/images/char2.png', 1);
+VALUES ('javi', 'Cacahuete', 40, 'media/images/char2.png', 1);
 
 INSERT INTO users (name, password, position, avatar, room)
-VALUES ('eric', 'Avocado', 40, './media/images/char2.png', 1);
+VALUES ('eric', 'Avocado', 40, 'media/images/char2.png', 1);
+
+USE JabbonDB;
 
 INSERT INTO rooms (name, background, exits, people, range_left, range_right)
-VALUES ('Camping', './media/images/background.png', '{"exit1": -100, "exit2" : 100}', '{"user1": 1, "user2": 2}', -100, 100);
+VALUES ('Camping', 'media/images/background.png', '{"exit1": -100, "exit2" : 100}', '{"user1": 1, "user2": 2}', -100, 100);
 
 INSERT INTO rooms (name, background, exits, people, range_left, range_right)
-VALUES ('Forest', './media/images/forest.png', '{"exit1": -100, "exit2" : 100}', '', -100, 100);
+VALUES ('Forest', 'media/images/forest.png', '{"exit1": -100, "exit2" : 100}', '{}', -100, 100);
 
 USE JabbonDB;
 
@@ -80,6 +84,15 @@ DELETE FROM users WHERE id = 6;
 DELETE FROM sessions;
 
 DELETE FROM users;
+
 DELETE FROM rooms;
+
+-- TABLE DROP
+
+USE JabbonDB;
+
+DROP TABLE users;
+
+DROP TABLE rooms;
 
 

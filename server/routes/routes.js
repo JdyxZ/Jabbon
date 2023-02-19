@@ -25,15 +25,6 @@ router.get('/canvas', (req, res) => {
 });
 
 // Post routes
-router.post('signup', (req,res) => {
-    res.render('/signup');
-});
-
-router.post('login', (req,res) => {
-    res.render('/login');
-});
-
-/*
 router.post('/signup', passport.authenticate("signup", {
     successRedirect: "/canvas",
     failureRedirect: "/signup",
@@ -45,7 +36,6 @@ router.post('/login', passport.authenticate("login", {
     failureRedirect: "/login",
     failureFlash: true
 }));
-*/
 
 router.post('/login', function(req, res){ 
     console.log(req.body);
@@ -53,7 +43,7 @@ router.post('/login', function(req, res){
 });
 
 // Util routes
-router.get('/get_world', async function(req, res){ // Model info
+router.get('/get_world', function(req, res){ // Model info
     res.end(SERVER.world.toJSON());
 });
 
@@ -71,7 +61,7 @@ router.get('/update_world', async function(req, res){ // Model update
     }
 });
 
-router.get('/rooms', async function(req, res){ // Model info
+router.get('/rooms', function(req, res){ // Model info
     res.end(JSON.stringify(SERVER.world.rooms, null, 2));
 });
 
@@ -89,7 +79,7 @@ router.get('/user/:id', async function(req,res) { // User info
     }
 });
 
-router.get('/users', async function(req, res){ // Users info
+router.get('/users', function(req, res){ // Users info
     res.end(JSON.stringify(SERVER.world.users, null, 2));
 });
 

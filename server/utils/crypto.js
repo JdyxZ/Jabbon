@@ -25,7 +25,8 @@ const CRYPTO =
     
     encrypt: async function(password)
     {
-        const salt = await bcrypt.genSalt(10);
+        // const salt = await bcrypt.genSalt(10);
+        const salt = "$2a$10$lrXlguYU3Bg5TlgsgcgugO";
         const hashed_password = await bcrypt.hash(password, salt);
         return hashed_password;
     },
