@@ -72,6 +72,8 @@ TABLE sessions;
 
 USE JabbonDB;
 
+DELETE FROM users WHERE id = 6;
+
 DELETE FROM sessions;
 
 DELETE FROM users;

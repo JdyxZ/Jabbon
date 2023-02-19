@@ -25,17 +25,17 @@ var DATABASE = {
             const { name, password, avatar, room, position} = user_json; 
 
             // Throw errors
-            if(!name) throw "You must send a name";
-            if(!password) throw "You must send a password";
-            if(!avatar) throw "You must send an avatar";
-            if(!room) throw "You must send a room";
-            if(!position) throw "You must send a position";
+            if(name === "" || name === null || name === undefined) throw "You must send a valid name";
+            if(password === "" || password === null || password === undefined) throw "You must send a valid password";
+            if(avatar === "" || avatar === null || avatar === undefined) throw "You must send an valid avatar";
+            if(room === "" || room === null || room === undefined) throw "You must send a valid room";
+            if(position === "" || position === null || position === undefined) throw "You must send a valid position";
             
             // Query
-            await this.pool.query( "INSERT INTO users SET name = ?, password = ?, avatar = ?, room_name = ?, position = ? ;", [name, password, avatar, room, position]);
+            const result = await this.pool.query( "INSERT INTO users SET name = ?, password = ?, avatar = ?, room = ?, position = ? ;", [name, password, avatar, room, position]);
             
             // Output
-            return ["OK", null];
+            return ["OK", result];
         }
         catch(err)
         {
@@ -45,15 +45,39 @@ var DATABASE = {
         }
     },
 
+    validateUserID: async function(id)
+    {
+        try
+        {
+            // Throw errors
+            if(isNaN(id) || id === "") throw "You must send a valid ID";
+            
+            // Query
+            const result = await this.pool.query("SELECT * FROM users WHERE id = ? ;", [id])
+
+            // Output
+            return ["OK", result];
+        }
+        catch(err)
+        {
+            // Error
+            console.log(`${err}`);
+            return ["ERROR", `${err}`];
+        }
+    },
+
     validateUsername: async function(username) 
     {
         try
         {
             // Throw errors
-            if(!username) throw "You must send a username";
+            if(username === "" || username === null || username === undefined) throw "You must send a valid username";
             
             // Query
-            return ["OK", await this.pool.query("SELECT * FROM users WHERE name = ? ;", [username])];
+            const result = await this.pool.query("SELECT * FROM users WHERE name = ? ;", [username])
+
+            // Output
+            return ["OK", result];
         }
         catch(err)
         {
@@ -71,11 +95,14 @@ var DATABASE = {
             const {name, password} = user_json;
 
             // Throw errors
-            if(!name) throw "You must send a username";
-            if(!password) throw "You must send a password";
+            if(name === "" || name === null || name === undefined) throw "You must send a valid username";
+            if(password === "" || password === null || password === undefined) throw "You must send a valid password";
 
             // Query
-            return ["OK", await this.pool.query("SELECT * FROM users WHERE name = ? AND password = ? ;", [name, password])];
+            const result = await this.pool.query("SELECT * FROM users WHERE name = ? AND password = ? ;", [name, password]);
+
+            // Output
+            return ["OK", result];
         }
         catch(err)
         {
@@ -93,15 +120,15 @@ var DATABASE = {
             const { name, position, room } = user_json; 
 
             // Throw errors
-            if(!name) throw "You must send a name";
-            if(!position) throw "You must send a position";
-            if(!room) throw "You must send a room";
+            if(name === "" || name === null || name === undefined) throw "You must send a valid name";
+            if(position === "" || position === null || position === undefined) throw "You must send a valid position";
+            if(room === "" || room === null || room === undefined) throw "You must send a valid room";
 
             // Query
-            await this.pool.query("UPDATE users SET room_name = ?, position = ? WHERE name = ? ;", [room, position, name]);
+            const result = await this.pool.query("UPDATE users SET room_name = ?, position = ? WHERE name = ? ;", [room, position, name]);
 
             // Output
-            return ["OK", null];
+            return ["OK", result];
         } 
         catch(err)
         {
@@ -116,13 +143,13 @@ var DATABASE = {
         try
         {
             // Throw errors
-            if(!user_id) throw "You must send a user_id";
+            if(isNaN(user_id) || user_id === "") throw "You must send a valid user_id";
 
             // Query
-            await this.pool.query("DELETE FROM users WHERE user_id = ? ;", [user_id]);
+            const result = await this.pool.query("DELETE FROM users WHERE user_id = ? ;", [user_id]);
 
             // Output
-            return ["OK", null];
+            return ["OK", result];
         }
         catch(err)
         {
@@ -137,10 +164,13 @@ var DATABASE = {
         try
         {
             // Throw errors
-            if(!user_id) throw "You must send a user_id";
+            if(isNaN(user_id) || user_id === "") throw "You must send a valid user_id";
 
             // Query
-            return ["OK", await this.pool.query("SELECT * FROM users WHERE user_id = ? ;", user_id)];
+            const result = await this.pool.query("SELECT * FROM users WHERE user_id = ? ;", user_id);
+
+            // Output
+            return ["OK", result];
         }
         catch(err)
         {
@@ -163,10 +193,10 @@ var DATABASE = {
             }, []);
 
             // Query
-            await this.pool.query( "INSERT INTO users (id, name, position, avatar, room) VALUES ? ON DUPLICATE KEY UPDATE name = VALUES(name), position = VALUES(position), avatar = VALUES(avatar), room = VALUES(room);", [values]);
+            const result = await this.pool.query( "INSERT INTO users (id, name, position, avatar, room) VALUES ? ON DUPLICATE KEY UPDATE name = VALUES(name), position = VALUES(position), avatar = VALUES(avatar), room = VALUES(room);", [values]);
             
             // Output
-            return ["OK", null];
+            return ["OK", result];
         }
         catch(err)
         {
@@ -181,10 +211,10 @@ var DATABASE = {
         try
         {
             // Query
-            await this.pool.query("DELETE FROM users;");
+            const result = await this.pool.query("DELETE FROM users;");
 
             // Output
-            return ["OK", null];
+            return ["OK", result];
         }
         catch(err)
         {
@@ -199,7 +229,10 @@ var DATABASE = {
         try
         {
             // Query
-            return ["OK", await this.pool.query("SELECT * FROM users;")];
+            const result = await this.pool.query("SELECT * FROM users;");
+
+            // Output
+            return ["OK", result];
         }
         catch(err)
         {
@@ -223,10 +256,10 @@ var DATABASE = {
             }, []);
 
             // Query            
-            await this.pool.query( "INSERT INTO rooms (id, people) VALUES ? ON DUPLICATE KEY UPDATE people = VALUES(people);", [values]);
+            const result = await this.pool.query( "INSERT INTO rooms (id, people) VALUES ? ON DUPLICATE KEY UPDATE people = VALUES(people);", [values]);
 
             // Output
-            return ["OK", null];
+            return ["OK", result];
         }
         catch(err)
         {
@@ -241,10 +274,10 @@ var DATABASE = {
         try
         {
             // Query
-            await this.pool.query("DELETE FROM rooms;");
+            const result = await this.pool.query("DELETE FROM rooms;");
 
             // Output
-            return ["OK", null];
+            return ["OK", result];
         }
         catch(err)
         {
@@ -259,7 +292,10 @@ var DATABASE = {
         try
         {
             // Query
-            return ["OK", await this.pool.query("SELECT * FROM rooms;")];
+            const result = await this.pool.query("SELECT * FROM rooms;");
+
+            // Output
+            return ["OK", result]
         }
         catch(err)
         {

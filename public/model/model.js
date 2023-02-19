@@ -11,12 +11,12 @@ function User(data)
 {   
     this.id = data == undefined ? -1 : data.id || -1;
     this.name = data == undefined ? "unnamed" : data.name || "unamed";
-    this.position = data == undefined ? 40 : data.position || 40;
+    this.position = data == undefined ? 0 : data.position || 0;
     this.avatar = data == undefined ? "./media/images/char1.png" : data.avatar || "./media/images/char1.png";
     this.facing = data == undefined ? FACING_FRONT : data.facing || FACING_FRONT;
     this.animation = data == undefined ? "idle" : data.animation || "idle";
-    this.room = data == undefined ? "none" : data.room || "none";
-    this.target = data == undefined ? [40,0] : data.target || [40,0];
+    this.room = data == undefined ? 1 : data.room || 1;
+    this.target = data == undefined ? [0,0] : data.target || [0,0];
 }
 
 User.prototype.toJSON = function()

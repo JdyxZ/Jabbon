@@ -25,11 +25,27 @@ router.get('/canvas', (req, res) => {
 });
 
 // Post routes
+router.post('signup', (req,res) => {
+    res.render('/signup');
+});
+
+router.post('login', (req,res) => {
+    res.render('/login');
+});
+
+/*
 router.post('/signup', passport.authenticate("signup", {
     successRedirect: "/canvas",
     failureRedirect: "/signup",
     failureFlash: true
 }));
+
+router.post('/login', passport.authenticate("login", {
+    successRedirect: "/canvas",
+    failureRedirect: "/login",
+    failureFlash: true
+}));
+*/
 
 router.post('/login', function(req, res){ 
     console.log(req.body);

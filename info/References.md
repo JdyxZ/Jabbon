@@ -14,5 +14,6 @@ Bulk insert values MySQL: https://stackoverflow.com/questions/8899802/how-do-i-d
 Bulk update values MySQL: https://stackoverflow.com/questions/8899802/how-do-i-do-a-bulk-insert-in-mysql-using-node-js 
 Navigate through directories (several folders up): https://stackoverflow.com/questions/162873/how-do-i-include-a-file-over-2-directories-back 
 Express sessions and connect-flash module: https://www.youtube.com/watch?v=mm9oIxR8YDU 
+Regex for password checking: https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a 
 
 # Sr.OjeteSucio
