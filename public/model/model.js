@@ -65,7 +65,7 @@ function Room(data)
 Room.prototype.addUser = function(user)
 {
     this.people.push( user.id );
-    user.room = this.name;
+    user.room = this.id;
 }
 
 Room.prototype.toJSON = function()

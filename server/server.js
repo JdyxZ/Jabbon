@@ -37,10 +37,6 @@ var SERVER =
     // WebSocket callbacks
     onMessage: function(connection, ws_message)
     {
-        // Check
-        if (message.type != 'utf8') 
-            return;
-
         // Process WebSocket message
         try {
 
@@ -57,7 +53,7 @@ var SERVER =
         // Catch errors
         catch (error) 
         {
-            const message = Message("system", "ERROR", error, null);
+            const message = new Message("system", "ERROR", error, null);
             connection.sendUTF(JSON.stringify(message));
         }
     },
@@ -68,10 +64,10 @@ var SERVER =
         console.log("User has joined");
        
         // Get vars
-        const user = this.world.getUser(-1);
+        const user = this.world.getUser(1);
        
         const current_room = this.world.getRoom(user.room);
-
+        
         // Check that user exists
         if(user)
         {   
@@ -90,7 +86,7 @@ var SERVER =
     OnNewUserEnter: function(user, user_id, current_room)
     {
         // Send room data
-        this.sendPrivateMessage(new Message("system", "ROOM", user.toJSON(), ), user_id);
+        this.sendPrivateMessage(new Message("system", "ROOM", current_room.toJSON(), ), user_id);
 
         // Send myinfo data
         this.sendPrivateMessage(new Message("system", "YOUR_INFO", user.toJSON(), ), user_id);
@@ -112,6 +108,7 @@ var SERVER =
 
         // Get necesary data of the leaving user
         const uid = connection.user_id;
+        console.log(uid);
         const user = this.world.getUser(uid);
 
         // Delete the connection
@@ -162,7 +159,7 @@ var SERVER =
         this.world.users[sender_id].target = content.target;
     
         // Send the message to the other users
-        this.sendRoomMessage(message,room.name,sender_id)
+        this.sendRoomMessage(message,room.id,sender_id)
     },
 
     // NOTI NOTI
@@ -255,17 +252,21 @@ var SERVER =
         });
     },
 
-    sendRoomMessage: function(message, room_name, id_)
+    sendRoomMessage: function(message, room_id, id_)
     {
         // Get room
-        const room = this.world.getRoom(room_name);
+        const room = this.world.getRoom(room_id);
 
         // Iterate through room people
+        console.log("sendRoomMessage");
+
         for(id of room.people)
         {
             if(id == id_) continue;
             const connection = this.clients[id];
-            connection.sendUTF(JSON.stringify(message));
+            // In case there is no connection for this id
+            if(connection)
+                connection.sendUTF(JSON.stringify(message));
         }
     },
 

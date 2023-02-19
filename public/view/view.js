@@ -46,35 +46,50 @@ var VIEW = {
 
     drawRoom:function( ctx, room)
     {
+        
         //Draw the room
         background = getImage(room.background);
+        
+
+        const index = background.src.indexOf("media");
+        background.src = background.src.substr(1, index);
+
+        console.log(background.src);
+
         ctx.drawImage( background , background.width * this.scale_factor / -2, background.height * this.scale_factor / -2, background.width * this.scale_factor, background.height * this.scale_factor);
 
         //Draw all users in the room
-        for(var i = 0; i < room.people.length; i++) this.drawUser(ctx, WORLD.getUser(room.people[i]));
+        if(room)
+        {
+            for(var i = 0; i < room.people.length; i++) this.drawUser(ctx, WORLD.getUser(room.people[i]));
+        };
     },
 
     drawUser:function(ctx, user)
     {
-        var img = getImage(user.avatar);
+        if(user)
+        {
+            var img = getImage(user.avatar);
 
-        //Check if the animation exists
-        var anim = this.animations[user.animation];
-        if(!anim) return;
+            //Check if the animation exists
+            var anim = this.animations[user.animation];
+            if(!anim) return;
 
-        var time = performance.now() * 0.001;
-        var frame = anim[Math.floor(time*12) % anim.length];
+            var time = performance.now() * 0.001;
+            var frame = anim[Math.floor(time*12) % anim.length];
 
-        //Or change all the scales or with a image editor modify all the images to have the same size more or less
-        var scale = 1.5;
-        ctx.drawImage( img, frame*32, user.facing*64,32,64, user.position, -22 , 32, 64);
+            //Or change all the scales or with a image editor modify all the images to have the same size more or less
+            var scale = 1.5;
+            ctx.drawImage( img, frame*32, user.facing*64,32,64, user.position, -22 , 32, 64);
 
-        //To have a debugg and see the line
-        // ctx.strokeStyle = "white";
-        // ctx.beginPath();
-        // ctx.moveTo(user.position, 0);
-        // ctx.lineTo(user.target[0], user.target[1]);
-        // ctx.stroke();
+            //To have a debugg and see the line
+            // ctx.strokeStyle = "white";
+            // ctx.beginPath();
+            // ctx.moveTo(user.position, 0);
+            // ctx.lineTo(user.target[0], user.target[1]);
+            // ctx.stroke();
+        };
+        
     },
 
 }

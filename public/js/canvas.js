@@ -39,8 +39,7 @@ function getImage(url)
 	//check if already loaded
 	if(imgs[url])
 		return imgs[url];
-
-
+    // Get project
 	//if no loaded, load and store
 	var img = imgs[url] = new Image();
 	img.src = url;

@@ -4,16 +4,16 @@ var MYAPP = {
 
     current_room: null,
     myuser: null,
-    user_list: [],
+    users: [],
 
     init: function()
     {
-        fetch("model/rooms.json")
-        .then(function(resp){ return resp.json(); })
-        .then(function(json){
-             WORLD.fromJSON(json);
-             MYAPP.onWorldLoaded();
-            });
+        // fetch("model/rooms.json")
+        // .then(function(resp){ return resp.json(); })
+        // .then(function(json){
+        //      WORLD.fromJSON(json);
+        //      MYAPP.onWorldLoaded();
+        //     });
             
         // TEST MODEL
         // this.current_room = WORLD.createRoom("start","media/images/background.png");
@@ -32,7 +32,6 @@ var MYAPP = {
     },
 
     draw: function(canvas,ctx) {
-
         VIEW.draw(canvas,ctx,this.current_room)
 
     },
@@ -97,7 +96,7 @@ var MYAPP = {
             this.myuser.target[0] = worldMouse[0];
             this.myuser.target[1] = worldMouse[1];
             const message = new Message(this.myuser.id,"TICK",{"target":this.myuser.target},getTime());
-            this.sendRoomMessage(message);
+            CLIENT.sendRoomMessage(message);
         }
         else if(e.type == "mousemove")
         {

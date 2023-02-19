@@ -131,7 +131,7 @@ var CLIENT =
 
     onError: function(message)
     {
-        console.log(obj.content);
+        console.log(message.content);
     },
 
     // Methods
@@ -141,7 +141,7 @@ var CLIENT =
         message.addressees = [];
 
         // Send message to user
-        this.socket.sendUTF(JSON.stringify(message));
+        this.socket.send(JSON.stringify(message));
     },
 
     sendPrivateMessage: function(message, addressees)
@@ -157,7 +157,7 @@ var CLIENT =
         message.addressees = addressees;
 
         // Send message to user
-        this.socket.sendUTF(JSON.stringify(message));
+        this.socket.send(JSON.stringify(message));
     }
 
 }
