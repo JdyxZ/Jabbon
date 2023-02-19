@@ -1,9 +1,11 @@
-// Import
-const SERVER = require("../server.js");
-const DATABASE = require("../database/database.js");
+// External modules
 const express = require('express');
 const passport = require("passport");
 const router = express.Router();
+
+// Our modules
+const SERVER = require("../server.js");
+const DATABASE = require("../database/database.js");
 
 // Get routes
 router.get('/', (req, res) => {
@@ -23,15 +25,13 @@ router.get('/canvas', (req, res) => {
 });
 
 // Post routes
-router.post('/signup', function(req, res){ // User signin
-    passport.authenticate("signup", {
-        successRedirect: "/canvas",
-        failureRedirect: "/signup",
-        failureFlash: true
-    });
-});
+router.post('/signup', passport.authenticate("signup", {
+    successRedirect: "/canvas",
+    failureRedirect: "/signup",
+    failureFlash: true
+}));
 
-router.post('/login', function(req, res){ // User login 
+router.post('/login', function(req, res){ 
     console.log(req.body);
     res.end("Login request received");
 });

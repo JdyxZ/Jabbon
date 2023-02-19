@@ -120,7 +120,7 @@ var WORLD = {
         this.fromJSON(world_json);
 
         // Notify success
-        console.log(`World data successfully loadad! \nNumber of rooms ${WORLD.num_rooms}`);
+        console.log(`World data successfully loaded! \nNumber of rooms ${WORLD.num_rooms}`);
     },
 
     createUser: function (data)

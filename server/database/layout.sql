@@ -47,10 +47,10 @@ CREATE TABLE IF NOT EXISTS rooms (
 USE JabbonDB;
 
 INSERT INTO users (name, password, position, avatar, room)
-VALUES ('javi', 'Cacahuete', 40, '2', 8);
+VALUES ('javi', 'Cacahuete', 40, '2', 1);
 
 INSERT INTO users (name, password, position, avatar, room)
-VALUES ('eric', 'Avocado', 40, '4', 8);
+VALUES ('eric', 'Avocado', 40, '4', 1);
 
 INSERT INTO rooms (name, background, exits, people, range_left, range_right)
 VALUES ('Camping', './public/media/images/background.png', '{"exit1": -100, "exit2" : 100}', '{"user1": 0, "user2": 1}', -100, 100);
@@ -66,11 +66,15 @@ USE JabbonDB;
 
 TABLE users;
 TABLE rooms;
+TABLE sessions;
 
 -- TABLE DELETE CONTENT
 
 USE JabbonDB;
 
+DELETE FROM sessions;
+
 DELETE FROM users;
 DELETE FROM rooms;
+
 
