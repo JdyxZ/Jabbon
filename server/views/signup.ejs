@@ -13,6 +13,11 @@
                         <input type="text" placeholder="username" name="username">
                         <div class="pnlerroriput" id="pnl1" style="display:none"></div>
                     </div>
+
+                    <% if (signup_username_error.length > 0) { %>
+                        <div class="alert"><%= signup_username_error %></div>
+                    <% } %>
+
                     <div class="input-password-signup">
                         <input type="password" placeholder="password" name="password1">
                     </div>
@@ -20,10 +25,18 @@
                         <input type="password" placeholder="repeat the password" name="password2">
                         <div class="pnlerroriput" id="pnl2" style="display:none"></div>
                     </div>
+
+                    <% if (signup_password_error.length > 0) { %>
+                        <div class="alert"><%= signup_password_error %></div>
+                    <% } %>
        
                     <div class="submit-button-signup">
                         <button type="button" id="button">Submit</button>
                     </div>
+
+                    <% if (signup_error.length > 0) { %>
+                        <div class="alert"><%= signup_error %></div>
+                    <% } %>
 
                     <div class="change"><a href="http://localhost:9014/login">log in</a></div>
                 </span>

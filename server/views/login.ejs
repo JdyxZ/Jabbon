@@ -12,13 +12,24 @@
                         <input type="text" placeholder="username" name="username">
                         <div style="display:none" class="pnlerroriput" id="pnl1"></div>
                     </div>
+                    
                     <div class="input-password-login">
                         <input type="password" placeholder="password" name="password">
                         <div style="display:none" class="pnlerroriput" id="pnl2"></div>
                     </div>
+
+                    <% if (login_user_error.length > 0) { %>
+                        <div class="alert"><%= login_user_error %></div>
+                    <% } %>
+
                     <div class="submit-button-login">
                         <button type="button" id="button">Go!</button>
                     </div>
+
+                    <% if (login_error.length > 0) { %>
+                        <div class="alert"><%= login_error %></div>
+                    <% } %>
+
                     <div class="change"><a href="http://localhost:9014/signup">sign up</a></div>
                 </span>
                 

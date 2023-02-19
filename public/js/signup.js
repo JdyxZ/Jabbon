@@ -31,7 +31,6 @@ var signup = {
             {
                 if (this.signupp1.value == this.signupp2.value)
                 {
-                    alert("Send data to the server");
                     this.sendCredentials()
                 }      
                 else
@@ -110,7 +109,7 @@ var signup = {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              user: this.signupu.value,
+              name: this.signupu.value,
               password: this.signupp1.value
             })
           })

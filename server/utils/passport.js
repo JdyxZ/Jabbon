@@ -14,7 +14,7 @@ passport.use('signup', new LocalStrategy(
     passwordField: 'password',
     passReqToCallback: true
 }, 
-async (req, name, password, flush) => {
+async (req, name, password, done) => {
 
     // Check username
     let [status, result] = await DATABASE.validateUsername(name);
@@ -22,14 +22,16 @@ async (req, name, password, flush) => {
     if (status == "ERROR")
     {
         console.log(result);
-        return flush(null, false, req.flash('signup_error', 'Something wrong happened. Try again.'));
+        return done(null, false, req.flash('signup_error', 'Something wrong happened. Try again.'));
     }
+
+    console.log("here");
         
-    if (result[0].length != 0) return flush('signup_username_error', `This username ${name} already exists.`);
+    if (result[0].length != 0) return done(null, false, req.flash('signup_username_error', `The username ${name} already exists.`));
 
     // Check password
     const [check, error] = CRYPTO.check(password);
-    if (check == "ERROR") return flush(null, false, req.flash('signup_password_error', error));
+    if (check == "ERROR") return done(null, false, req.flash('signup_password_error', error));
 
     // Hash password
     const hashed_password = await CRYPTO.encrypt(password);
@@ -49,7 +51,7 @@ async (req, name, password, flush) => {
     if (status == "ERROR")
     {
         console.log(result);
-        return flush(null, false, req.flash('signup_error', 'Something wrong happened. Try again'));
+        return done(null, false, req.flash('signup_error', 'Something wrong happened. Try again'));
     }
 
     // Set push query user ID to object and delete password from it
@@ -60,7 +62,7 @@ async (req, name, password, flush) => {
     const user = SERVER.world.createUser(user_obj);
 
     // Pass user id to the serializer
-    return flush(null, user.id);
+    return done(null, user.id);
 }));
 
 // Define signup strategy
@@ -68,9 +70,9 @@ passport.use('login', new LocalStrategy(
 {
     usernameField: 'name',
     passwordField: 'password',
-    passReqToCallback: false
+    passReqToCallback: true
 }, 
-async (name, password, flush) => {
+async (req, name, password, done) => {
 
     // Hash password
     const hashed_password = await CRYPTO.encrypt(password);  
@@ -81,28 +83,30 @@ async (name, password, flush) => {
     if (status == "ERROR")
     {
         console.log(result);
-        return flush(null, false, req.flash('login_error', 'Something wrong happened. Try again.'));
+        return done(null, false, req.flash('login_error', 'Something wrong happened. Try again.'));
     }
         
-    if (result[0].length != 0) return flush(null, false, req.flash('login_user_error', 'Wrong user or password.'));
+    if (result[0].length != 0) return done(null, false, req.flash('login_user_error', 'Wrong user or password.'));
 
     // Pass user id to the serializer
-    return flush(null, user.id);
+    return done(null, user.id);
 }));
 
 // Store user id into the express session
-passport.serializeUser((user_id,flush) => {
-    flush(null, user_id);
+passport.serializeUser((user_id,done) => {
+    console.log(user_id);
+    done(null, user_id);
 });
 
 // Get user id from session
-passport.deserializeUser(async(user_id, flush) => {
+passport.deserializeUser(async (user_id, done) => {
+    console.log(user_id);
     const [status, result] = await DATABASE.validateUserID(user_id);
     
-    if(status == "ERROR") return flush(result);
-    if(result[0].length == 0) return flush("ID not valid");
+    if(status == "ERROR") return done(result);
+    if(result[0].length == 0) return done("ID not valid");
 
-    flush(null, result[0].id);
+    done(null, result[0].id);
 });
 
 

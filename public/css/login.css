@@ -37,6 +37,7 @@ input {
     padding: 1% 2% 1% 2%;
     overflow: hidden;
     font-size: 100%;
+    text-align: center;
 }
 
 #button {

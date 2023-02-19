@@ -95,4 +95,8 @@ DROP TABLE users;
 
 DROP TABLE rooms;
 
+USE JabbonDB;
+
+DROP TABLE sessions;
+
 
