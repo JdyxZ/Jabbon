@@ -234,5 +234,8 @@ function getDate()
 	 
  };
 
- module.exports = {getTime, getDate, getKeyFromValue};
+ if(typeof(window) == "undefined")
+{
+ 	module.exports = {getTime, getDate, getKeyFromValue};
+}
  

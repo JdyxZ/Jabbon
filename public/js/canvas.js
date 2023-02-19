@@ -9,7 +9,6 @@ var imgs = {};
 
 //last stores timestamp from previous frame
 
-
 function loop()
 {
    // Update our canvas

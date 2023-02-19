@@ -11,18 +11,9 @@ var signup = {
         this.bttn = this.getSelector('#button');
         this.bttn.addEventListener("click", this.onSignUpReady.bind(this));
 
-        //label
-        this.botlbl = this.getSelector('.change');
-        this.botlbl.addEventListener("click", this.changeToLogIn.bind(this));
-
         //error panels
         this.pnl1 = this.getSelector('#pnl1');
         this.pnl2 = this.getSelector('#pnl2');
-    },
-
-    changeToLogIn: function()
-    {
-        alert("CARGAR VIEW LOG IN")
     },
     
     onSignUpReady: function()

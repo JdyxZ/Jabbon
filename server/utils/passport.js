@@ -19,33 +19,38 @@ async (req, name, password, flush) => {
     // Check username
     let [status, result] = await DATABASE.validateUsername(name);
 
-    if (status == "ERROR") return flush(result);
-    if (result[0].length != 0) return flush(`Username ${name} already exists`);
+    if (status == "ERROR")
+    {
+        console.log(result);
+        return flush(null, false, req.flash('signup_error', 'Something wrong happened. Try again.'));
+    }
+        
+    if (result[0].length != 0) return flush('signup_username_error', `This username ${name} already exists.`);
 
     // Check password
     const [check, error] = CRYPTO.check(password);
-    if(check == "ERROR") return flush(error);
+    if (check == "ERROR") return flush(null, false, req.flash('signup_password_error', error));
 
     // Hash password
     const hashed_password = await CRYPTO.encrypt(password);
-
-    // Get other user properties from body
-    //const {avatar} = req.body;
 
     // Push user info into the database
     let user_obj =
     {
         name : name,
         password: hashed_password,
-        avatar : "./media/images/char1.png",
+        avatar : "media/images/char1.png",
         room : 1,
         position: 0
     };
 
     [status, result] = await DATABASE.pushUser(user_obj);
 
-    // Check push query result
-    if(status == "ERROR") return flush(result);
+    if (status == "ERROR")
+    {
+        console.log(result);
+        return flush(null, false, req.flash('signup_error', 'Something wrong happened. Try again'));
+    }
 
     // Set push query user ID to object and delete password from it
     user_obj.id = result[0].insertId;
@@ -70,11 +75,16 @@ async (name, password, flush) => {
     // Hash password
     const hashed_password = await CRYPTO.encrypt(password);  
 
-    // Validate user
+    // Check user credentials
     let [status, result] = await DATABASE.validateUsername(name, hashed_password);
 
-    if (status == "ERROR") return flush(result);
-    if (result[0].length != 0) return flush(`User ${name} with password ${password} doesn't exists`);
+    if (status == "ERROR")
+    {
+        console.log(result);
+        return flush(null, false, req.flash('login_error', 'Something wrong happened. Try again.'));
+    }
+        
+    if (result[0].length != 0) return flush(null, false, req.flash('login_user_error', 'Wrong user or password.'));
 
     // Pass user id to the serializer
     return flush(null, user.id);

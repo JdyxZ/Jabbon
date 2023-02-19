@@ -2,24 +2,26 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css/login.css"/>
+        <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
     </head>
     <body>
-        <div id="container" >
-                <div class="label">Log in</div>
+        <div id="container">
                 <span class="loginspan">
+                    <div class="label">Log in</div>
                     <div class="input-username-login">
-                        <input type="text" placeholder="username" id="input" name="username">
+                        <input type="text" placeholder="username" name="username">
                         <div style="display:none" class="pnlerroriput" id="pnl1"></div>
                     </div>
                     <div class="input-password-login">
-                        <input type="password" placeholder="password" id="input" name="password">
+                        <input type="password" placeholder="password" name="password">
                         <div style="display:none" class="pnlerroriput" id="pnl2"></div>
                     </div>
                     <div class="submit-button-login">
-                        <button type="button" id="button">Log in</button>
+                        <button type="button" id="button">Go!</button>
                     </div>
+                    <div class="change"><a href="http://localhost:9014/signup">sign up</a></div>
                 </span>
-                <div class="change"><a href="http://localhost:9014/signup">sign up</a></div>
+                
         </div>
     </body>
     <script src="./framework.js"></script>

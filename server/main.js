@@ -57,7 +57,11 @@ app.use(express.json()); // Parses json data directly to objects
 
 // Global session variables
 app.use((req, res, next) =>{
-
+  app.locals.signup_username_error = req.flash('signup_username_error');
+  app.locals.signup_password_error = req.flash('signup_password_error');
+  app.locals.signup_error = req.flash('signup_error');
+  app.locals.login_error = req.flash('login_user_error');
+  app.locals.login_error = req.flash('login_error');
   next();
 });
 

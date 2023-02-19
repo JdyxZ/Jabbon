@@ -2,7 +2,6 @@
 
 var VIEW = {
 
-    
     cam_offset: 0,
     scale_factor: 3,
 
@@ -38,7 +37,7 @@ var VIEW = {
 
     },
 
-    //Here we apply a trasformation to a postion, from the screen to the world (with all the transformations)
+    // Here we apply a trasformation to a postion, from the screen to the world (with all the transformations)
     canvasToWorld(pos)
     {
         return [(pos[0] - canvas.width/2) / this.scale_factor - this.cam_offset, ( pos[1] - canvas.height/2) / this.scale_factor ]
