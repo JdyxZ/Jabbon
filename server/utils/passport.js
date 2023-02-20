@@ -98,7 +98,7 @@ async (req, name, password, done) => {
     // Check that the client is not already connected in another session
     const user_id = result[0][0].id;
 
-    if(SERVER.clients.includes(user_id.toString()))
+    if(Object.keys(SERVER.clients).includes(user_id.toString()))
     {
         return done(null, false, req.flash('login_error', 'The user you are trying to log in is already logged in a different window'));
     }

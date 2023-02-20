@@ -48,7 +48,7 @@ var SERVER =
             const message = JSON.parse(ws_message.utf8Data);
             
             // Check message
-            const result = this.CheckMessage(connection, message);
+            const result = this.checkMessage(connection, message);
             if (result != "OK") return;
             
             // Route message
@@ -57,7 +57,7 @@ var SERVER =
         // Catch errors
         catch (error) 
         {
-            const message = new Message("system", "ERROR", error, getTime());
+            const message = new Message("system", "ERROR", JSON.stringify(error), getTime());
             connection.sendUTF(JSON.stringify(message));
         }
     },
@@ -225,7 +225,8 @@ var SERVER =
     {
         // Get some vars
         const user_id = connection.user_id;
-        const user_current_room = WORLD.getRoom(user.room);
+        const user = WORLD.getUser(user_id);
+        const user_current_room = user.room;
 
         // Check the sender id and the connection user id matches
         if (message.sender != user_id)
