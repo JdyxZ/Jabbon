@@ -18,7 +18,7 @@
                         <div style="display:none" class="pnlerroriput" id="pnl2"></div>
                     </div>
 
-                    <% if (login_user_error.length > 0) { %>
+                    <% if (login_user_error && login_user_error.length > 0) { %>
                         <div class="alert"><%= login_user_error %></div>
                     <% } %>
 
@@ -26,7 +26,7 @@
                         <button type="button" id="button">Go!</button>
                     </div>
 
-                    <% if (login_error.length > 0) { %>
+                    <% if (login_error && login_error.length > 0) { %>
                         <div class="alert"><%= login_error %></div>
                     <% } %>
 

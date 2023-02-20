@@ -14,7 +14,7 @@
                         <div class="pnlerroriput" id="pnl1" style="display:none"></div>
                     </div>
 
-                    <% if (signup_username_error.length > 0) { %>
+                    <% if (signup_username_error && signup_username_error.length > 0) { %>
                         <div class="alert"><%= signup_username_error %></div>
                     <% } %>
 
@@ -26,7 +26,7 @@
                         <div class="pnlerroriput" id="pnl2" style="display:none"></div>
                     </div>
 
-                    <% if (signup_password_error.length > 0) { %>
+                    <% if (signup_password_error && signup_password_error.length > 0) { %>
                         <div class="alert"><%= signup_password_error %></div>
                     <% } %>
        
@@ -34,7 +34,7 @@
                         <button type="button" id="button">Submit</button>
                     </div>
 
-                    <% if (signup_error.length > 0) { %>
+                    <% if (signup_error && signup_error.length > 0) { %>
                         <div class="alert"><%= signup_error %></div>
                     <% } %>
 

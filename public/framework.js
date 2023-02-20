@@ -208,13 +208,13 @@ Array.prototype.remove = function(element)
  function getTime()
 {
 	const date = new Date();
-	return date.getTime();
+	return date.getTime2();
 }
 
 function getDate()
 {
 	const date = new Date();
-	return date.getDate();
+	return date.getDate2();
 }
 
  function getKeyFromValue(array, value)

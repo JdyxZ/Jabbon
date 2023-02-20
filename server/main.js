@@ -56,13 +56,12 @@ app.use(passport.session()); // Let passport know we are using a session context
 app.use(express.urlencoded({extended: false})); // Parses encoded data send with post method through a form
 app.use(express.json()); // Parses json data directly to objects
 
-
 // Global session variables
 app.use((req, res, next) =>{
   app.locals.signup_username_error = req.flash('signup_username_error');
   app.locals.signup_password_error = req.flash('signup_password_error');
   app.locals.signup_error = req.flash('signup_error');
-  app.locals.login_error = req.flash('login_user_error');
+  app.locals.login_user_error = req.flash('login_user_error');
   app.locals.login_error = req.flash('login_error');
   next();
 });
@@ -99,3 +98,5 @@ wss.on('request', function(request) {
     connection.on('message', (message) => SERVER.onMessage(connection, message));
     connection.on('close', SERVER.onUserDisconnected);
 });
+
+module.exports = app;
