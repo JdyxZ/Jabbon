@@ -113,15 +113,21 @@ wss.on('request', function(request) {
             // Reject connection
             request.reject(102, 'You must log in before trying to connect with WebSocket');
             return;
-        }       
+        } 
+        else
+        {
+            // Get user id
+            const user_id = session_info.passport.user;
 
-        // Accept connection
-        const connection = request.accept(null, request.origin);
+            // Accept connection
+            const connection = request.accept(null, request.origin);
+    
+            // Websocket callbacks
+            SERVER.onUserConnected(connection);
+            connection.on('message', (message) => SERVER.onMessage(connection, message));
+            connection.on('close', SERVER.onUserDisconnected);
+        }      
 
-        // Websocket callbacks
-        SERVER.onUserConnected(connection);
-        connection.on('message', (message) => SERVER.onMessage(connection, message));
-        connection.on('close', SERVER.onUserDisconnected);
       
     }); 
 });
