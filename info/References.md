@@ -17,6 +17,7 @@ Express sessions and connect-flash module: https://www.youtube.com/watch?v=mm9oI
 Regex for password checking: https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a 
 Fetch images server-side: https://www.geeksforgeeks.org/how-to-fetch-images-from-node-js-server/ 
 Fetch images client-side: https://stackoverflow.com/questions/50248329/fetch-image-from-api 
-Issue: https://github.com/passport/todos-express-password/issues/34 
+My fault: https://github.com/passport/todos-express-password/issues/34 
+THE SOLUTION TO THE BIG PROBLEM FINALLY FOUND!!: https://stackoverflow.com/questions/27202075/expressjs-res-redirect-not-working-as-expected
 
 # Sr.OjeteSucio

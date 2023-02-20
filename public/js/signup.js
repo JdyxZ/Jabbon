@@ -103,21 +103,33 @@ var signup = {
     
     sendCredentials: function()
     {
-        fetch('http://localhost:9014/signup', {
+        fetch('http://localhost:9014/signup', 
+        {
             method: 'POST',
-            headers: {
+            headers: 
+            {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
+            body: 
+            JSON.stringify
+            ({
               name: this.signupu.value,
               password: this.signupp1.value
             })
-          })
-          .then(response => {
+        })
+        .then(response => 
+        {
+            // Log response
             console.log('Server response:', response);
-          })
-          .catch(error => {
+
+            // Enable redirecting
+            if (response.redirected) {
+                window.location.href = response.url;
+            };
+        })
+        .catch(error => 
+        {
             console.error('Error sending data to server:', error);
-          });
+        });
     }
 }
