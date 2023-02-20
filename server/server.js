@@ -57,6 +57,7 @@ var SERVER =
         // Catch errors
         catch (error) 
         {
+            console.log(error);
             const message = new Message("system", "ERROR", JSON.stringify(error), getTime());
             connection.sendUTF(JSON.stringify(message));
         }

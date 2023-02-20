@@ -163,3 +163,12 @@ var CLIENT =
     }
 
 }
+
+// Before reloading page close connection
+window.onbeforeunload = function() {
+    if(CLIENT.socket != null)
+    {
+        CLIENT.socket.onclose = function () {}; // disable onclose handler first
+        CLIENT.socket.close();
+    }
+};
