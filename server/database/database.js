@@ -53,7 +53,7 @@ var DATABASE = {
             if(isNaN(id) || id === "") throw "You must send a valid ID";
             
             // Query
-            const result = await this.pool.query("SELECT * FROM users WHERE id = ? ;", [id])
+            const result = await this.pool.query("SELECT * FROM users WHERE id = ? ;", [id]);
 
             // Output
             return ["OK", result];

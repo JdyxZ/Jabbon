@@ -100,19 +100,13 @@ async (req, name, password, done) => {
 
 // Store user id into the express session
 passport.serializeUser((user_id,done) => {
-    console.log(user_id);
     done(null, user_id);
 });
 
 // Get user id from session
 passport.deserializeUser(async (user_id, done) => {
-    console.log(user_id);
     const [status, result] = await DATABASE.validateUserID(user_id);
-    
-    if(status == "ERROR") return done(result);
-    if(result[0].length == 0) return done("ID not valid");
-
-    done(null, result[0].id);
+    done(null, result[0][0].id);
 });
 
 

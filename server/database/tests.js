@@ -6,7 +6,7 @@ async function test()
     DATABASE.initConnection();
 
     // Queries
-    const [_, [result]] = await DATABASE.validateUsername("pedro");
+    const [_, [result]] = await DATABASE.validateUserID("4");
 
     console.log(result);
 }
