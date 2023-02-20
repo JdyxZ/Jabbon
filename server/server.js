@@ -57,6 +57,7 @@ var SERVER =
         // Catch errors
         catch (error) 
         {
+            console.log(error)
             const message = new Message("system", "ERROR", JSON.stringify(error), getTime());
             connection.sendUTF(JSON.stringify(message));
         }
@@ -163,11 +164,13 @@ var SERVER =
 
         // Update the WORLD state
         this.world.users[sender_id].target = content.target;
+        this.world.users[sender_id].position = content.target[0];
     
         // Send the message to the other users
         // console.log(room.id)
         // console.log(message)
         // console.log(sender_id)
+        console.log(this.world.users[sender_id])
         this.sendRoomMessage(message,room.id,sender_id)
     },
 

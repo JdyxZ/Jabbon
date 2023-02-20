@@ -47,6 +47,7 @@ var DATABASE = {
 
     validateUserID: async function(id)
     {
+        console.log(id)
         try
         {
             // Throw errors

@@ -134,14 +134,15 @@ var CLIENT =
 
     onError: function(message)
     {
-        console.log(message.content);
+        console.log("aqui");
+        console.log(message);
     },
 
     // Methods
     sendRoomMessage: function(message)
     {
         // Append addresses to the message
-
+        message.addressees = [];
         // Send message to user
         this.socket.send(JSON.stringify(message));
     },
