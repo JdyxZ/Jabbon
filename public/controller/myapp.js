@@ -38,11 +38,6 @@ var MYAPP = {
     updateUser:function(user,dt)
     {
         var current_room = this.current_room;
-            if(user.animation != "idle")
-            {
-                console.log("position: ",user.position);
-                console.log("target: ",user.target);
-            }
 
             //There is something wrong with the position of the user when you change tabs, so this is just a temporary fix
             if(!(user.position >current_room.range[1] || user.position < current_room.range[0]))

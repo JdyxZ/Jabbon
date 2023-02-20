@@ -42,6 +42,7 @@ async function fetchImage(url)
         // Check response
         if (response.status !== 200) {
             console.log(`HTTP-Error ${response.satus} upon fetching url ${url} `);
+            return null;
         };
             
         // Convert response into binary image
