@@ -24,8 +24,6 @@ async (req, name, password, done) => {
         console.log(result);
         return done(null, false, req.flash('signup_error', 'Something wrong happened. Try again.'));
     }
-
-    console.log("here");
         
     if (result[0].length != 0) return done(null, false, req.flash('signup_username_error', `The username ${name} already exists.`));
 
@@ -108,5 +106,6 @@ passport.deserializeUser(async (user_id, done) => {
 
     done(null, result[0].id);
 });
+
 
 

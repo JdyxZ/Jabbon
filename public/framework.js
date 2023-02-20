@@ -152,12 +152,12 @@ String.prototype.reverseString = function()
 
 /***************** DATE *****************/
 
-Date.prototype.getTime = function() 
+Date.prototype.getTime2 = function() 
 {
 	return `${this.getHours().toString().padStart(2,"0")}:${this.getMinutes().toString().padStart(2, "0")}`
 };
 
-Date.prototype.getDate = function() 
+Date.prototype.getDate2 = function() 
 {
 	return `${this.getDay().toString().padStart(2,"0")}/${this.getMonth().toString().padStart(2, "0")}/${this.getFullYear()}`;
 };

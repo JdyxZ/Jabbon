@@ -37,11 +37,6 @@ router.post('/login', passport.authenticate("login", {
     failureFlash: true
 }));
 
-router.post('/login', function(req, res){ 
-    console.log(req.body);
-    res.end("Login request received");
-});
-
 // Util routes
 router.get('/get_world', function(req, res){ // Model info
     res.end(SERVER.world.toJSON());

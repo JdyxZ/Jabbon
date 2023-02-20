@@ -38,6 +38,7 @@ var session_properties = {
   secret: 'JabbonSession',
   resave: false, // avoids overwritting the session
   saveUninitialized: false,
+  cookie: { expires: new Date(Date.now() + (30 * 86400 * 1000)) } , // Set 1 month of expiration time
   store: new MySQLSession(CREDENTIALS) // Persistent session
 }
 
@@ -54,6 +55,7 @@ app.use(passport.initialize());  // Processes signup and login requests
 app.use(passport.session()); // Let passport know we are using a session context
 app.use(express.urlencoded({extended: false})); // Parses encoded data send with post method through a form
 app.use(express.json()); // Parses json data directly to objects
+
 
 // Global session variables
 app.use((req, res, next) =>{
