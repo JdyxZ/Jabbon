@@ -1,4 +1,5 @@
 const DATABASE = require("./database.js");
+const CRYPTO = require("../utils/crypto.js");
 
 async function test()
 {
@@ -6,9 +7,16 @@ async function test()
     DATABASE.initConnection();
 
     // Queries
-    const [_, [result]] = await DATABASE.validateUserID("4");
 
-    console.log(result);
+    // Hash password
+    name = "raquel2",
+    password = "Holaejs2001$";
+    const hashed_password = await CRYPTO.encrypt(password);  
+
+    // Check user credentials
+    let [status, result] = await DATABASE.validateUsername(name, hashed_password);
+
+    console.log(result[0][0].id);
 }
 
 test();

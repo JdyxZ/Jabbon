@@ -42,14 +42,14 @@
                 </span>
         </div>
     </body>
-    <script>
-        document.get("#username").value = '<%-signup_username%>';
-        document.get("#password1").value = '<%-signup_password%>';
-        document.get("#password2").value = '<%-signup_password%>';
-    </script>
     <script src="./js/ejs.js"></script>
     <script src="./framework.js"></script>
     <script src="./js/signup.js"></script>
     <script>signup.init()</script>
+    <script>
+        document.querySelector("#username").value = '<%-signup_username%>';
+        document.querySelector("#password1").value = '<%-signup_password%>';
+        document.querySelector("#password2").value = '<%-signup_password%>';
+    </script>
 </html>
 

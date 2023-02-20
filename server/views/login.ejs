@@ -31,19 +31,16 @@
                         </div>
                     </form>
     
-                    <div class="change"><a href="http://localhost:9014/signup">sign up</a></div>
-                    
-                </span>
-
-                
+                    <div class="change"><a href="http://localhost:9014/signup">sign up</a></div> 
+                </span>                
         </div>
     </body>
-    <script>
-        document.get("#username").value = '<%-login_username%>';
-        document.get("#password").value = '<%-login_password%>';
-    </script>
     <script src="./js/ejs.js"></script>
     <script src="./framework.js"></script>
     <script src="./js/login.js"></script>
     <script>login.init()</script>
+    <script>
+        document.querySelector("#username").value = '<%-login_username%>';
+        document.querySelector("#password").value = '<%-login_password%>';
+    </script>
 </html>

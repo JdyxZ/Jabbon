@@ -92,10 +92,10 @@ async (req, name, password, done) => {
         return done(null, false, req.flash('login_error', 'Something wrong happened. Try again.'));
     }
         
-    if (result[0].length != 0) return done(null, false, req.flash('login_user_error', 'Wrong user or password.'));
+    if (result[0].length == 0) return done(null, false, req.flash('login_user_error', 'Wrong user or password.'));
 
     // Pass user id to the serializer
-    return done(null, user.id);
+    return done(null, result[0][0].id);
 }));
 
 // Store user id into the express session
