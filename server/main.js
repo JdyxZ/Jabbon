@@ -55,12 +55,22 @@ app.use(passport.initialize());  // Processes signup and login requests
 app.use(passport.session()); // Let passport know we are using a session context
 
 // Global session variables
-app.use((req, res, next) =>{
+app.use((req, res, next) => {
+
+  // Sign up variables
+  app.locals.signup_username = req.flash('signup_username');
   app.locals.signup_username_error = req.flash('signup_username_error');
+  app.locals.signup_password = req.flash('signup_password');
   app.locals.signup_password_error = req.flash('signup_password_error');
-  app.locals.signup_error = req.flash('signup_error');
+  app.locals.signup_error = req.flash('signup_error')
+
+  // Log in variables
+  app.locals.login_username = req.flash('login_username');
+  app.locals.login_password = req.flash('login_password');
   app.locals.login_user_error = req.flash('login_user_error');
   app.locals.login_error = req.flash('login_error');
+
+  // Pass to next middleware
   next();
 });
 

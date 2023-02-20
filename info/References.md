@@ -19,5 +19,7 @@ Fetch images server-side: https://www.geeksforgeeks.org/how-to-fetch-images-from
 Fetch images client-side: https://stackoverflow.com/questions/50248329/fetch-image-from-api 
 My fault: https://github.com/passport/todos-express-password/issues/34 
 THE SOLUTION TO THE BIG PROBLEM FINALLY FOUND!!: https://stackoverflow.com/questions/27202075/expressjs-res-redirect-not-working-as-expected
+Fetch HTML: https://stackoverflow.com/questions/36631762/returning-html-with-fetch 
+Use EJS syntax inside Javascript scripts: https://www.geeksforgeeks.org/how-to-use-ejs-in-javascript/ 
 
 # Sr.OjeteSucio

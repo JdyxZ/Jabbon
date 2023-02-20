@@ -3,9 +3,9 @@ var signup = {
     init: function()
     {
         //Log in data
-        this.signupu = this.getSelector('input[name="username"]');
-        this.signupp1 = this.getSelector('input[name="password1"]');
-        this.signupp2 = this.getSelector('input[name="password2"]');
+        this.signupu = this.getSelector('#username');
+        this.signupp1 = this.getSelector('.password1');
+        this.signupp2 = this.getSelector('.password2');
 
         //button
         this.bttn = this.getSelector('#button');
@@ -14,6 +14,21 @@ var signup = {
         //error panels
         this.pnl1 = this.getSelector('#pnl1');
         this.pnl2 = this.getSelector('#pnl2');
+
+        // Key down
+        this.signupu.addEventListener("keydown", this.onKeyDown.bind(this));
+        this.signupp1.addEventListener("keydown", this.onKeyDown.bind(this));
+        this.signupp2.addEventListener("keydown", this.onKeyDown.bind(this));
+    },
+
+    onKeyDown: function(event)
+    {
+        const alert = document.querySelector(".alert");
+        if(alert)
+        {
+            console.log("here");
+            alert.hide();
+        }
     },
     
     onSignUpReady: function()
@@ -117,19 +132,23 @@ var signup = {
               password: this.signupp1.value
             })
         })
-        .then(response => 
-        {
-            // Log response
-            console.log('Server response:', response);
-
-            // Enable redirecting
-            if (response.redirected) {
-                window.location.href = response.url;
-            };
+        .then(function(response) {
+            // When the page is loaded convert it to text
+            return response.text()
         })
-        .catch(error => 
-        {
-            console.error('Error sending data to server:', error);
+        .then(function(html) {
+            // Initialize the DOM parser
+            var parser = new DOMParser();
+
+            // Parse the text
+            var doc = parser.parseFromString(html, "text/html");
+            
+            // Change DOM
+            document.body = doc.body;     
+        })
+        .catch(function(err) {  
+            console.log('Failed to fetch page: ', err);  
         });
     }
+    
 }

@@ -10,7 +10,7 @@
                     <div class="label">Sign up</div>
 
                     <div class="input-username-signup">
-                        <input type="text" placeholder="username" name="username">
+                        <input id="username" type="text" placeholder="username" name="username">
                         <div class="pnlerroriput" id="pnl1" style="display:none"></div>
                     </div>
 
@@ -19,10 +19,10 @@
                     <% } %>
 
                     <div class="input-password-signup">
-                        <input type="password" placeholder="password" name="password1">
+                        <input class="password1" type="password" name="password" placeholder="password" >
                     </div>
                     <div class="input-password-signup">
-                        <input type="password" placeholder="repeat the password" name="password2">
+                        <input class="password2" type="password" placeholder="repeat the password">
                         <div class="pnlerroriput" id="pnl2" style="display:none"></div>
                     </div>
 
@@ -42,7 +42,9 @@
                 </span>
         </div>
     </body>
+    <script src="./js/ejs.js"></script>
     <script src="./framework.js"></script>
     <script src="./js/signup.js"></script>
     <script>signup.init()</script>
 </html>
+

@@ -16,6 +16,10 @@ passport.use('signup', new LocalStrategy(
 }, 
 async (req, name, password, done) => {
 
+    // Set input username and password to global variables thorugh flash
+    req.flash("signup_username", name);
+    req.flash("signup_password", password);
+
     // Check username
     let [status, result] = await DATABASE.validateUsername(name);
 
