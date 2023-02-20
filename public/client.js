@@ -169,6 +169,6 @@ window.onbeforeunload = function() {
     if(CLIENT.socket != null)
     {
         CLIENT.socket.onclose = function () {}; // disable onclose handler first
-        CLIENT.socket.close();
+        CLIENT.socket.close(); // Gracias internet <3
     }
 };
