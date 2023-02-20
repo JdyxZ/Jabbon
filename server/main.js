@@ -6,20 +6,18 @@ const http = require('http');
 const url = require('url');
 const express = require('express');
 const morgan = require('morgan'); 
-const cors = require('cors');
 const WebSocketServer = require('websocket').server;
 const path = require('path');
 const session = require('express-session'); 
 const passport = require('passport');
-const validator = require('express-validator');
 const MySQLSession = require('express-mysql-session')(session);
 const ejs = require('ejs'); 
 const flash = require('connect-flash');
+const bodyParser = require('body-parser');
 
 // Our modules
 const SERVER = require("./server.js");
 const CREDENTIALS = require("./database/credentials.js");
-require('./utils/passport');
 
 // Init server services
 SERVER.init();
@@ -28,6 +26,7 @@ SERVER.init();
 
 // Create ExpressJS app
 const app = express(); // We use ExpressJS to deal with requests, since it allows us to manage request in a simpler way and easily serve files to the client
+require('./utils/passport');
 
 // App settings
 app.set('appName', 'Jabbon');
@@ -48,13 +47,12 @@ app.set('view engine', 'ejs');
 
 // Middleware
 app.use(morgan('short')); // To see the request specs
-app.use(cors()); // To process cors restrictions
+app.use(bodyParser.urlencoded({extended: false})); // Parses encoded data send with post method through a form
+app.use(bodyParser.json()); // Parses json data directly to objects
 app.use(session(session_properties)); // Initialize session
 app.use(flash()); // Allows to easily store data in the session
 app.use(passport.initialize());  // Processes signup and login requests
 app.use(passport.session()); // Let passport know we are using a session context
-app.use(express.urlencoded({extended: false})); // Parses encoded data send with post method through a form
-app.use(express.json()); // Parses json data directly to objects
 
 // Global session variables
 app.use((req, res, next) =>{

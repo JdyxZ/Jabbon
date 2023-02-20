@@ -9,19 +9,19 @@ const DATABASE = require("../database/database.js");
 
 // Get routes
 router.get('/', (req, res) => {
-    res.render("../views/login");
+    res.render("login");
 });
 
 router.get('/login', (req, res) => {
-    res.render("../views/login");
+    res.render("login");
 });
 
 router.get('/signup',  (req, res) => {
-    res.render("../views/signup");
+    res.render("signup");
 });
 
 router.get('/canvas', (req, res) => {
-    res.render("../views/canvas");
+    res.render("canvas");
 });
 
 // Post routes
@@ -30,7 +30,7 @@ router.post('/signup', (req,res,next) => {
     successRedirect: "/canvas",
     failureRedirect: "/login",
     failureFlash: true
-    }) (req,res,next);
+    }) (req, res, next);
 });
 
 router.post('/login', passport.authenticate("login", {
