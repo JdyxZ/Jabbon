@@ -6,7 +6,7 @@ var last = performance.now();
 var mouse_pos = [0,0];
 var mouse_buttons = 0;
 var imgs = {};
-
+var exit = document.get('input[name="exit"]');
 
 //last stores timestamp from previous frame
 
@@ -65,14 +65,6 @@ async function fetchImage(url)
 }
 
 // Image manager
-//Function to get the selector (easier code)
-function getSelector(selector)
-{
-    return document.querySelector(selector);
-}
-
-var exit = this.getSelector('input[name="exit"]');
-
 function getImage(url)
 {
 	// If the image is already loaded return it

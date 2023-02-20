@@ -60,8 +60,9 @@ async (req, name, password, done) => {
     user_obj.id = result[0].insertId;
     delete user_obj.password;
 
-    // Create new user into the WORLD
+    // Create new user into the WORLD and add it to its room
     const user = SERVER.world.createUser(user_obj);
+    SERVER.world.addUsertoRoom(user.id, user.room);
 
     // Pass user id to the serializer
     return done(null, user.id);
@@ -94,8 +95,16 @@ async (req, name, password, done) => {
         
     if (result[0].length == 0) return done(null, false, req.flash('login_user_error', 'Wrong user or password.'));
 
+    // Check that the client is not already connected in another session
+    const user_id = result[0][0].id;
+
+    if(SERVER.clients.includes(user_id.toString()))
+    {
+        return done(null, false, req.flash('login_error', 'The user you are trying to log in is already logged in a different window'));
+    }
+
     // Pass user id to the serializer
-    return done(null, result[0][0].id);
+    return done(null, user_id);
 }));
 
 // Store user id into the express session
@@ -105,12 +114,15 @@ passport.serializeUser((user_id,done) => {
 
 // Get user id from session
 passport.deserializeUser(async (user_id, done) => {
+    // Query
     const [status, result] = await DATABASE.validateUserID(user_id);
 
+    // Check
     if(status == "ERROR") return done(result);
     if(result[0].length == 0) return done("ID not valid");
 
-    done(null, result[0][0].id);
+    // Flush user ID
+    done(null, user_id);
 });
 
 
