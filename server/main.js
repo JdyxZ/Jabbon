@@ -123,7 +123,7 @@ wss.on('request', function(request) {
             const connection = request.accept(null, request.origin);
     
             // Websocket callbacks
-            SERVER.onUserConnected(connection);
+            SERVER.onUserConnected(connection, user_id);
             connection.on('message', (message) => SERVER.onMessage(connection, message));
             connection.on('close', SERVER.onUserDisconnected);
         }      

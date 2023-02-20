@@ -26,7 +26,7 @@ var SERVER =
 
         // Assign world to the SERVER
         this.world = WORLD;
-        console.log(this.world.rooms);
+        //console.log(this.world.rooms);
     },
 
     // Ready callback
@@ -61,22 +61,17 @@ var SERVER =
         }
     },
 
-    onUserConnected: function(connection)
+    onUserConnected: function(connection, user_id)
     {
         // Notify the server
         console.log("User has joined");
        
         // Get vars
-        var user = this.world.getUser(1);
-        if(this.temp == 1)
-        {
-            this.temp = 2;
-            user = this.world.getUser(2);
-        }
+        var user = this.world.getUser(user_id);
         
         const current_room = this.world.getRoom(user.room);
         //console.log(this.world.rooms);
-        console.log(current_room);
+        //console.log(current_room);
         // Check that user exists
         if(user)
         {   
@@ -96,7 +91,7 @@ var SERVER =
     {
         // Send room data
         this.sendPrivateMessage(new Message("system", "ROOM", current_room.toJSON(), ), user_id);
-        console.log(current_room.toJSON());  
+        //console.log(current_room.toJSON());  
 
         // Send myinfo data
         this.sendPrivateMessage(new Message("system", "YOUR_INFO", user.toJSON(), ), user_id);
@@ -147,7 +142,7 @@ var SERVER =
         switch(message.type)
         {
             case "TICK":
-                console.log("TICK RECIVED: ",message.content )
+                console.log("TICK RECIVED: ", message.content )
                 this.onTick(message);
                 break;
             case "PRIVATE":
@@ -238,9 +233,9 @@ var SERVER =
         // Get some vars
         const user_id = connection.user_id;
         const user_current_room = this.world.rooms[this.world.users[user_id].room];
-        console.log(user_id);
-        console.log(user_current_room);
-        console.log(message);
+        //console.log(user_id);
+        //console.log(user_current_room);
+        //console.log(message);
         // Check the sender id and the connection user id matches
         if (message.sender != user_id)
         {

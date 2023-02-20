@@ -192,7 +192,7 @@ var WORLD = {
         world_json.rooms.forEach(room_json => {
             this.createRoom(room_json);
         }); 
-        console.log(this.rooms);
+       
         // Create users
         world_json.users.forEach(user_json => {
             const user = this.createUser(user_json);
