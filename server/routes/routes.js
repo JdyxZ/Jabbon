@@ -27,10 +27,7 @@ router.get('/canvas', LOCKER.isLogged, (req, res) => {
     const user_id = req.session.passport.user;
 
     // Check if user is already connected in a different window
-    if(SERVER.clients == null) console.log("No clients yet");
-    else console.log(Object.keys(SERVER.clients));
-
-    if(Object.keys(SERVER.clients).includes(user_id))
+    if(Object.keys(SERVER.clients).includes(user_id.toString()))
         res.redirect("/logout");
 
     // Otherwise, print canvas
@@ -38,8 +35,10 @@ router.get('/canvas', LOCKER.isLogged, (req, res) => {
 });
 
 router.get('/logout', LOCKER.isLogged, (req, res) => {
-    req.logOut();
-    res.redirect('/login');
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        res.redirect('/login');
+    });
 });
 
 // Post routes
@@ -138,9 +137,8 @@ router.delete('/user/:id', async function(req, res){ // User delete
     }
 });
 
-router.get("/connections", (req,res,next) =>{
-    if(SERVER.connections == null) res.end("Empty");
-    else res.end(Object.keys(SERVER.connections));
+router.get("/clients", (req,res,next) => {
+    else res.end(Object.keys(SERVER.clients));
 });
 
 // Export module

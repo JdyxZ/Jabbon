@@ -106,6 +106,10 @@ passport.serializeUser((user_id,done) => {
 // Get user id from session
 passport.deserializeUser(async (user_id, done) => {
     const [status, result] = await DATABASE.validateUserID(user_id);
+
+    if(status == "ERROR") return done(result);
+    if(result[0].length == 0) return done("ID not valid");
+
     done(null, result[0][0].id);
 });
 
