@@ -6,34 +6,38 @@ const router = express.Router();
 // Our modules
 const SERVER = require("../server.js");
 const DATABASE = require("../database/database.js");
+const LOCKER = require("../utils/locker.js");
 
 // Get routes
 router.get('/', (req, res) => {
     res.render("login");
 });
 
-router.get('/login', (req, res) => {
+router.get('/login', LOCKER.isNotLogged, (req, res) => {
     res.render("login");
 });
 
-router.get('/signup',  (rseq, res) => {
+router.get('/signup', LOCKER.isNotLogged, (req, res) => {
     res.render("signup");
 });
 
-router.get('/canvas', (req, res) => {
+router.get('/canvas', LOCKER.isLogged, (req, res) => {
     res.render("canvas");
 });
 
+router.get('/logout', LOCKER.isLogged, (req, res) => {
+    req.logOut();
+    res.redirect('/login');
+});
+
 // Post routes
-router.post('/signup', (req,res,next) => {
-    passport.authenticate("signup", {
+router.post('/signup', LOCKER.isNotLogged, passport.authenticate("signup", {
     successRedirect: "/canvas",
     failureRedirect: "/signup",
     failureFlash: true
-    }) (req, res, next);
-});
+}));
 
-router.post('/login', passport.authenticate("login", {
+router.post('/login', LOCKER.isNotLogged, passport.authenticate("login", {
     successRedirect: "/canvas",
     failureRedirect: "/login",
     failureFlash: true

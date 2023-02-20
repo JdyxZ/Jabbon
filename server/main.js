@@ -37,9 +37,12 @@ var session_properties = {
   secret: 'JabbonSession',
   resave: false, // avoids overwritting the session
   saveUninitialized: false,
-  cookie: { expires: new Date(Date.now() + (30 * 86400 * 1000)) } , // Set 1 month of expiration time
+  cookie: { name: "JabbonCookie", _expires: new Date(Date.now() + (30 * 86400 * 1000)) } , // Set 1 month of expiration time
   store: new MySQLSession(CREDENTIALS) // Persistent session
-}
+};
+
+// Define session parser
+var sessionParser = session(session_properties);
 
 // View Engine
 app.set('views', path.join(__dirname, 'views'));
@@ -49,7 +52,7 @@ app.set('view engine', 'ejs');
 app.use(morgan('short')); // To see the request specs
 app.use(bodyParser.urlencoded({extended: false})); // Parses encoded data send with post method through a form
 app.use(bodyParser.json()); // Parses json data directly to objects
-app.use(session(session_properties)); // Initialize session
+app.use(sessionParser); // Parses sessions
 app.use(flash()); // Allows to easily store data in the session
 app.use(passport.initialize());  // Processes signup and login requests
 app.use(passport.session()); // Let passport know we are using a session context
@@ -97,14 +100,30 @@ const wss = new WebSocketServer({ // create the server
 
 // Client connection request
 wss.on('request', function(request) {
-      
-    // Accept request and establish connection
-    const connection = request.accept(null, request.origin);
 
-    // Websocket callbacks
-    SERVER.onUserConnected(connection);
-    connection.on('message', (message) => SERVER.onMessage(connection, message));
-    connection.on('close', SERVER.onUserDisconnected);
+    // Parse session with sessionParser middleware
+    sessionParser(request.httpRequest, {}, function(){
+
+        // Get session info
+        const session_info = request.httpRequest.session;
+
+        // Validate session
+        if(session_info.passport == undefined) 
+        {
+            // Reject connection
+            request.reject(102, 'You must log in before trying to connect with WebSocket');
+            return;
+        }       
+
+        // Accept connection
+        const connection = request.accept(null, request.origin);
+
+        // Websocket callbacks
+        SERVER.onUserConnected(connection);
+        connection.on('message', (message) => SERVER.onMessage(connection, message));
+        connection.on('close', SERVER.onUserDisconnected);
+      
+    }); 
 });
 
 module.exports = app;
