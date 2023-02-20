@@ -3,26 +3,23 @@ var login = {
 
     init: function()
     {
-        //Log in data
-        this.loginu = this.getSelector('input[name="username"]');
-        this.loginp = this.getSelector('input[name="password"]');
+        // Log in data
+        this.loginu = this.getSelector('#username');
+        this.loginp = this.getSelector('#password');
 
-        //button
-        this.bttn = this.getSelector('#button');
-        this.bttn.addEventListener("click", this.onLoginReady.bind(this));
-
-        //label
-        this.botlbl = this.getSelector('.change');
-        this.botlbl.addEventListener("click", this.changeToSingUp.bind(this));
-
-        //error panels
-        this.pnl1 = this.getSelector('#pnl1');
-        this.pnl2 = this.getSelector('#pnl2');
+        // Key down
+        this.loginu.addEventListener("keydown", this.onKeyDown.bind(this));
+        this.loginp.addEventListener("keydown", this.onKeyDown.bind(this));
     },
 
-    changeToSingUp: function()
+    onKeyDown: function(event)
     {
-        //this.switchToSign();
+        const alert = document.querySelector(".alert");
+        if(alert)
+        {
+            console.log("here");
+            alert.hide();
+        }
     },
     
     onLoginReady: function()

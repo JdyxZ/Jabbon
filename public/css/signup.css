@@ -77,9 +77,9 @@ button:hover {
     margin-top: 1px;
 }
 
-/* LOGIN CSS */
+/* SIGNUP CSS */
 
-.loginspan
+.signupspan
 {
     border-radius: 25px;
     background-color: #ffffff;
@@ -87,15 +87,22 @@ button:hover {
     height: auto;
     overflow: hidden;
     text-align: center;
-    padding: 2em;
+     padding: 2em;
 }
 
-#username {
+#username 
+{
     margin-bottom: 2em;
 }
 
-#password{
-     margin-bottom: 2em;
+#password1
+{
+    margin-bottom: 2em;
+}
+
+#password2
+{
+    margin-bottom: 2em;
 }
 
 /* FLASH MESSAGES */

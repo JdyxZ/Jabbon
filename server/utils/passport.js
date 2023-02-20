@@ -16,7 +16,7 @@ passport.use('signup', new LocalStrategy(
 }, 
 async (req, name, password, done) => {
 
-    // Set input username and password to global variables thorugh flash
+    // Set input username and password to global variables through flash
     req.flash("signup_username", name);
     req.flash("signup_password", password);
 
@@ -75,6 +75,10 @@ passport.use('login', new LocalStrategy(
     passReqToCallback: true
 }, 
 async (req, name, password, done) => {
+
+    // Set input username and password to global variables through flash
+    req.flash("login_username", name);
+    req.flash("login_password", password);
 
     // Hash password
     const hashed_password = await CRYPTO.encrypt(password);  
