@@ -6,7 +6,7 @@ var last = performance.now();
 var mouse_pos = [0,0];
 var mouse_buttons = 0;
 var imgs = {};
-var exit = document.get('input[name="exit"]');
+var exit = document.get('div[name="exit"]');
 
 //last stores timestamp from previous frame
 
@@ -104,9 +104,11 @@ function onMouse( e ) {
    MYAPP.onMouse(e);
 };
 
+
 document.body.addEventListener("mousedown", onMouse );
 document.body.addEventListener("mousemove", onMouse );
 document.body.addEventListener("mouseup", onMouse );
+exit.addEventListener("click", MYAPP.leave );
 
 
 MYAPP.init();

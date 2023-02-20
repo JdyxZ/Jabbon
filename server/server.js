@@ -106,6 +106,13 @@ var SERVER =
         
     },
 
+    // Before closing
+    onClose: async function()
+    {
+        console.log(SERVER.world);
+        await DATABASE.updateModel(SERVER.world);
+    },
+
     onUserDisconnected: function(connection)
     {
         // Notify the server
@@ -155,7 +162,7 @@ var SERVER =
 
     },
 
-    onTick: function(message)
+    onTick: async function(message)
     {
         // Necessary information to compute the task
         const sender_id = message.sender;
@@ -165,12 +172,8 @@ var SERVER =
         // Update the WORLD state
         this.world.users[sender_id].target = content.target;
         this.world.users[sender_id].position = content.target[0];
-    
+        await DATABASE.updateModel(SERVER.world);
         // Send the message to the other users
-        // console.log(room.id)
-        // console.log(message)
-        // console.log(sender_id)
-        console.log(this.world.users[sender_id])
         this.sendRoomMessage(message,room.id,sender_id)
     },
 
@@ -191,17 +194,21 @@ var SERVER =
         // Necessary information to compute the task
         const sender_id = message.sender;
         const content = message.content;
-
+        const _exit = JSON.parse(content.exit);
+        const room = content.room;
+        console.log(_exit);
         // Dada la exit, encontrar la room
         // const exit = content.exit[1];
-        exit = 0;
-        var new_room = this.world.getRoom(exit);
+
+        var new_room = this.world.getRoom(_exit[2]);
         var user = this.world.users[sender_id];
-        var last_room = this.world.getRoom(content.room);
+        var last_room = room;
+
+        var expos = new_room.exits.forEach(function(exit){ if(exit[0] == _exit[3]) return exit[1]});
 
         // Update server data from users
         user.room = new_room.id;
-        user.position = room.range[0];
+        user.position = -290;
         user.target = user.position;
 
         // Update server data from room
@@ -213,6 +220,9 @@ var SERVER =
         new_room.people.push(user);
 
         // Update clients info
+        console.log(user);
+        console.log(sender_id);
+        console.log(new_room);
         this.OnNewUserEnter(user,sender_id,new_room);
 
     },

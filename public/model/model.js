@@ -17,7 +17,7 @@ function User(data)
     this.facing = data == undefined ? FACING_FRONT : data.facing || FACING_FRONT;
     this.animation = data == undefined ? "idle" : data.animation || "idle";
     this.room = data == undefined ? 1 : data.room || 1;
-    this.target = data == undefined ? [40,0] : data.target || [40,0];
+    this.target = data == undefined ? [0,0] : [data.position,0] || [0,0];
 }
 
 User.prototype.toJSON = function()
@@ -89,6 +89,11 @@ Room.prototype.getUsers = function()
 {
     return this.people;
 }
+
+// Room.prototype.getExitByID = function(id)
+// {
+//     this.exits.forEach(exit => if(exit))
+// }
 
 /***************** WORLD *****************/
 

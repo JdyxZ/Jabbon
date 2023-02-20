@@ -1,3 +1,4 @@
+'use strict';
 // Good practice to know my process pid
 console.log(`Serving with pid ${process.pid}`);
 
@@ -18,6 +19,8 @@ const bodyParser = require('body-parser');
 // Our modules
 const SERVER = require("./server.js");
 const CREDENTIALS = require("./database/credentials.js");
+const DATABASE = require("./database/database.js");
+const beforeShutdown = require("./database/before-shutdown.js");
 
 // Init server services
 SERVER.init();
@@ -90,6 +93,16 @@ const server = http.createServer(app); // Instead of passing a custom function t
 
 // Launch the server
 server.listen(app.get('port'), () => SERVER.onReady(app.get('port')));
+
+// On server close
+// process.on('SIGINT', async() => 
+// { 
+//     SERVER.onClose()
+//     process.exit(0);
+// });
+
+beforeShutdown(async () => {await DATABASE.updateModel(SERVER.world)});
+beforeShutdown(() => server.close());
 
 /***************** WEBSOCKET *****************/
 
