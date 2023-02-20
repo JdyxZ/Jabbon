@@ -28,7 +28,7 @@ router.get('/canvas', LOCKER.isLogged, (req, res) => {
 
     // Check if user is already connected in a different window
     if(Object.keys(SERVER.clients).includes(user_id.toString()))
-        res.redirect("/signup");
+        res.redirect("/logout");
 
     // Otherwise, print canvas
     res.render("canvas");
