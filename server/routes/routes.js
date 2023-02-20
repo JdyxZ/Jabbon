@@ -22,6 +22,18 @@ router.get('/signup', LOCKER.isNotLogged, (req, res) => {
 });
 
 router.get('/canvas', LOCKER.isLogged, (req, res) => {
+    
+    // Get user id from session
+    const user_id = req.session.passport.user;
+
+    // Check if user is already connected in a different window
+    if(SERVER.clients == null) console.log("No clients yet");
+    else console.log(Object.keys(SERVER.clients));
+
+    if(Object.keys(SERVER.clients).includes(user_id))
+        res.redirect("/logout");
+
+    // Otherwise, print canvas
     res.render("canvas");
 });
 
@@ -124,6 +136,11 @@ router.delete('/user/:id', async function(req, res){ // User delete
             res.end(result);
             break;
     }
+});
+
+router.get("/connections", (req,res,next) =>{
+    if(SERVER.connections == null) res.end("Empty");
+    else res.end(Object.keys(SERVER.connections));
 });
 
 // Export module

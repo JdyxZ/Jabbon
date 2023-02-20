@@ -1,5 +1,6 @@
 // Module imports
 const {User, Room, WORLD, Message} = require("../public/model/model.js");
+const {getTime} = require("../public/framework.js");
 const DATABASE = require("./database/database.js");
 require("../public/framework.js");
 
@@ -47,8 +48,8 @@ var SERVER =
             const message = JSON.parse(ws_message.utf8Data);
             
             // Check message
-            // const result = this.CheckMessage(message);
-            // if (result != "OK") return;
+            const result = this.CheckMessage(connection, message);
+            if (result != "OK") return;
             
             // Route message
             this.routeMessage(message);
@@ -56,7 +57,7 @@ var SERVER =
         // Catch errors
         catch (error) 
         {
-            const message = new Message("system", "ERROR", error, null);
+            const message = new Message("system", "ERROR", error, getTime());
             connection.sendUTF(JSON.stringify(message));
         }
     },
@@ -68,21 +69,15 @@ var SERVER =
        
         // Get vars
         var user = this.world.getUser(user_id);
-        
         const current_room = this.world.getRoom(user.room);
-        //console.log(this.world.rooms);
-        //console.log(current_room);
+
         // Check that user exists
         if(user)
         {   
             // Store connection
             this.clients[user.id] = connection; 
             connection.user_id = user.id;
-            // console.log(user);
-            // console.log(user.id);
-            //console.log(current_room);
-            this.OnNewUserEnter( user, user.id, current_room);
-            
+            this.OnNewUserEnter( user, user.id, current_room);   
         };
         
     },
@@ -90,42 +85,40 @@ var SERVER =
     OnNewUserEnter: function(user, user_id, current_room)
     {
         // Send room data
-        this.sendPrivateMessage(new Message("system", "ROOM", current_room.toJSON(), ), user_id);
+        this.sendPrivateMessage(new Message("system", "ROOM", current_room.toJSON(), getTime()), user_id);
         //console.log(current_room.toJSON());  
 
         // Send myinfo data
-        this.sendPrivateMessage(new Message("system", "YOUR_INFO", user.toJSON(), ), user_id);
+        this.sendPrivateMessage(new Message("system", "YOUR_INFO", user.toJSON(), getTime()), user_id);
         
         // Send room users data to my user
         current_room.people.forEach(people_id => {
             const connection = this.clients[people_id];
             if(people_id != user_id && connection)
             {
-                this.sendPrivateMessage(new Message("system", "USER_JOIN", this.world.getUser(people_id).toJSON(), ), user_id);
+                this.sendPrivateMessage(new Message("system", "USER_JOIN", this.world.getUser(people_id).toJSON(), getTime()), user_id);
             } 
         });
 
         // Send New user info
-        this.sendRoomMessage( new Message("system", "USER_JOIN", user.toJSON(), ), user.room, user_id);
+        this.sendRoomMessage( new Message("system", "USER_JOIN", user.toJSON(), getTime()), user.room, user_id);
         
     },
 
     onUserDisconnected: function(connection)
     {
         // Notify the server
-        console.log(this.clients)
         console.log("User has left");
-        console.log(connection);
+
         // Get necesary data of the leaving user
-        const uid = connection.user_id;
-        //console.log(uid);
-        const user = this.world.getUser(uid);
-
+        const user_id = connection.user_id;
+        const user = this.world.getUser(user_id);
+        
         // Delete the connection
-        delete this.clients[uid];
-
+        delete this.clients[user_id];
+        
         // Update info to the other users
-        this.sendRoomMessage( new Message("system", "USER_LEFT", JSON.parse(user.name), getTime()), user.room, uid);
+        this.sendRoomMessage( new Message("system", "USER_LEFT", JSON.stringify(user.name), getTime()), user.room, user_id);
     },
 
     // Message callbacks
@@ -228,18 +221,16 @@ var SERVER =
     },
 
     // Check message
-    checkMessage: function(message)
+    checkMessage: function(connection, message)
     {
         // Get some vars
         const user_id = connection.user_id;
-        const user_current_room = this.world.rooms[this.world.users[user_id].room];
-        //console.log(user_id);
-        //console.log(user_current_room);
-        //console.log(message);
+        const user_current_room = WORLD.getRoom(user.room);
+
         // Check the sender id and the connection user id matches
         if (message.sender != user_id)
         {
-            const message = Message("system", "ERROR", "Eres muy perrito y me la has intentado colar", null);
+            const message = Message("system", "ERROR", "Eres muy perrito y me la has intentado colar", getTime());
             connection.sendUTF(JSON.stringify(message));
             return "SENDER_ERROR";
         };
@@ -250,7 +241,7 @@ var SERVER =
             message.addressees.forEach(addressee => {
                 if(!user_current_room.people.includes(addressee))
                 {
-                    const message = Message("system", "ERROR", "¿A quién le intentas enviar tú un mensaje, perrito?", null);
+                    const message = Message("system", "ERROR", "¿A quién le intentas enviar tú un mensaje, perrito?", getTime());
                     connection.sendUTF(JSON.stringify(message));
                     return "ADDRESSEE ERROR";
                 }

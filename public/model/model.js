@@ -1,5 +1,6 @@
 /********************************** MODEL **********************************/
 
+
 /***************** USER *****************/
 
 const FACING_RIGHT = 0;
@@ -222,7 +223,7 @@ function Message(sender, type, content, time)
     this.sender = sender || ""; //ID
     this.type = type || "ERROR";
     this.content = content || "";
-    this.time = time || "getTime()";
+    this.time = time || "";
 }
 
 if(typeof(window) == "undefined")

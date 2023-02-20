@@ -57,7 +57,7 @@ VALUES ('eric', 'Avocado', 0, 'media/images/char2.png', 1);
 USE JabbonDB;
 
 INSERT INTO rooms (name, background, exits, people, range_left, range_right)
-VALUES ('Camping', 'media/images/background.png', '{"exit1": [-1,-260,2,1]', '{"user1": 1, "user2": 2}', -260, 200);
+VALUES ('Camping', 'media/images/background.png', '{"exit1": [-1,-260,2,1]}', '{"user1": 1, "user2": 2}', -260, 200);
 
 INSERT INTO rooms (name, background, exits, people, range_left, range_right)
 VALUES ('Forest', 'media/images/forest.png', '{"exit1": [1,200,1,1]}', '{}', -300, 240);

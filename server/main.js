@@ -125,7 +125,7 @@ wss.on('request', function(request) {
             // Websocket callbacks
             SERVER.onUserConnected(connection, user_id);
             connection.on('message', (message) => SERVER.onMessage(connection, message));
-            connection.on('close', SERVER.onUserDisconnected);
+            connection.on('close', (message) => SERVER.onUserDisconnected(connection));
         }      
 
       
