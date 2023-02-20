@@ -11,6 +11,7 @@ var SERVER =
     clients : {},
     last_id : 0,
     world: null,
+    temp: 1,
 
     // Init server
     init: async function(){
@@ -25,6 +26,7 @@ var SERVER =
 
         // Assign world to the SERVER
         this.world = WORLD;
+        console.log(this.world.rooms);
     },
 
     // Ready callback
@@ -37,15 +39,16 @@ var SERVER =
     // WebSocket callbacks
     onMessage: function(connection, ws_message)
     {
+        
         // Process WebSocket message
         try {
 
             // Parse message
             const message = JSON.parse(ws_message.utf8Data);
-
+            
             // Check message
-            const result = this.CheckMessage(message);
-            if (result != "OK") return;
+            // const result = this.CheckMessage(message);
+            // if (result != "OK") return;
             
             // Route message
             this.routeMessage(message);
@@ -64,51 +67,63 @@ var SERVER =
         console.log("User has joined");
        
         // Get vars
-        const user = this.world.getUser(1);
-       
-        const current_room = this.world.getRoom(user.room);
+        var user = this.world.getUser(1);
+        if(this.temp == 1)
+        {
+            this.temp = 2;
+            user = this.world.getUser(2);
+        }
         
+        const current_room = this.world.getRoom(user.room);
+        //console.log(this.world.rooms);
+        console.log(current_room);
         // Check that user exists
         if(user)
         {   
             // Store connection
             this.clients[user.id] = connection; 
             connection.user_id = user.id;
-            console.log(user);
-            console.log(user.id);
-            console.log(current_room);
+            // console.log(user);
+            // console.log(user.id);
+            //console.log(current_room);
             this.OnNewUserEnter( user, user.id, current_room);
             
         };
-
+        
     },
 
     OnNewUserEnter: function(user, user_id, current_room)
     {
         // Send room data
         this.sendPrivateMessage(new Message("system", "ROOM", current_room.toJSON(), ), user_id);
+        console.log(current_room.toJSON());  
 
         // Send myinfo data
         this.sendPrivateMessage(new Message("system", "YOUR_INFO", user.toJSON(), ), user_id);
-
+        
         // Send room users data to my user
         current_room.people.forEach(people_id => {
             const connection = this.clients[people_id];
-            this.sendPrivateMessage(new Message("system", "USER_JOIN", user.toJSON(), ), user_id);
+            if(people_id != user_id && connection)
+            {
+                this.sendPrivateMessage(new Message("system", "USER_JOIN", this.world.getUser(people_id).toJSON(), ), user_id);
+            } 
         });
 
         // Send New user info
         this.sendRoomMessage( new Message("system", "USER_JOIN", user.toJSON(), ), user.room, user_id);
+        
     },
 
     onUserDisconnected: function(connection)
     {
         // Notify the server
+        console.log(this.clients)
         console.log("User has left");
-
+        console.log(connection);
         // Get necesary data of the leaving user
         const uid = connection.user_id;
-        console.log(uid);
+        //console.log(uid);
         const user = this.world.getUser(uid);
 
         // Delete the connection
@@ -122,14 +137,17 @@ var SERVER =
     routeMessage: function(message)
     {
         // Prepare the message to be broadcasted
-        const addressees = message.addressees;
-        if(message.addressees != undefined) delete message.addressees;
-        if(message.date == null) message.date = getTime();
         
+        const addressees = message.addressees;
+        //if(message.addressees != undefined) delete message.addressees;
+        if(message.time == null) message.date = getTime();
+
         // Eventually, message has passed all checkings and is ready to be sent!
+
         switch(message.type)
         {
             case "TICK":
+                console.log("TICK RECIVED: ",message.content )
                 this.onTick(message);
                 break;
             case "PRIVATE":
@@ -153,12 +171,15 @@ var SERVER =
         // Necessary information to compute the task
         const sender_id = message.sender;
         const content = message.content;
-        room = this.world.getRoom(this.world.users[sender_id].id);
+        room = this.world.getRoom(this.world.users[sender_id].room);
 
         // Update the WORLD state
         this.world.users[sender_id].target = content.target;
     
         // Send the message to the other users
+        // console.log(room.id)
+        // console.log(message)
+        // console.log(sender_id)
         this.sendRoomMessage(message,room.id,sender_id)
     },
 
@@ -217,7 +238,9 @@ var SERVER =
         // Get some vars
         const user_id = connection.user_id;
         const user_current_room = this.world.rooms[this.world.users[user_id].room];
-
+        console.log(user_id);
+        console.log(user_current_room);
+        console.log(message);
         // Check the sender id and the connection user id matches
         if (message.sender != user_id)
         {

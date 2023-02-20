@@ -7,13 +7,13 @@ var mouse_pos = [0,0];
 var mouse_buttons = 0;
 var imgs = {};
 
+
 //last stores timestamp from previous frame
 
 function loop()
 {
    // Update our canvas
    draw();
-
    // Compute elapsed time
    var now = performance.now();
    var elapsed_time = (now - last) / 1000; 
@@ -31,7 +31,7 @@ function loop()
 // Start loop
 loop();
 
-// Fetch image
+//Fetch image
 async function fetchImage(url)
 {
     try
@@ -65,6 +65,14 @@ async function fetchImage(url)
 }
 
 // Image manager
+//Function to get the selector (easier code)
+function getSelector(selector)
+{
+    return document.querySelector(selector);
+}
+
+var exit = this.getSelector('input[name="exit"]');
+
 function getImage(url)
 {
 	// If the image is already loaded return it

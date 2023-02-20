@@ -82,11 +82,13 @@ var CLIENT =
     {
         console.log(`New YOUR_INFO message received: ${message.content}`);
         MYAPP.myuser = message.content;
+        MYAPP.users.push(MYAPP.myuser);
     },
 
     onUserJoin: function(message)
     {
         console.log(`New USER_JOIN message received: ${message.content}`);
+        console.log(message.content);
         MYAPP.users.push(message.content);
     },
 
@@ -101,8 +103,9 @@ var CLIENT =
     {
         console.log(`New TICK message received: ${message.content}`);
         //Mirar bien el mensaje que recibo
-        var moving_user = MYAPP.users[message.sender];
-        moving_user.target = message.content.target;
+        
+        // console.log(message);
+        MYAPP.users[MYAPP.getIDByUserID(message.sender)].target = message.content.target;
     },
 
     // De momento no
@@ -138,7 +141,6 @@ var CLIENT =
     sendRoomMessage: function(message)
     {
         // Append addresses to the message
-        message.addressees = [];
 
         // Send message to user
         this.socket.send(JSON.stringify(message));

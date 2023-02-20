@@ -16,7 +16,7 @@ function User(data)
     this.facing = data == undefined ? FACING_FRONT : data.facing || FACING_FRONT;
     this.animation = data == undefined ? "idle" : data.animation || "idle";
     this.room = data == undefined ? 1 : data.room || 1;
-    this.target = data == undefined ? [0,0] : data.target || [0,0];
+    this.target = data == undefined ? [40,0] : data.target || [40,0];
 }
 
 User.prototype.toJSON = function()
@@ -76,6 +76,7 @@ Room.prototype.toJSON = function()
         name: this.name,
         background: this.background,
         people: this.people,
+        exits: this.exits,
         range: this.range
     }
 
@@ -105,6 +106,7 @@ var WORLD = {
         {
             room.exits = Object.values(room.exits);
             room.people = Object.values(room.people);
+            
             room.range = [room.range_left, room.range_right];
             delete room.range_left;
             delete room.range_right;
@@ -186,14 +188,15 @@ var WORLD = {
     fromJSON: function(world_json)
     {
         // Create rooms
+        
         world_json.rooms.forEach(room_json => {
             this.createRoom(room_json);
         }); 
-    
+        console.log(this.rooms);
         // Create users
         world_json.users.forEach(user_json => {
             const user = this.createUser(user_json);
-            this.addUsertoRoom(user.id, user.room);
+            //this.addUsertoRoom(user.id, user.room);
         }); 
     },
 
