@@ -1,6 +1,4 @@
-'use strict';
-// Good practice to know my process pid
-console.log(`Serving with pid ${process.pid}`);
+/***************** SERVER *****************/
 
 // External module 
 const http = require('http');
@@ -19,8 +17,6 @@ const bodyParser = require('body-parser');
 // Our modules
 const SERVER = require("./server.js");
 const CREDENTIALS = require("./database/credentials.js");
-const DATABASE = require("./database/database.js");
-const beforeShutdown = require("./database/before-shutdown.js");
 
 // Init server services
 SERVER.init();
@@ -52,7 +48,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // Middleware
-app.use(morgan('short')); // To see the request specs
+// app.use(morgan('short')); // To see the request specs
 app.use(bodyParser.urlencoded({extended: false})); // Parses encoded data send with post method through a form
 app.use(bodyParser.json()); // Parses json data directly to objects
 app.use(sessionParser); // Parses sessions
@@ -81,7 +77,8 @@ app.use((req, res, next) => {
 });
 
 // Routers
-app.use(require("./routes/routes"));
+app.use(require("./routes/authenticate"));
+app.use(require("./routes/utils"));
 
 // Default request folder
 app.use(express.static(path.join(__dirname, '../public')));
@@ -95,14 +92,7 @@ const server = http.createServer(app); // Instead of passing a custom function t
 server.listen(app.get('port'), () => SERVER.onReady(app.get('port')));
 
 // On server close
-// process.on('SIGINT', async() => 
-// { 
-//     SERVER.onClose()
-//     process.exit(0);
-// });
-
-beforeShutdown(async () => {await DATABASE.updateModel(SERVER.world)});
-beforeShutdown(() => server.close());
+process.on('SIGINT', SERVER.onClose);
 
 /***************** WEBSOCKET *****************/
 

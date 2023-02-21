@@ -1,66 +1,22 @@
+/***************** UTILS ROUTES *****************/
+
 // External modules
 const express = require('express');
-const passport = require("passport");
 const router = express.Router();
 
 // Our modules
+const {WORLD} = require("../../public/model/model.js");
 const SERVER = require("../server.js");
 const DATABASE = require("../database/database.js");
 const LOCKER = require("../utils/locker.js");
 
-// Get routes
-router.get('/', (req, res) => {
-    res.render("login");
-});
-
-router.get('/login', LOCKER.isNotLogged, (req, res) => {
-    res.render("login");
-});
-
-router.get('/signup', LOCKER.isNotLogged, (req, res) => {
-    res.render("signup");
-});
-
-router.get('/canvas', LOCKER.isLogged, (req, res) => {
-    
-    // Get user id from session
-    const user_id = req.session.passport.user;
-
-    // Check if user is already connected in a different window
-    if(Object.keys(SERVER.clients).includes(user_id.toString()))
-        res.redirect("/logout");
-
-    // Otherwise, print canvas
-    res.render("canvas");
-});
-
-router.get('/logout', LOCKER.isLogged, (req, res) => {
-    req.logout(function(err) {
-        if (err) { return next(err); }
-        res.redirect('/login');
-    });
-});
-
-// Post routes
-router.post('/signup', LOCKER.isNotLogged, passport.authenticate("signup", {
-    successRedirect: "/canvas",
-    failureRedirect: "/signup",
-    failureFlash: true
-}));
-
-router.post('/login', LOCKER.isNotLogged, passport.authenticate("login", {
-    successRedirect: "/canvas",
-    failureRedirect: "/login",
-    failureFlash: true
-}));
-
 // Util routes
 router.get('/get_world', function(req, res){ // Model info
-    res.end(SERVER.world.toJSON());
+    res.end(WORLD.toJSON());
 });
 
 router.get('/update_world', async function(req, res){ // Model update
-    const [status, result] = await DATABASE.updateModel(SERVER.world);
+    const [status, result] = await DATABASE.updateModel(WORLD);
 
     switch(status)
     {
@@ -74,7 +30,7 @@ router.get('/update_world', async function(req, res){ // Model update
 });
 
 router.get('/rooms', function(req, res){ // Model info
-    res.end(JSON.stringify(SERVER.world.rooms, null, 2));
+    res.end(JSON.stringify(WORLD.rooms, null, 2));
 });
 
 router.get('/user/:id', async function(req,res) { // User info
@@ -92,7 +48,7 @@ router.get('/user/:id', async function(req,res) { // User info
 });
 
 router.get('/users', function(req, res){ // Users info
-    res.end(JSON.stringify(SERVER.world.users, null, 2));
+    res.end(JSON.stringify(WORLD.users, null, 2));
 });
 
 router.post('/user', async function(req,res){ // User insert

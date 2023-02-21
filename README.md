@@ -25,6 +25,13 @@ if (response.redirected) {
     window.location.href = response.url;
 };
 
+getIDByUserID:function(_id)
+{
+    for(i = 0; i < this.users.length; i++)
+    {
+        if(this.users[i].id == _id) return i;
+    }
+},
 
 
 

@@ -34,3 +34,26 @@ html,body {
     font-weight: bold;
     text-align: center;
 }
+
+.logout
+{
+    display: flex;
+    width:100%;
+    height: fit-content;
+    justify-content:center;
+    padding-top: 1em;
+}
+
+.logout a
+{
+    display:none;
+}
+
+#logout
+{
+    background-color:aquamarine;
+    height: 4em;
+    width: 15em;
+    border:none;
+    border-radius: 10px;
+}

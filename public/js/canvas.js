@@ -2,11 +2,13 @@
 /***************** VIEW *****************/
 
 var canvas = document.getElementById('canvas');
+var exit = document.get('input[name="exit"]');
+var logout_button = document.get("#logout"); 
+var logout_anchor = document.get(".logout a");
 var last = performance.now();
 var mouse_pos = [0,0];
 var mouse_buttons = 0;
 var imgs = {};
-var exit = document.get('div[name="exit"]');
 
 //last stores timestamp from previous frame
 
@@ -104,11 +106,13 @@ function onMouse( e ) {
    MYAPP.onMouse(e);
 };
 
-
 document.body.addEventListener("mousedown", onMouse );
 document.body.addEventListener("mousemove", onMouse );
 document.body.addEventListener("mouseup", onMouse );
-exit.addEventListener("click", MYAPP.leave );
+logout_button.when("keydown", () => {
+    console.log(logout_button);
+    logout_anchor.click();
+});
 
 
 MYAPP.init();

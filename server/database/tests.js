@@ -1,3 +1,5 @@
+/***************** DATABASE TESTS *****************/
+
 const DATABASE = require("./database.js");
 const CRYPTO = require("../utils/crypto.js");
 

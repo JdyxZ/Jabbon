@@ -135,20 +135,17 @@ Number.prototype.lerp = function(target, step)
 	return origin * (1 - step) + target * step;
 };
 
+Number.prototype.toArray = function()
+{
+	return [this.valueOf()];
+}
+
 /***************** STRING *****************/
 
-String.prototype.reverseString = function() 
+String.prototype.toArray = function ()
 {
-	// Declare some vars
-	var length = this.length;
-	reversed_string = [];
-	index = 0;
-
-	for (var i = length - 1; i >= 0; i--) {
-		reversed_string[index++] = this.charAt(i);
-	}
-	return reversed_string.join("");
- };
+	return [this.valueOf()];
+};
 
 /***************** DATE *****************/
 
@@ -164,12 +161,20 @@ Date.prototype.getDate2 = function()
 
 /***************** ARRAY *****************/
 
-Array.prototype.remove = function(element)
+Array.prototype.remove = function(elements)
 {
-	return this.filter( (value) =>
+	// Checkings
+	if (!isNaN(elements) || elements instanceof String) elements = elements.toArray();  
+
+	// Filter
+	elements.forEach( element =>
 	{
-		return value != element;
+		const index = this.indexOf(element);
+		if(index != -1) this.splice(index, 1);
 	});
+
+	// Output
+	return this;
 };
 
  Array.prototype.containsObject = function(property, value)

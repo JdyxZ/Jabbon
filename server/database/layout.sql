@@ -1,3 +1,5 @@
+/***************** DATABASE LAYOUT *****************/
+
 -- CREATE USER
 CREATE USER IF NOT EXISTS 'Haylo'@'localhost' IDENTIFIED WITH mysql_native_password BY '1234';
 CREATE USER IF NOT EXISTS 'Jabbon'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Cacahuete200$';

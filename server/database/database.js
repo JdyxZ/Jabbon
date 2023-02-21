@@ -1,5 +1,6 @@
 
-/***************** DATABASE *****************/
+/***************** DATABASE CRUD *****************/
+
 const mysql = require('mysql2/promise');
 const CREDENTIALS = require('./credentials.js');
 require("../../public/framework.js");
@@ -40,14 +41,13 @@ var DATABASE = {
         catch(err)
         {
             // Error
-            console.log(err);
+            console.log(`${err}`);
             return ["ERROR", `${err}`];
         }
     },
 
     validateUserID: async function(id)
     {
-        console.log(id)
         try
         {
             // Throw errors
@@ -202,7 +202,7 @@ var DATABASE = {
         catch(err)
         {
             // Error
-            console.log(err);
+            console.log(`${err}`);
             return ["ERROR", `${err}`];
         }
     },
@@ -265,7 +265,7 @@ var DATABASE = {
         catch(err)
         {
             // Error
-            console.log(err);
+            console.log(`${err}`);
             return ["ERROR", `${err}`];
         }
     },

@@ -17,7 +17,7 @@ function User(data)
     this.facing = data == undefined ? FACING_FRONT : data.facing || FACING_FRONT;
     this.animation = data == undefined ? "idle" : data.animation || "idle";
     this.room = data == undefined ? 1 : data.room || 1;
-    this.target = data == undefined ? [0,0] : [data.position,0] || [0,0];
+    this.target = data == undefined ? [40,0] : data.target || [40,0];
 }
 
 User.prototype.toJSON = function()
@@ -85,15 +85,44 @@ Room.prototype.toJSON = function()
     return room_json;
 }
 
-Room.prototype.getUsers = function()
+Room.prototype.getRoomPeopleInfo = function(users_id)
 {
-    return this.people;
+    // Checkings
+    if (!isNaN(users_id) || users_id instanceof String) users_id = users_id.toArray();    
+    else if (!users_id instanceof Array)
+    {
+        console.log(`ERROR ---> Invalid input "${users_id}" in function roomUserstoJSON of Room Class. Returning null`);
+        return null;
+    }
+
+    // Reduce
+    return this.people.reduce( (obj, user_id) => {
+
+        // Check if current user is exempt
+        if(users_id.includes(user_id)) return obj;
+
+        // Push to obj
+        const user = WORLD.getUser(user_id);
+        obj.room_people_list.push(user_id)
+        obj.room_people_info.push(user.toJSON());
+
+        // Ouput
+        return arr;
+    }, {room_people_list: [], room_people_info: []});
 }
 
-// Room.prototype.getExitByID = function(id)
-// {
-//     this.exits.forEach(exit => if(exit))
-// }
+Room.prototype.getUsers = function(users_id)
+{
+    // Checkings
+    if (!isNaN(users_id) || users_id instanceof String) users_id = users_id.toArray();    
+    else if (!users_id instanceof Array)
+    {
+        console.log(`ERROR ---> Invalid input "${users_id}" in function getUsers of Room Class. Returning null`);
+        return null;
+    }
+
+    return user_room.people.clone().remove(users_id);
+}
 
 /***************** WORLD *****************/
 
@@ -126,9 +155,6 @@ var WORLD = {
         }
 
         this.fromJSON(world_json);
-
-        // Notify success
-        console.log(`World data successfully loaded! \nNumber of rooms ${WORLD.num_rooms}`);
     },
 
     createUser: function (data)

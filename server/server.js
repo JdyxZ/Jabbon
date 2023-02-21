@@ -11,8 +11,9 @@ var SERVER =
     port: null,
     clients : {},
     last_id : 0,
-    world: null,
-    temp: 1,
+    messages_types = ["TICK", "PRIVATE", "PUBLIC", "EXIT", "TYPING"];
+
+    /***************** HTTP SERVER CALLBACKS *****************/
 
     // Init server
     init: async function(){
@@ -22,128 +23,163 @@ var SERVER =
 
         // Load world data
         const [status, model] = await DATABASE.fetchModel();
-        if(status == "ERROR") console.log(model);
-        else WORLD.init(model.rooms, model.users);
 
-        // Assign world to the SERVER
-        this.world = WORLD;
-        //console.log(this.world.rooms);
+        // Check errors
+        if(status == "ERROR")
+        {
+            console.log(model);
+            process.exit();
+        }            
+        else
+        {
+            WORLD.init(model.rooms, model.users);
+            console.log("*********** MODEL INFO *********** \n");
+            console.log(`World data successfully loaded!`);
+            console.log(`Number of rooms ${WORLD.num_rooms}`);
+            console.log("\n*********** SERVER LOG *********** \n");
+        }
     },
 
     // Ready callback
     onReady: function(port)
     {
+        console.log("\n*********** SERVER INFO *********** \n");
+        console.log(`Serving with pid ${process.pid}`); // Good practice to know my process pid
         console.log(`Server listening at port ${port}!`);
+        console.log("\n");
         this.port = port;
     },
 
-    // WebSocket callbacks
+    // Before closing
+    onClose: function()
+    {
+        DATABASE.updateModel(WORLD);
+    },
+
+    /***************** WEBSOCKET CALLBACKS *****************/
+
     onMessage: function(connection, ws_message)
     {
-        
-        // Process WebSocket message
         try {
-
             // Parse message
             const message = JSON.parse(ws_message.utf8Data);
             
             // Check message
             const result = this.checkMessage(connection, message);
-            if (result != "OK") return;
-            
-            // Route message
+            if (result != "OK") throw result;
+
+            // If there is no send time, append one
+            if(message.time == null) message.time = getTime();
+
+            // Eventually, message has passed all checkings and is ready to be sent!
             this.routeMessage(message);
         } 
         // Catch errors
         catch (error) 
         {
-            console.log(error)
-            const message = new Message("system", "ERROR", JSON.stringify(error), getTime());
+            console.log(`ERROR --> Error upon processing received message: ${error}`);
+            const message = new Message("system", "ERROR", "Error upon processing your message", getTime());
             connection.sendUTF(JSON.stringify(message));
         }
     },
 
     onUserConnected: function(connection, user_id)
-    {
-        // Notify the server
-        console.log("User has joined");
-       
-        // Get vars
-        var user = this.world.getUser(user_id);
-        const current_room = this.world.getRoom(user.room);
+    {       
+        // Get user data
+        const user = WORLD.getUser(user_id);
 
         // Check that user exists
-        if(user)
-        {   
-            // Store connection
-            this.clients[user.id] = connection; 
-            connection.user_id = user.id;
-            this.OnNewUserEnter( user, user.id, current_room);   
-        };
+        if(!user)
+        {
+            console.log(`ERROR --> Invalid user ID ${user_id} in function onUserConnected: User doesn't exist`);
+            return;
+        }
         
-    },
-
-    OnNewUserEnter: function(user, user_id, current_room)
-    {
-        // Send room data
-        this.sendPrivateMessage(new Message("system", "ROOM", current_room.toJSON(), getTime()), user_id);
-        //console.log(current_room.toJSON());  
-
-        // Send myinfo data
-        this.sendPrivateMessage(new Message("system", "YOUR_INFO", user.toJSON(), getTime()), user_id);
+        // Store connection
+        connection.user_id = user.id;
+        this.clients[user.id] = connection; 
         
-        // Send room users data to my user
-        current_room.people.forEach(people_id => {
-            const connection = this.clients[people_id];
-            if(people_id != user_id && connection)
-            {
-                this.sendPrivateMessage(new Message("system", "USER_JOIN", this.world.getUser(people_id).toJSON(), getTime()), user_id);
-            } 
-        });
+        // Send data about the new user
+        this.onNewUserToRoom(user.id, "NEW");   
 
-        // Send New user info
-        this.sendRoomMessage( new Message("system", "USER_JOIN", user.toJSON(), getTime()), user.room, user_id);
-        
-    },
-
-    // Before closing
-    onClose: async function()
-    {
-        console.log(SERVER.world);
-        await DATABASE.updateModel(SERVER.world);
+        // Log
+        console.log(`EVENT --> User ${user.name} has joined`);
     },
 
     onUserDisconnected: function(connection)
     {
-        // Notify the server
-        console.log("User has left");
-
-        // Get necesary data of the leaving user
+        // Get user data
         const user_id = connection.user_id;
-        const user = this.world.getUser(user_id);
+        const user = WORLD.getUser(user_id);
         
         // Delete the connection
         delete this.clients[user_id];
         
         // Update info to the other users
-        this.sendRoomMessage( new Message("system", "USER_LEFT", JSON.stringify(user.name), getTime()), user.room, user_id);
+        const message = new Message("system", "USER_LEFT", JSON.stringify(user.id), getTime());
+        this.sendRoomMessage(message, user.room, user_id);
+
+        // Log
+        console.log(`EVENT --> User ${user.name} has left`);
     },
+
+    /***************** MESSAGE CHECKING *****************/
+
+    // Check message for security reasons
+    checkMessage: function(connection, message)
+    {
+        // Get some vars
+        const user_id = connection.user_id;
+        const user = WORLD.getUser(user_id);
+        const user_current_room = user.room;
+        const public_types = messages_types.clone().remove("PRIVATE");
+        const private_types = ["PRIVATE"];
+
+        // Check that the sender is registered in the WORLD
+        if(user == undefined)
+            return "SENDER_EXISTS_ERROR";
+
+        // Check the sender id and the connection user id matches
+        if (message.sender != user_id)
+            return "SENDER_MATCH_ERROR";
+
+        // Check the sender is sending a valid type of message 
+        if(!messages_types.includes(message.type))
+            return "TYPE_MESSAGE_ERROR";
+
+        // Check the sender is coherent with the type of message they are sending
+        if(public_types.includes(message.type) && message.addressees != undefined)
+            return "PUBLIC_WITH_ADDRESSES_ERROR";
+        
+        if(private_types.includes(message.type) && message.addressees == undefined)
+            return "PRIVATE_WITHOUT_ADDRESSES_ERROR";
+
+        // Check addresses property
+        if(private_types.includes(message.type) && !(message.addressees instanceof Array))
+            return "ADDRESSES_TYPE_ERROR";
+
+        // Check the sender is sending messages to people of the same room
+        if(private_types.includes(message.type))
+        {
+            message.addressees.forEach(addressee => {
+                if(!user_current_room.people.includes(addressee))
+                    return "ADDRESSEE_INVALID_ERROR";
+            });
+        };
+
+        // Output
+        return "OK";
+    },
+
+    /***************** MESSAGE ROUTING *****************/
 
     // Message callbacks
     routeMessage: function(message)
     {
-        // Prepare the message to be broadcasted
-        
-        const addressees = message.addressees;
-        //if(message.addressees != undefined) delete message.addressees;
-        if(message.time == null) message.date = getTime();
-
-        // Eventually, message has passed all checkings and is ready to be sent!
-
+        // Route message        
         switch(message.type)
         {
             case "TICK":
-                console.log("TICK RECIVED: ", message.content )
                 this.onTick(message);
                 break;
             case "PRIVATE":
@@ -159,134 +195,148 @@ var SERVER =
                 this.onTyping(message);
                 break;
         }
-
     },
 
-    onTick: async function(message)
+    onTick: function(message)
     {
-        // Necessary information to compute the task
+        // Get message data
         const sender_id = message.sender;
         const content = message.content;
-        room = this.world.getRoom(this.world.users[sender_id].room);
+
+        // Get user data
+        const user = WORLD.getUser(sender_id);
+
+        // Log
+        console.log(`EVENT --> User ${user.name} has sent a TICK message`);
 
         // Update the WORLD state
-        this.world.users[sender_id].target = content.target;
-        this.world.users[sender_id].position = content.target[0];
-        await DATABASE.updateModel(SERVER.world);
-        // Send the message to the other users
-        this.sendRoomMessage(message,room.id,sender_id)
+        user.target = content.target;
+        user.position = content.target[0];
+    
+        // Send the message to all the people in the room except the user
+        this.sendRoomMessage(message, user.room, user.id);
     },
 
-    // NOTI NOTI
     onPrivateMessage: function(message)
     {
+        // Get message data
+        const sender_id = message.sender;
+        const content = message.content;
+
+        // Get user data
+        const user = WORLD.getUser(sender_id);
+
+        // Log
+        console.log(`EVENT --> User ${user.name} has sent a PRIVATE message`);
+
+        // Prepare the message to be broadcasted
+        const addressees = message.addressees;
+        if(message.addressees != undefined) delete message.addressees;
+
         // TODO
+        // TODO: If a sender is sending a private message, check that the addressee is within the fov of the sender.
     },
 
-    //NOT YET MAI FRIEND
     onPublicMessage: function(message)
     {
+        // Get message data
+        const sender_id = message.sender;
+        const content = message.content;
+
+        // Get user data
+        const user = WORLD.getUser(sender_id);
+
+        // Log
+        console.log(`EVENT --> User ${user.name} has sent a PUBLIC message`);
+
         // TODO
     },
 
     onExit: function(message)
     {
-        // Necessary information to compute the task
+        // Get message data
         const sender_id = message.sender;
         const content = message.content;
-        const _exit = JSON.parse(content.exit);
-        const room = content.room;
-        console.log(_exit);
-        // Dada la exit, encontrar la room
+
+        // Get user data
+        const user = WORLD.getUser(sender_id);
+
+        // Get room data
         // const exit = content.exit[1];
+        exit = 0;
+        var next_room = WORLD.getRoom(exit);
+        var previous_room = WORLD.getRoom(content.room);
 
-        var new_room = this.world.getRoom(_exit[2]);
-        var user = this.world.users[sender_id];
-        var last_room = room;
-
-        var expos = new_room.exits.forEach(function(exit){ if(exit[0] == _exit[3]) return exit[1]});
+        // Log
+        console.log(`EVENT --> User ${user.name} has sent an EXIT message`);      
 
         // Update server data from users
         user.room = new_room.id;
-        user.position = -290;
+        user.position = room.range[0];
         user.target = user.position;
 
-        // Update server data from room
         // Remove the user from last room
-        const index = last_room.people.indexOf(sender_id)
-        last_room.people.splice(index,1);
+        previous_room.people.remove(sender_id);
 
         // Add user to new room 
-        new_room.people.push(user);
+        next_room.people.push(user.id);
 
         // Update clients info
-        console.log(user);
-        console.log(sender_id);
-        console.log(new_room);
-        this.OnNewUserEnter(user,sender_id,new_room);
-
+        this.onNewUserToRoom(user.id, "OLD");
     },
 
     //MAYBE IN A FUTURE
     onTyping: function(message)
     {
+        // Get message data
+        const sender_id = message.sender;
+        const content = message.content;
+
+        // Get user data
+        const user = WORLD.getUser(sender_id);
+
+        // Log
+        console.log(`EVENT --> User ${user.name} has sent a TYPING message`);
+
         // TODO
     },
 
-    // Check message
-    checkMessage: function(connection, message)
-    {
-        // Get some vars
-        const user_id = connection.user_id;
-        const user = WORLD.getUser(user_id);
-        const user_current_room = user.room;
+    /***************** MESSAGE DELIVERY *****************/
 
-        // Check the sender id and the connection user id matches
-        if (message.sender != user_id)
-        {
-            const message = Message("system", "ERROR", "Eres muy perrito y me la has intentado colar", getTime());
-            connection.sendUTF(JSON.stringify(message));
-            return "SENDER_ERROR";
-        };
-
-        // Check the sender is sending messages to people of the same room
-        if(message.addressees != [])
-        {
-            message.addressees.forEach(addressee => {
-                if(!user_current_room.people.includes(addressee))
-                {
-                    const message = Message("system", "ERROR", "¿A quién le intentas enviar tú un mensaje, perrito?", getTime());
-                    connection.sendUTF(JSON.stringify(message));
-                    return "ADDRESSEE ERROR";
-                }
-            });
-        };
-
-        // TODO: If a sender is sending a private message, check that the addressee is within the fov of the sender.
-
-        return "OK";
-    },
-
-    // Send message
-    sendClientsMessage: function(message)
+    sendAllClientsMessage: function(message)
     {
         Object.values(this.clients).forEach(connection => {
             connection.sendUTF(JSON.stringify(message));
         });
     },
 
-    sendRoomMessage: function(message, room_id, id_)
+    sendRoomMessage: function(message, room_id, users_id)
     {
+        // Checkings
+        if (!isNaN(users_id) || users_id instanceof String) users_id = users_id.toArray();    
+        else if (!users_id instanceof Array)
+        {
+            console.log(`ERROR ---> Invalid input "${users_id}" in function sendRoomMessage of SERVER. Message won't be send`);
+            return;
+        }
+
         // Get room
-        const room = this.world.getRoom(room_id);
+        const room = WORLD.getRoom(room_id);
 
         // Iterate through room people
-        console.log("sendRoomMessage");
-
-        for(id of room.people)
+        for(user_id of room.people)
         {
-            if(id == id_) continue;
-            const connection = this.clients[id];
+            // Skip users
+            if(users_id.contains(user_id))
+                continue;
+
+            // Get connection
+            const connection = this.clients[user_id];
+            if(connection == undefined){
+                console.log(`Connection with user id ${addressees} doesn't exist`);
+                return;
+            } 
+
             // In case there is no connection for this id
             if(connection)
                 connection.sendUTF(JSON.stringify(message));
@@ -306,6 +356,7 @@ var SERVER =
     
             // Send message to the user
             connection.sendUTF(JSON.stringify(message));
+            return;
         }
         else if (addressee instanceof Array)
         {
@@ -315,14 +366,53 @@ var SERVER =
                 // Get connection
                 const connection = this.clients[addressee];
                 if(connection == undefined){
-                    console.log(`Connection with user id ${addressees} doesn't exist`);
+                    console.log(`Connection with user id ${addressee} doesn't exist`);
                     continue;
                 } 
         
                 // Send message to the user
                 connection.sendUTF(JSON.stringify(message));
             }  
+            return;
         }
+
+        // Notify error
+        console.log(`ERROR ---> Invalid addressees "${addressees}" input in function sendMessage`);
+
+    },
+
+    /***************** AUXILIAR METHODS *****************/
+
+    onNewUserToRoom: function(user_id, user_type)
+    {
+        // Get all data stuff
+        let message;
+        const user = WORLD.getUser(user_id); 
+        const user_room = WORLD.getRoom(user.room);
+        const {_, room_people_info} = user_room.getRoomPeopleInfo(user_id);
+
+        // Send to the new user info about their current/new room
+        message = new Message("system", "ROOM", JSON.stringify(user_room.toJSON()), getTime());
+        this.sendPrivateMessage(message, user_id);
+
+        // Send to the new user its own user data
+        message = new Message("system", "YOUR_INFO", JSON.stringify(user.toJSON()), getTime());
+        this.sendPrivateMessage(message, user_id);
+        
+        // Send to the new user info about the people in the current/new room
+        message = new Message("system", "USER_JOIN", JSON.stringify(room_people_info), getTime());
+        this.sendPrivateMessage(message, user_id);
+
+        // Send to the current/new room users data of the new user
+        message = new Message("system", "USER_JOIN", JSON.stringify([user.toJSON()]), getTime());
+        this.sendRoomMessage(message, user.room, user_id);
+        
+        // Check if user has just connected before proceeding 
+        if(user_type == "NEW")
+            return;
+        
+        // Notify the users of the old room that the user has left
+        message = new Message("system", "USER_LEFT", JSON.stringify(user_id), getTime());        
     }
 }
 

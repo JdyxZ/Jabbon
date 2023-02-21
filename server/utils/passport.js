@@ -1,11 +1,15 @@
+/***************** CREDENTIALS VERIFICATION *****************/
+
 // External modules
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 // Our modules
+const {WORLD} = require("../../public/model/model.js");
 const SERVER = require("../server.js");
 const DATABASE = require("../database/database.js");
 const CRYPTO = require("./crypto.js");
+const LOCKER = require("./locker.js");
 
 // Define signup strategy
 passport.use('signup', new LocalStrategy(
@@ -61,8 +65,11 @@ async (req, name, password, done) => {
     delete user_obj.password;
 
     // Create new user into the WORLD and add it to its room
-    const user = SERVER.world.createUser(user_obj);
-    SERVER.world.addUsertoRoom(user.id, user.room);
+    const user = WORLD.createUser(user_obj);
+    WORLD.addUsertoRoom(user.id, user.room);
+
+    // If old session is active, delete it
+    await LOCKER.deleteCurrentSession(req);
 
     // Pass user id to the serializer
     return done(null, user.id);
@@ -98,10 +105,12 @@ async (req, name, password, done) => {
     // Check that the client is not already connected in another session
     const user_id = result[0][0].id;
 
-    if(Object.keys(SERVER.clients).includes(user_id.toString()))
-    {
+    // Check if user is trying to log in the same account opened in a different window
+    if(LOCKER.checkConnection(user_id))
         return done(null, false, req.flash('login_error', 'The user you are trying to log in is already logged in a different window'));
-    }
+
+    // If old session is active, delete it
+    await LOCKER.deleteCurrentSession(req);
 
     // Pass user id to the serializer
     return done(null, user_id);

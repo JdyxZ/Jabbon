@@ -82,30 +82,33 @@ var CLIENT =
     {
         console.log("New YOUR_INFO message received: ", message.content);
         MYAPP.myuser = message.content;
-        MYAPP.users.push(MYAPP.myuser);
+        // MYAPP.users.push(MYAPP.myuser); Sure?
     },
 
     onUserJoin: function(message)
     {
         console.log("New USER_JOIN message received: ", message.content);
-        console.log(message.content);
-        MYAPP.users.push(message.content);
+        
+        const users = message.content;
+        users.forEach(user => MYAPP.users[user.id] = user);
     },
 
     onUserLeft: function(message)
     {
         console.log("New USER_LEFT message received: ", message.content);
-        const usr = MYAPP.users.getObjectIndex("id",message.content);
-        MYAPP.users.splice(usr,1);
+        const user_id = message.content;
+
+        delete MYAPP.users.user_id;
     },
 
     onTick: function(message)
     {
         console.log("New TICK message received: ", message.content);
-        //Mirar bien el mensaje que recibo
-        
-        // console.log(message);
-        MYAPP.users[MYAPP.getIDByUserID(message.sender)].target = message.content.target;
+
+        const sender_id = message.seder;
+        const new_target = message.content.target;
+
+        MYAPP.users[sender_id].target = new_target;
     },
 
     // De momento no
@@ -134,25 +137,23 @@ var CLIENT =
 
     onError: function(message)
     {
-        console.log("aqui");
-        console.log(message);
+        console.log("New ERROR message received: ", message.content);
     },
 
     // Methods
     sendRoomMessage: function(message)
     {
-        // Append addresses to the message
-        message.addressees = [];
         // Send message to user
         this.socket.send(JSON.stringify(message));
     },
 
     sendPrivateMessage: function(message, addressees)
     {
-        // Check addressees
-        if (!addressees instanceof Array)
+        // Checkings
+        if (!isNaN(addressees) || addressees instanceof String) addressees = addressees.toArray();    
+        else if (!addressees instanceof Array)
         {
-            console.error("The addressees of your message must be an array of ids");
+            console.log(`ERROR ---> Invalid input "${addressees}" in function sendPrivateMessage of CLIENT. Message won't be send`);
             return;
         }
 
@@ -162,10 +163,9 @@ var CLIENT =
         // Send message to user
         this.socket.send(JSON.stringify(message));
     }
-
 }
 
-// Before reloading page close connection
+// Before reloading page, close connection with the WebSocket Server
 window.onbeforeunload = function() {
     if(CLIENT.socket != null)
     {

@@ -1,3 +1,5 @@
+/***************** PASSWORK SECURITY AND CHECKINGS *****************/
+
 const bcrypt = require('bcryptjs');
 
 const CRYPTO =
