@@ -11,11 +11,12 @@ var VIEW = {
         talking: [0,1]
     },
 
-    init: function(){
-
+    init: function()
+    {
+        // TODO
     },
 
-    draw: async function(canvas, ctx, room)
+    draw: function(canvas, ctx, room, users, my_user)
     {
         // Clear rect
         ctx.clearRect(0,0,canvas.width, canvas.height);
@@ -26,11 +27,9 @@ var VIEW = {
         ctx.scale(this.scale_factor,this.scale_factor);
         ctx.translate( this.cam_offset, 0 );
 
-        if(room) await this.drawRoom( ctx, room);
-
-        // Print rectangle in center
-        // ctx.fillStyle = "red";
-        // ctx.fillRect(-1,-1, 2, 2);
+        // Draw room and user of it
+        this.drawRoom(ctx, room);
+        this.drawUsers(ctx, users, my_user);
 
         // Always restore after a save
         ctx.restore();
@@ -45,38 +44,46 @@ var VIEW = {
 
     drawRoom: function(ctx, room)
     {
-        // Draw the room
+        // Check
+        if(!room)
+            return;
+
+        // Get background
         const background = getImage(room.background);
+
+        // Draw the room
         ctx.imageSmoothingEnabled = false;
         ctx.drawImage( background, background.width * this.scale_factor / -2, background.height * this.scale_factor / -2, background.width * this.scale_factor, background.height * this.scale_factor);
+    },
 
-        // Draw all users in the room
-        //console.log(room);
-        if(room)
-        {
-            for(var i = 0; i < room.people.length ; i++) this.drawUser(ctx, MYAPP.users[i]);
-            // console.log(room.people.length);
-        };
+    drawUsers: function(ctx, users, my_user)
+    {
+        // Draw other users
+        users.forEach(user => this.drawUser(ctx, user));
+
+        // Draw my user
+        this.drawUser(ctx, my_user);
     },
 
     drawUser: function(ctx, user)
     {
-        if(user)
-        {
-            //console.log(user);
-            var img = getImage(user.avatar);
-            // Check if the animation exists
-            var anim = this.animations[user.animation];
-            if(!anim) return;
-
-            var time = performance.now() * 0.001;
-            var frame = anim[Math.floor(time*12) % anim.length];
-
-            // Or change all the scales or with a image editor modify all the images to have the same size more or less
-            ctx.drawImage( img, frame*32, user.facing*64,32,64, user.position, 10 , 32*this.scale_factor, 64*this.scale_factor);
-
-        };
+        // Check
+        if(!user)
+            return;
         
+        // Get user sprite
+        var img = getImage(user.avatar);
+        
+        // Check if the animation exists
+        var anim = this.animations[user.animation];
+        if(!anim) return;
+
+        // Get frame
+        var time = performance.now() * 0.001;
+        var frame = anim[Math.floor(time*12) % anim.length];
+
+        // Or change all the scales or with a image editor modify all the images to have the same size more or less
+        ctx.drawImage( img, frame*32, user.facing*64,32,64, user.position, 10 , 32*this.scale_factor, 64*this.scale_factor);           
     },
 
 }

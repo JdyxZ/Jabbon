@@ -188,7 +188,7 @@ var DATABASE = {
         try
         {
             // Wrap values into an array
-            const values = Object.values(users).reduce((values, user) => {
+            const values = users.values().reduce((values, user) => {
                 values.push([user.id, user.name, user.position, user.avatar, user.room]);
                 return values;
             }, []);
@@ -250,7 +250,7 @@ var DATABASE = {
         try
         {
             // Wrap values into an array
-            const values = Object.values(rooms).reduce((values, room) => {
+            const values = rooms.values().reduce((values, room) => {
                 const people_json = JSON.stringify(room.people.toObject("user"));
                 values.push([room.id, people_json]);
                 return values;

@@ -1,5 +1,6 @@
 /***************** LOCKER MIDDLEWARES *****************/
 const SERVER = require("../server.js");
+require("../../public/framework.js");
 
 var LOCKER =
 {
@@ -50,12 +51,18 @@ var LOCKER =
 
     checkConnection: function(user_id)
     {
-        return Object.keys(SERVER.clients).includes(user_id.toString());
+        return SERVER.clients.keys().includes(user_id.toString());
     },
 
-    deleteCurrentSession: async function(req)
+    deleteCurrentSession: function(req)
     {
-        await req.logout();
+        return new Promise((resolve, fail) =>{
+            req.logout(function(err){
+                if(err) return fail(err);
+                else return resolve();
+            });
+        })
+
     }
 }
 

@@ -23,5 +23,7 @@ Fetch HTML: https://stackoverflow.com/questions/36631762/returning-html-with-fet
 Use EJS syntax inside Javascript scripts: https://www.geeksforgeeks.org/how-to-use-ejs-in-javascript/ 
 Websocket Session validation: https://stackoverflow.com/questions/12182651/expressjs-websocket-session-sharing 
 Websocket reject connection request: https://stackoverflow.com/questions/10560591/nodejs-websockets-reject-the-connection-with-a-message
+Use an HTML button as a link: https://stackoverflow.com/questions/2906582/how-do-i-create-an-html-button-that-acts-like-a-link 
+Promisify logout function of passport: https://github.com/jaredhanson/passport/issues/929
 
 # Sr.OjeteSucio

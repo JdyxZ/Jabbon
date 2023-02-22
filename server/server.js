@@ -1,8 +1,8 @@
 // Module imports
-const {User, Room, WORLD, Message} = require("../public/model/model.js");
-const {getTime} = require("../public/framework.js");
+const {User, Room, WORLD, Message} = require("./model/model.js");
+const {getTime, isNumber, isString} = require("../public/framework.js");
 const DATABASE = require("./database/database.js");
-require("../public/framework.js");
+
 
 /***************** SERVER *****************/
 var SERVER = 
@@ -11,7 +11,7 @@ var SERVER =
     port: null,
     clients : {},
     last_id : 0,
-    messages_types = ["TICK", "PRIVATE", "PUBLIC", "EXIT", "TYPING"];
+    messages_types: ["TICK", "PRIVATE", "PUBLIC", "EXIT", "TYPING"],
 
     /***************** HTTP SERVER CALLBACKS *****************/
 
@@ -77,7 +77,7 @@ var SERVER =
         // Catch errors
         catch (error) 
         {
-            console.log(`ERROR --> Error upon processing received message: ${error}`);
+            console.log("ERROR --> Error upon processing received message \n", error);
             const message = new Message("system", "ERROR", "Error upon processing your message", getTime());
             connection.sendUTF(JSON.stringify(message));
         }
@@ -100,7 +100,7 @@ var SERVER =
         this.clients[user.id] = connection; 
         
         // Send data about the new user
-        this.onNewUserToRoom(user.id, "NEW");   
+        this.onNewUserToRoom(user.id);   
 
         // Log
         console.log(`EVENT --> User ${user.name} has joined`);
@@ -116,7 +116,7 @@ var SERVER =
         delete this.clients[user_id];
         
         // Update info to the other users
-        const message = new Message("system", "USER_LEFT", JSON.stringify(user.id), getTime());
+        const message = new Message("system", "USER_LEFT", user.id, getTime());
         this.sendRoomMessage(message, user.room, user_id);
 
         // Log
@@ -132,7 +132,7 @@ var SERVER =
         const user_id = connection.user_id;
         const user = WORLD.getUser(user_id);
         const user_current_room = user.room;
-        const public_types = messages_types.clone().remove("PRIVATE");
+        const public_types = this.messages_types.clone().remove("PRIVATE");
         const private_types = ["PRIVATE"];
 
         // Check that the sender is registered in the WORLD
@@ -144,7 +144,7 @@ var SERVER =
             return "SENDER_MATCH_ERROR";
 
         // Check the sender is sending a valid type of message 
-        if(!messages_types.includes(message.type))
+        if(!this.messages_types.includes(message.type))
             return "TYPE_MESSAGE_ERROR";
 
         // Check the sender is coherent with the type of message they are sending
@@ -158,7 +158,7 @@ var SERVER =
         if(private_types.includes(message.type) && !(message.addressees instanceof Array))
             return "ADDRESSES_TYPE_ERROR";
 
-        // Check the sender is sending messages to people of the same room
+        // Check the sender is sending messages to people of the same room and filter the ones which are active
         if(private_types.includes(message.type))
         {
             message.addressees.forEach(addressee => {
@@ -281,8 +281,13 @@ var SERVER =
         // Add user to new room 
         next_room.people.push(user.id);
 
-        // Update clients info
-        this.onNewUserToRoom(user.id, "OLD");
+        // Update user and new room clients info
+        this.onNewUserToRoom(user.id);
+
+        // Notify the users of the old room that the user has left
+        message = new Message("system", "USER_LEFT", user_id, getTime());   
+        this.sendRoomMessage(message, previous_room, sender_id);     
+
     },
 
     //MAYBE IN A FUTURE
@@ -305,37 +310,36 @@ var SERVER =
 
     sendAllClientsMessage: function(message)
     {
-        Object.values(this.clients).forEach(connection => {
+        this.clients.values().forEach(connection => {
             connection.sendUTF(JSON.stringify(message));
         });
     },
 
     sendRoomMessage: function(message, room_id, users_id)
     {
-        // Checkings
-        if (!isNaN(users_id) || users_id instanceof String) users_id = users_id.toArray();    
+        // Some checkings before proceeding
+        if (isNumber(users_id) || isString(users_id)) users_id = users_id.toArray();    
         else if (!users_id instanceof Array)
         {
             console.log(`ERROR ---> Invalid input "${users_id}" in function sendRoomMessage of SERVER. Message won't be send`);
             return;
         }
 
-        // Get room
+        // Get active users of the room
         const room = WORLD.getRoom(room_id);
+        const room_users = room.people.clone().remove(users_id);
+        const active_room_users = this.filterActiveUsers(room_users); 
 
-        // Iterate through room people
-        for(user_id of room.people)
+        // Iterate through room active users
+        for(user_id of active_room_users)
         {
-            // Skip users
-            if(users_id.contains(user_id))
-                continue;
-
             // Get connection
             const connection = this.clients[user_id];
-            if(connection == undefined){
-                console.log(`Connection with user id ${addressees} doesn't exist`);
+            if(connection == undefined)
+            {
+                console.log(`ERROR ---> Invalid connection with "${user_id}" in function sendRoomMessage. User ID might not be valid or user might be disconnected`);
                 return;
-            } 
+            };
 
             // In case there is no connection for this id
             if(connection)
@@ -345,75 +349,71 @@ var SERVER =
 
     sendPrivateMessage: function(message, addressees)
     {
-        if(!isNaN(addressees))
+        // Some checkings before proceeding
+        if (isNumber(addressees) || isString(addressees)) addressees = addressees.toArray();    
+        else if (!users_id instanceof Array)
+        {
+            console.log(`ERROR ---> Invalid input "${addressees}" in function sendPrivateMessage of SERVER. Message won't be send`);
+            return;
+        }
+
+        // Get active users of the array addressees
+        const active_users = this.filterActiveUsers(addressees); 
+
+        // Iterate through addresses
+        for(const user_id of active_users)
         {
             // Get connection
-            const connection = this.clients[addressees];
-            if(connection == undefined){
-                console.log(`Connection with user id ${addressees} doesn't exist`);
-                return;
-            } 
+            const connection = this.clients[user_id];
+            if(connection == undefined)
+            {
+                console.log(`ERROR ---> Invalid connection with "${user_id}" in function sendPrivateMessage. User ID might not be valid or user might be disconnected`);
+                continue;
+            }
     
             // Send message to the user
             connection.sendUTF(JSON.stringify(message));
-            return;
-        }
-        else if (addressee instanceof Array)
-        {
-            // Iterate through addresses
-            for(const addressee of addressees)
-            {
-                // Get connection
-                const connection = this.clients[addressee];
-                if(connection == undefined){
-                    console.log(`Connection with user id ${addressee} doesn't exist`);
-                    continue;
-                } 
-        
-                // Send message to the user
-                connection.sendUTF(JSON.stringify(message));
-            }  
-            return;
-        }
-
-        // Notify error
-        console.log(`ERROR ---> Invalid addressees "${addressees}" input in function sendMessage`);
-
+        }      
     },
 
     /***************** AUXILIAR METHODS *****************/
 
-    onNewUserToRoom: function(user_id, user_type)
+    onNewUserToRoom: function(user_id)
     {
         // Get all data stuff
         let message;
         const user = WORLD.getUser(user_id); 
         const user_room = WORLD.getRoom(user.room);
-        const {_, room_people_info} = user_room.getRoomPeopleInfo(user_id);
+        const room_users = user_room.people.clone().remove(user_id);
+        const active_room_users_ids = this.filterActiveUsers(room_users); 
+        const [_, active_room_users_info] = user_room.getRoomUsersInfo(active_room_users_ids, "INCLUSIVE");
 
         // Send to the new user info about their current/new room
-        message = new Message("system", "ROOM", JSON.stringify(user_room.toJSON()), getTime());
+        message = new Message("system", "ROOM", user_room.toJSON(), getTime());
         this.sendPrivateMessage(message, user_id);
 
         // Send to the new user its own user data
-        message = new Message("system", "YOUR_INFO", JSON.stringify(user.toJSON()), getTime());
-        this.sendPrivateMessage(message, user_id);
-        
-        // Send to the new user info about the people in the current/new room
-        message = new Message("system", "USER_JOIN", JSON.stringify(room_people_info), getTime());
-        this.sendPrivateMessage(message, user_id);
+        message = new Message("system", "YOUR_INFO", user.toJSON(), getTime());
+        this.sendPrivateMessage(message, user_id);        
 
-        // Send to the current/new room users data of the new user
-        message = new Message("system", "USER_JOIN", JSON.stringify([user.toJSON()]), getTime());
-        this.sendRoomMessage(message, user.room, user_id);
-        
-        // Check if user has just connected before proceeding 
-        if(user_type == "NEW")
-            return;
-        
-        // Notify the users of the old room that the user has left
-        message = new Message("system", "USER_LEFT", JSON.stringify(user_id), getTime());        
-    }
+        // Send to the new user info about the active users in the current/new room
+        if(active_room_users_ids.length > 0)
+        {
+            message = new Message("system", "USER_JOIN", active_room_users_info, getTime());
+            this.sendPrivateMessage(message, user_id);
+        }
+
+        // Send to the current/new room active users data of the new user
+        message = new Message("system", "USER_JOIN",[user.toJSON()], getTime());
+        this.sendRoomMessage(message, user.room, user.id);      
+    },
+
+    filterActiveUsers(users_id)
+    {
+        return users_id.filter(user_id => {
+            return this.clients[user_id] != undefined;
+        })
+    },
 }
 
 module.exports = SERVER;

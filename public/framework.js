@@ -164,7 +164,7 @@ Date.prototype.getDate2 = function()
 Array.prototype.remove = function(elements)
 {
 	// Checkings
-	if (!isNaN(elements) || elements instanceof String) elements = elements.toArray();  
+	if (isNumber(elements) || isString(elements)) elements = elements.toArray();
 
 	// Filter
 	elements.forEach( element =>
@@ -177,36 +177,53 @@ Array.prototype.remove = function(elements)
 	return this;
 };
 
- Array.prototype.containsObject = function(property, value)
- {
-	return this.reduce((acc, {property, _}) => acc | property == value, false) 
- };
+Array.prototype.containsObject = function(property, value)
+{
+	return this.reduce((acc, {property, _}) => acc | property == value, false);
+};
 
- Array.prototype.getObject = function(property, value)
- {
+Array.prototype.getObject = function(property, value)
+{
 	return this.filter(({property, _}) => property == value);
- };
+};
 
- Array.prototype.getObjectIndex = function(property, value)
- {
+Array.prototype.getObjectIndex = function(property, value)
+{
 	return this.reduce((acc, element , index) => {
 		if (element[property] == value) acc = index;
 		return acc;
 	}, -1);
- };
+};
 
- Array.prototype.clone = function()
- {
+Array.prototype.clone = function()
+{
 	return this.concat();
- };
+};
 
- Array.prototype.toObject = function(prefix)
- {
+Array.prototype.toObject = function(prefix)
+{
 	return this.reduce((obj, element, index) => {
 		obj[`${prefix}${index}`] = element;
 		return obj;
 	}, {})
- };
+};
+
+/***************** OBJECT *****************/
+
+Object.prototype.keys = function()
+{
+	return Object.keys(this);
+};
+
+Object.prototype.values = function()
+{
+	return Object.values(this);
+};
+
+Object.prototype.entries = function()
+{
+	return Object.entries(this);
+};
 
  /***************** FUNCTIONS *****************/
 
@@ -239,8 +256,18 @@ function getDate()
 	 
  };
 
+ function isNumber(x)
+ {
+	return typeof(x) == 'number';
+ }
+
+ function isString(x)
+ {
+	return typeof(x) == 'string';
+ }
+
 if(typeof(window) == "undefined")
 {
- 	module.exports = {getTime, getDate, getKeyFromValue};
+ 	module.exports = {getTime, getDate, getKeyFromValue, isNumber, isString};
 }
  

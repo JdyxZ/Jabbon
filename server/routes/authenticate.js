@@ -25,9 +25,9 @@ router.get('/canvas', LOCKER.isSessionAvailable, (req, res) => {
     res.render("canvas");
 });
 
-router.get('/logout', LOCKER.isSessionNotAvailable, (req, res) => {
+router.get('/logout', LOCKER.isSessionAvailable, (req, res, next) => {
     req.logout(function(err) {
-        if (err) { return next(err); }
+        if (err) return next(err);
         res.redirect('/login');
     });
 });

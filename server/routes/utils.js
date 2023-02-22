@@ -5,10 +5,11 @@ const express = require('express');
 const router = express.Router();
 
 // Our modules
-const {WORLD} = require("../../public/model/model.js");
+const {WORLD} = require("../model/model.js");
 const SERVER = require("../server.js");
 const DATABASE = require("../database/database.js");
 const LOCKER = require("../utils/locker.js");
+require("../../public/framework.js");
 
 // Util routes
 router.get('/get_world', function(req, res){ // Model info
@@ -94,7 +95,7 @@ router.delete('/user/:id', async function(req, res){ // User delete
 });
 
 router.get("/clients", (req,res,next) => {
-    res.end(JSON.stringify(Object.keys(SERVER.clients)));
+    res.end(JSON.stringify(SERVER.clients.values()));
 });
 
 // Export module

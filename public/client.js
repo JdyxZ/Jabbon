@@ -74,69 +74,90 @@ var CLIENT =
     // Message callbacks
     setRoom: function(message)
     {
+        // Log
         console.log("New ROOM message received: ", message.content);
+
+        // Assign new room
         MYAPP.current_room = message.content;
     },
 
     setMyUser: function(message)
     {
+        // Log
         console.log("New YOUR_INFO message received: ", message.content);
-        MYAPP.myuser = message.content;
-        // MYAPP.users.push(MYAPP.myuser); Sure?
+
+        // Assign my user info to my_user
+        MYAPP.my_user = message.content;
     },
 
     onUserJoin: function(message)
     {
+        // Log
         console.log("New USER_JOIN message received: ", message.content);
-        
+
+        // Get data
         const users = message.content;
+
+        // Append new users to users
         users.forEach(user => MYAPP.users[user.id] = user);
     },
 
     onUserLeft: function(message)
     {
+        // Log
         console.log("New USER_LEFT message received: ", message.content);
+
+        // Get data
         const user_id = message.content;
 
+        // Delete left user from users
         delete MYAPP.users.user_id;
     },
 
     onTick: function(message)
     {
+        // Log
         console.log("New TICK message received: ", message.content);
 
+        // Get data
         const sender_id = message.seder;
         const new_target = message.content.target;
 
+        // Set user target
         MYAPP.users[sender_id].target = new_target;
     },
 
-    // De momento no
+
     onPrivateMessage: function(message)
     {
+        // Log
         console.log("New PRIVATE message received: ", message.content);
     },
 
-    // De momento no
+
     onRoomMessage: function(message)
     {
+        // Log
         console.log("New PUBLIC message received: ", message.content);
     },
 
-    // Diria que esta no la usaremos
+
     onShutDown: function(message)
     {
+        // Log
         console.log("New SHUT DOWN message received: ", message.content);
     },
 
-    // Future implementation
+
     onTyping: function(message)
     {
+        // Log
         console.log("New TYPING message received: ", message.content);
     },
 
     onError: function(message)
     {
+        // Log
         console.log("New ERROR message received: ", message.content);
     },
 

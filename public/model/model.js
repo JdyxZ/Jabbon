@@ -1,6 +1,5 @@
 /********************************** MODEL **********************************/
 
-
 /***************** USER *****************/
 
 const FACING_RIGHT = 0;
@@ -63,12 +62,6 @@ function Room(data)
     this.range = data == undefined ? [] : data.range || [];
 }
 
-Room.prototype.addUser = function(user)
-{
-    this.people.push( user.id );
-    user.room = this.id;
-}
-
 Room.prototype.toJSON = function()
 {
     const room_json =
@@ -85,36 +78,10 @@ Room.prototype.toJSON = function()
     return room_json;
 }
 
-Room.prototype.getRoomPeopleInfo = function(users_id)
-{
-    // Checkings
-    if (!isNaN(users_id) || users_id instanceof String) users_id = users_id.toArray();    
-    else if (!users_id instanceof Array)
-    {
-        console.log(`ERROR ---> Invalid input "${users_id}" in function roomUserstoJSON of Room Class. Returning null`);
-        return null;
-    }
-
-    // Reduce
-    return this.people.reduce( (obj, user_id) => {
-
-        // Check if current user is exempt
-        if(users_id.includes(user_id)) return obj;
-
-        // Push to obj
-        const user = WORLD.getUser(user_id);
-        obj.room_people_list.push(user_id)
-        obj.room_people_info.push(user.toJSON());
-
-        // Ouput
-        return arr;
-    }, {room_people_list: [], room_people_info: []});
-}
-
 Room.prototype.getUsers = function(users_id)
 {
     // Checkings
-    if (!isNaN(users_id) || users_id instanceof String) users_id = users_id.toArray();    
+    if (isNumber(users_id) || isString(users_id)) users_id = users_id.toArray();    
     else if (!users_id instanceof Array)
     {
         console.log(`ERROR ---> Invalid input "${users_id}" in function getUsers of Room Class. Returning null`);
@@ -124,142 +91,11 @@ Room.prototype.getUsers = function(users_id)
     return user_room.people.clone().remove(users_id);
 }
 
-/***************** WORLD *****************/
-
-var WORLD = {
-
-    // Objects
-    rooms: {},
-    users: {},
-    num_users: 0,
-    num_rooms: 0,
-
-    // Methods
-    init: function(rooms_array, users_array)
-    {
-        rooms_array.map( room => 
-        {
-            room.exits = Object.values(room.exits);
-            room.people = Object.values(room.people);
-            
-            room.range = [room.range_left, room.range_right];
-            delete room.range_left;
-            delete room.range_right;
-            return room
-        });
-
-        const world_json =
-        {
-            rooms: rooms_array,
-            users: users_array
-        }
-
-        this.fromJSON(world_json);
-    },
-
-    createUser: function (data)
-    {
-        var user = new User(data);
-        this.num_users++;
-        this.users[user.id] = user;
-        return user;
-    },
-
-    createRoom: function (data)
-    {
-        var room = new Room(data);
-        this.num_rooms++;
-        this.rooms[room.id] = room;
-        return room;
-    },
-
-    getUser: function (id)
-    {
-        return this.users[id];
-    },
-
-    getRoom: function(id)
-    {
-        return this.rooms[id];
-    },
-
-    addUser: function(user)
-    {
-        if(users[user.id] != undefined)
-        {
-            console.error(`The user ${user.name} already exists`);
-            return;
-        }
-
-        users[user.id] = user;
-    },
-
-    addRoom: function(room)
-    {
-        if(rooms[room.id] != undefined)
-        {
-            console.error(`The room ${room.name} already exists`);
-            return;
-        }
-
-        rooms[room.id] = room;
-    },
-    
-    removeUser: function(id)
-    {
-        delete users.id;
-    },
-
-    addUsertoRoom: function(user_id, room_id)
-    {
-        const user = this.getUser(user_id);
-        const room = this.getRoom(room_id);
-        room.addUser(user);
-    },
-
-    fromJSON: function(world_json)
-    {
-        // Create rooms
-        
-        world_json.rooms.forEach(room_json => {
-            this.createRoom(room_json);
-        }); 
-       
-        // Create users
-        world_json.users.forEach(user_json => {
-            const user = this.createUser(user_json);
-            //this.addUsertoRoom(user.id, user.room);
-        }); 
-    },
-
-    toJSON: function()
-    {
-        const{rooms, users, num_rooms, num_users} = this;
-
-        world_json =
-        {
-            num_rooms,
-            num_users,
-            rooms,
-            users
-        }
-
-        return JSON.stringify(world_json, null, 2);
-    }
-}
-
 /***************** MESSAGE *****************/
 function Message(sender, type, content, time)
 {
     this.sender = sender || ""; //ID
     this.type = type || "ERROR";
     this.content = content || "";
-    this.time = time || "";
-}
-
-if(typeof(window) == "undefined")
-{
-    module.exports = {
-        WORLD, Room, User, FACING_RIGHT, FACING_FRONT, FACING_LEFT, FACING_BACK, Message
-    }
+    this.time = time || getTime();
 }

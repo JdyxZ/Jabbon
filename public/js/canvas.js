@@ -1,24 +1,25 @@
 
 /***************** VIEW *****************/
 
-var canvas = document.getElementById('canvas');
-var exit = document.get('input[name="exit"]');
-var logout_button = document.get("#logout"); 
-var logout_anchor = document.get(".logout a");
-var last = performance.now();
-var mouse_pos = [0,0];
-var mouse_buttons = 0;
-var imgs = {};
+// HTML Elements
+const canvas = document.getElementById('canvas');
+// const exit = document.get('div[name="exit"]');
+const logout_button = document.get("#logout"); 
 
-//last stores timestamp from previous frame
+// Auxiliar elements
+let last = performance.now(); //last stores timestamp from previous frame
+let mouse_pos = [0,0];
+let mouse_buttons = 0;
+let imgs = {};
 
 function loop()
 {
    // Update our canvas
    draw();
+
    // Compute elapsed time
-   var now = performance.now();
-   var elapsed_time = (now - last) / 1000; 
+   const now = performance.now();
+   const elapsed_time = (now - last) / 1000; 
 
    // Update last time
    last = now;
@@ -28,6 +29,7 @@ function loop()
 
    // Request to call loop() again before next frame
    requestAnimationFrame( loop );
+
 }
 
 // Start loop
@@ -88,7 +90,7 @@ function draw() {
     canvas.height = rect.height;
     var ctx = canvas.getContext('2d');
 
-    MYAPP.draw(canvas,ctx);
+    MYAPP.draw(canvas, ctx);
 }
 
 function update(dt)
@@ -106,13 +108,13 @@ function onMouse( e ) {
    MYAPP.onMouse(e);
 };
 
+// Event listeners
 document.body.addEventListener("mousedown", onMouse );
 document.body.addEventListener("mousemove", onMouse );
 document.body.addEventListener("mouseup", onMouse );
+
 logout_button.when("keydown", () => {
     console.log(logout_button);
-    logout_anchor.click();
 });
-
 
 MYAPP.init();

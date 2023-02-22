@@ -4,15 +4,9 @@
         <link rel="stylesheet" type="text/css" href="css/canvas.css"/>
     </head>
     <body>
-        <span class="canvas">
-            <div class="menu_bar">
-                <div style="display:none"class="chat template" name ="exit">GO TO FOREST</div>
-            </div>
-        </span>
-        <div class="logout">
-            <button id="logout"> logout </button>
-            <a href="http://localhost:9014/logout"></a>
-        </div>
+        <form action="/logout">
+            <button type="submit" id="logout"> Logout </button>
+        </form>
         <canvas id="canvas"></canvas>
     </body>
 

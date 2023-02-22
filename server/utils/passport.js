@@ -5,7 +5,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 // Our modules
-const {WORLD} = require("../../public/model/model.js");
+const {WORLD} = require("../model/model.js");
 const SERVER = require("../server.js");
 const DATABASE = require("../database/database.js");
 const CRYPTO = require("./crypto.js");
@@ -110,10 +110,18 @@ async (req, name, password, done) => {
         return done(null, false, req.flash('login_error', 'The user you are trying to log in is already logged in a different window'));
 
     // If old session is active, delete it
-    await LOCKER.deleteCurrentSession(req);
-
-    // Pass user id to the serializer
-    return done(null, user_id);
+    LOCKER.deleteCurrentSession(req)
+    .then(() =>
+    {
+        // Pass user id to the serializer
+        return done(null, user_id);
+    })
+    .catch((err) =>
+    {
+        console.log(err);
+        return done(null, false, req.flash('login_error', 'Something wrong happened. Try again.'));
+    })
+  
 }));
 
 // Store user id into the express session
