@@ -95,7 +95,7 @@ router.delete('/user/:id', async function(req, res){ // User delete
 });
 
 router.get("/clients", (req,res,next) => {
-    res.end(JSON.stringify(SERVER.clients.values()));
+    res.end(JSON.stringify(SERVER.clients.keys()));
 });
 
 // Export module

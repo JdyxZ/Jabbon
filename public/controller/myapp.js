@@ -4,7 +4,8 @@ var MYAPP = {
 
     current_room: null,
     my_user: null,
-    users: {},
+    users_obj: {},
+    users_arr: [],
 
     init: function()
     {
@@ -15,16 +16,14 @@ var MYAPP = {
 
     draw: function(canvas,ctx) 
     {
-        const user_array = this.users.values();
-        VIEW.draw(canvas,ctx, this.current_room, user_array, this.my_user);
+        VIEW.draw(canvas,ctx, this.current_room, this.users_arr, this.my_user);
     },
 
     update:function(dt)
     {
         // Update other users
-        const user_array = this.users.values();
-        if(user_array.length > 0)
-            user_array.forEach(user => this.updateUser(user, dt));
+        if(this.users_arr.length > 0)
+            this.users_arr.forEach(user => this.updateUser(user, dt));
 
         // Update my user
         this.updateUser(this.my_user, dt);

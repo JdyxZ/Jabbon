@@ -142,10 +142,15 @@ Number.prototype.toArray = function()
 
 /***************** STRING *****************/
 
-String.prototype.toArray = function ()
+String.prototype.toArray = function()
 {
 	return [this.valueOf()];
 };
+
+String.prototype.reverse = function()
+{
+	return [...this].reverse().join("");	
+}
 
 /***************** DATE *****************/
 
@@ -177,22 +182,118 @@ Array.prototype.remove = function(elements)
 	return this;
 };
 
-Array.prototype.containsObject = function(property, value)
+Array.prototype.getObject = function(constraint)
 {
-	return this.reduce((acc, {property, _}) => acc | property == value, false);
+	// Check that constraint is an object
+	if(!isObject(constraint))
+	{
+		console.error(`WARNING: The input value "${constraint}" in method Array.getObject() is not an object. Returning null`);
+		return null;
+	}
+
+	// Search for the object
+	for (const element of this)
+    {
+		// If not an object, skip
+		if(!isObject(element))
+			continue;
+
+		// Look for a match
+		const match = constraint.entries().every( ([key,value]) => element[key] === value );
+
+		// If found return object info
+		if(match)
+			return element;
+    };
+
+	// Otherwise return null to let the user know that the object hasn't been found
+	return null;
 };
 
-Array.prototype.getObject = function(property, value)
+Array.prototype.getObjects = function(constraint)
 {
-	return this.filter(({property, _}) => property == value);
+	// Check that constraint is an object
+	if(!isObject(constraint))
+	{
+		console.error(`WARNING: The input value "${constraint}" in method Array.getObject() is not an object. Returning []`);
+		return [];
+	}
+
+	// Search for the objects
+	this.reduce((acc, element) => {
+
+		// If not an object, skip
+		if(!isObject(element))
+			return acc;
+
+		// Look for a match
+		const match = constraint.entries().every( ([key,value]) => element[key] === value );
+
+		// If found append object info
+		if(match)
+			return [...acc, element];
+
+	}, [])
+
+	// Otherwise return an empty array to let the user know that no object has been found
+	return [];
 };
 
-Array.prototype.getObjectIndex = function(property, value)
+Array.prototype.getObjectIndex = function(constraint)
 {
-	return this.reduce((acc, element , index) => {
-		if (element[property] == value) acc = index;
-		return acc;
-	}, -1);
+	// Check that constraint is an object
+	if(!isObject(constraint))
+	{
+		console.error(`WARNING: The input value "${constraint}" in method Array.getObject() is not an object. Returning -1`);
+		return -1;
+	}
+
+	// Search for the object
+	for (const [index, element] of this.entries())
+    {
+		// If not an object, skip
+		if(!isObject(element))
+			continue;
+
+		// Look for a match
+		const match = constraint.entries().every( ([key,value]) => element[key] === value );
+
+		// If found return object info
+		if(match)
+			return index;
+    };
+
+	// Otherwise return -1 to let the user know that the object hasn't been found
+	return -1;
+};
+
+Array.prototype.getObjectsIndexes = function(constraint)
+{
+	// Check that constraint is an object
+	if(!isObject(constraint))
+	{
+		console.error(`WARNING: The input value "${constraint}" in method Array.getObject() is not an object. Returning []`);
+		return [];
+	}
+
+	// Search for the objects indexes
+	this.reduce((acc, element, index) => {
+
+		// If not an object, skip
+		if(!isObject(element))
+			return acc;
+
+		// Look for a match
+		const match = constraint.entries().every( ([key,value]) => element[key] === value );
+
+		// If found append object index
+		if(match)
+			return [...acc, index];
+			
+	}, [])
+
+	// Otherwise return an empty array to let the user know that no object has been found
+	return [];
 };
 
 Array.prototype.clone = function()
@@ -225,9 +326,19 @@ Object.prototype.entries = function()
 	return Object.entries(this);
 };
 
+Object.prototype.clone = function()
+{
+	return structuredClone(this);
+};
+
+Object.prototype.concat = function(obj)
+{
+	return {...this, ...obj};
+};
+
  /***************** FUNCTIONS *****************/
 
- function getTime()
+function getTime()
 {
 	const date = new Date();
 	return date.getTime2();
@@ -239,35 +350,77 @@ function getDate()
 	return date.getDate2();
 }
 
- function getKeyFromValue(array, value)
- {
-	 const result = Object.entries(array).filter(([current_key, current_value]) => current_value == value);
- 
-	 switch(result.length)
-	 {
-		 case 0:
-			 return result;
-		 case 1:
-			 return result[0][1];
-		 default:
-			 throw Error("The array you are trying to filter hasn't unique values");
-			 return result;
-	 }
-	 
- };
+function getKeyFromValue(array, value)
+{
+	const result = Object.entries(array).filter(([current_key, current_value]) => current_value == value);
 
- function isNumber(x)
- {
-	return typeof(x) == 'number';
- }
+	switch(result.length)
+	{
+		case 0:
+			return result;
+		case 1:
+			return result[0][1];
+		default:
+			throw Error("The array you are trying to filter hasn't unique values");
+			return result;
+	}
+	
+};
 
- function isString(x)
- {
-	return typeof(x) == 'string';
- }
+function isNumber(x)
+{
+	return typeof(x) === 'number';
+}
+
+function isString(x)
+{
+	return typeof(x) === 'string';
+}
+
+function isBoolean(x)
+{
+	return typeof(x) === 'boolean';
+}
+
+function isArray(x)
+{
+	return Array.isArray(x);
+}
+
+function isFunction(x)
+{
+	return typeof x === "function";
+}
+
+function isObject(x)
+{
+	return typeof x === 'object' && x !== null && !isArray(x);
+}
+
+/*
+
+check({});
+check(0);
+check(null);
+check(undefined);
+check("");
+check("gol");
+check(() => {});
+check([]);
+check(true);
+check(BigInt(9007199254740991));
+check(Symbol("foo"));
+
+function check(x)
+{
+	console.log(isObject(x));
+}
+
+*/
+
 
 if(typeof(window) == "undefined")
 {
- 	module.exports = {getTime, getDate, getKeyFromValue, isNumber, isString};
+ 	module.exports = {getTime, getDate, getKeyFromValue, isNumber, isString, isBoolean, isArray, isFunction, isObject};
 }
  

@@ -15,8 +15,11 @@ const flash = require('connect-flash');
 const bodyParser = require('body-parser');
 
 // Our modules
+
 const SERVER = require("./server.js");
 const CREDENTIALS = require("./database/credentials.js");
+require('./utils/strategies.js');
+require('./utils/serializer.js');
 
 // Init server services
 SERVER.init();
@@ -25,11 +28,12 @@ SERVER.init();
 
 // Create ExpressJS app
 const app = express(); // We use ExpressJS to deal with requests, since it allows us to manage request in a simpler way and easily serve files to the client
-require('./utils/passport');
+
 
 // App settings
 app.set('appName', 'Jabbon');
 app.set('port', process.env.PORT || 9014);
+app.set('update_interval', 60000); // [ms]
 
 // Define session properties
 var session_properties = {
@@ -91,8 +95,11 @@ const server = http.createServer(app); // Instead of passing a custom function t
 // Launch the server
 server.listen(app.get('port'), () => SERVER.onReady(app.get('port')));
 
+// Update database each interval
+//setInterval(SERVER.updateWorld.bind(SERVER), 60000);
+
 // On server close
-process.on('SIGINT', SERVER.onClose);
+//process.on('SIGINT', SERVER.onClose.bind(SERVER));
 
 /***************** WEBSOCKET *****************/
 
@@ -134,5 +141,7 @@ wss.on('request', function(request) {
       
     }); 
 });
+
+
 
 module.exports = app;

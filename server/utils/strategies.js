@@ -6,7 +6,6 @@ const LocalStrategy = require('passport-local').Strategy;
 
 // Our modules
 const {WORLD} = require("../model/model.js");
-const SERVER = require("../server.js");
 const DATABASE = require("../database/database.js");
 const CRYPTO = require("./crypto.js");
 const LOCKER = require("./locker.js");
@@ -92,7 +91,7 @@ async (req, name, password, done) => {
     const hashed_password = await CRYPTO.encrypt(password);  
 
     // Check user credentials
-    let [status, result] = await DATABASE.validateUsername(name, hashed_password);
+    let [status, result] = await DATABASE.validateUser({name: name, password: hashed_password});
 
     if (status == "ERROR")
     {
@@ -123,24 +122,3 @@ async (req, name, password, done) => {
     })
   
 }));
-
-// Store user id into the express session
-passport.serializeUser((user_id,done) => {
-    done(null, user_id);
-});
-
-// Get user id from session
-passport.deserializeUser(async (user_id, done) => {
-    // Query
-    const [status, result] = await DATABASE.validateUserID(user_id);
-
-    // Check
-    if(status == "ERROR") return done(result);
-    if(result[0].length == 0) return done("ID not valid");
-
-    // Flush user ID
-    done(null, user_id);
-});
-
-
-

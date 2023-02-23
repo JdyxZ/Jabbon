@@ -75,7 +75,8 @@ var CLIENT =
     setRoom: function(message)
     {
         // Log
-        console.log("New ROOM message received: ", message.content);
+        console.log("New ROOM message received\n");
+        console.table(message.content);
 
         // Assign new room
         MYAPP.current_room = message.content;
@@ -84,7 +85,8 @@ var CLIENT =
     setMyUser: function(message)
     {
         // Log
-        console.log("New YOUR_INFO message received: ", message.content);
+        console.log("New YOUR_INFO message received\n");
+        console.table(message.content);
 
         // Assign my user info to my_user
         MYAPP.my_user = message.content;
@@ -93,72 +95,97 @@ var CLIENT =
     onUserJoin: function(message)
     {
         // Log
-        console.log("New USER_JOIN message received: ", message.content);
+        console.log("New USER_JOIN message received\n");
+        console.table(message.content);
 
         // Get data
         const users = message.content;
 
         // Append new users to users
-        users.forEach(user => MYAPP.users[user.id] = user);
+        users.forEach(user => MYAPP.users_obj[user.id] = user);
+        MYAPP.users_arr = MYAPP.users_arr.concat(users);
     },
 
     onUserLeft: function(message)
     {
         // Log
-        console.log("New USER_LEFT message received: ", message.content);
+        console.log("New USER_LEFT message received\n");
+        console.table(message.content);
 
         // Get data
         const user_id = message.content;
+        const index = MYAPP.users_arr.getObjectIndex({id: user_id});
+
+        // Check
+        if(index == -1)
+        { 
+            console.error(`onUserLeft callback --> User id ${user_id} is not in the container`);
+            return;  
+        }
 
         // Delete left user from users
-        delete MYAPP.users.user_id;
+        delete MYAPP.users_obj.user_id;
+        MYAPP.users_arr.splice(index, 1);
     },
 
     onTick: function(message)
     {
         // Log
-        console.log("New TICK message received: ", message.content);
+        console.log("New TICK message received\n");
+        console.table(message.content);
 
         // Get data
-        const sender_id = message.seder;
+        const sender_id = message.sender;
         const new_target = message.content.target;
 
+        // Check
+        if(!MYAPP.users_obj[sender_id])
+        {
+            console.error(`onTick callback -->The user id ${sender_id} is not registered`);
+            return;
+        }
+
         // Set user target
-        MYAPP.users[sender_id].target = new_target;
+        MYAPP.users_obj[sender_id].target = new_target;
     },
 
 
     onPrivateMessage: function(message)
     {
         // Log
-        console.log("New PRIVATE message received: ", message.content);
+        console.log("New PRIVATE message received\n");
+        console.table(message.content);
     },
 
 
     onRoomMessage: function(message)
     {
         // Log
-        console.log("New PUBLIC message received: ", message.content);
+        console.log("New PUBLIC message received\n");
+        console.table(message.content);
     },
 
 
     onShutDown: function(message)
     {
         // Log
-        console.log("New SHUT DOWN message received: ", message.content);
+        console.log("New SHUT DOWN message received\n");
+        console.table(message.content);
     },
 
 
     onTyping: function(message)
     {
         // Log
-        console.log("New TYPING message received: ", message.content);
+        console.log("New TYPING message received\n");
+        console.table(message.content);
     },
 
     onError: function(message)
     {
         // Log
-        console.log("New ERROR message received: ", message.content);
+        console.log("New ERROR message received\n");
+        console.table(message.content);
     },
 
     // Methods
@@ -171,8 +198,8 @@ var CLIENT =
     sendPrivateMessage: function(message, addressees)
     {
         // Checkings
-        if (!isNaN(addressees) || addressees instanceof String) addressees = addressees.toArray();    
-        else if (!addressees instanceof Array)
+        if (isNumber(addressees) || isString(addressees)) addressees = addressees.toArray();    
+        else if (!isArray(addressees))
         {
             console.log(`ERROR ---> Invalid input "${addressees}" in function sendPrivateMessage of CLIENT. Message won't be send`);
             return;

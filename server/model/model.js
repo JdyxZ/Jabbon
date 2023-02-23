@@ -1,6 +1,6 @@
 /********************************** MODEL **********************************/
 
-const {getTime, isNumber, isString} = require("../../public/framework.js");
+const {getTime, isNumber, isString, isArray} = require("../../public/framework.js");
 
 /***************** USER *****************/
 
@@ -90,7 +90,7 @@ Room.prototype.getRoomUsersInfo = function(users_id, filter_type)
 {
     // Checkings
     if (isNumber(users_id) || isString(users_id)) users_id = users_id.toArray();    
-    else if (!users_id instanceof Array)
+    else if (!isArray(users_id))
     {
         console.log(`ERROR ---> Invalid input "${users_id}" in function roomUserstoJSON of Room Class. Returning null`);
         return null;
@@ -116,7 +116,7 @@ Room.prototype.getRoomUsersInfo = function(users_id, filter_type)
         arr[1].push(user.toJSON());
 
         // Ouput
-        return obj;
+        return arr;
     }, [[],[]]);
 }
 

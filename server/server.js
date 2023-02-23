@@ -1,6 +1,6 @@
 // Module imports
 const {User, Room, WORLD, Message} = require("./model/model.js");
-const {getTime, isNumber, isString} = require("../public/framework.js");
+const {getTime, isNumber, isString, isArray} = require("../public/framework.js");
 const DATABASE = require("./database/database.js");
 
 
@@ -50,10 +50,16 @@ var SERVER =
         this.port = port;
     },
 
+    // Update world
+    updateWorld: function()
+    {
+        DATABASE.updateModel(WORLD);
+    },
+
     // Before closing
     onClose: function()
     {
-        DATABASE.updateModel(WORLD);
+        this.updateWorld();        
     },
 
     /***************** WEBSOCKET CALLBACKS *****************/
@@ -94,13 +100,17 @@ var SERVER =
             console.log(`ERROR --> Invalid user ID ${user_id} in function onUserConnected: User doesn't exist`);
             return;
         }
+
+        // Just in case
+        const user_room = WORLD.getRoom(user.room);
+        if(!user_room.people.includes(user_id)) user_room.people = [...user_room.people, user_id];
         
         // Store connection
-        connection.user_id = user.id;
-        this.clients[user.id] = connection; 
+        connection.user_id = user_id;
+        this.clients[user_id] = connection; 
         
         // Send data about the new user
-        this.onNewUserToRoom(user.id);   
+        this.onNewUserToRoom(user_id);   
 
         // Log
         console.log(`EVENT --> User ${user.name} has joined`);
@@ -319,7 +329,7 @@ var SERVER =
     {
         // Some checkings before proceeding
         if (isNumber(users_id) || isString(users_id)) users_id = users_id.toArray();    
-        else if (!users_id instanceof Array)
+        else if (!isArray(users_id))
         {
             console.log(`ERROR ---> Invalid input "${users_id}" in function sendRoomMessage of SERVER. Message won't be send`);
             return;
@@ -328,18 +338,14 @@ var SERVER =
         // Get active users of the room
         const room = WORLD.getRoom(room_id);
         const room_users = room.people.clone().remove(users_id);
-        const active_room_users = this.filterActiveUsers(room_users); 
 
         // Iterate through room active users
-        for(user_id of active_room_users)
+        for(user_id of room_users)
         {
             // Get connection
             const connection = this.clients[user_id];
             if(connection == undefined)
-            {
-                console.log(`ERROR ---> Invalid connection with "${user_id}" in function sendRoomMessage. User ID might not be valid or user might be disconnected`);
-                return;
-            };
+                continue; 
 
             // In case there is no connection for this id
             if(connection)
@@ -351,25 +357,19 @@ var SERVER =
     {
         // Some checkings before proceeding
         if (isNumber(addressees) || isString(addressees)) addressees = addressees.toArray();    
-        else if (!users_id instanceof Array)
+        else if (!isArray(users_id))
         {
             console.log(`ERROR ---> Invalid input "${addressees}" in function sendPrivateMessage of SERVER. Message won't be send`);
             return;
         }
 
-        // Get active users of the array addressees
-        const active_users = this.filterActiveUsers(addressees); 
-
         // Iterate through addresses
-        for(const user_id of active_users)
+        for(const user_id of addressees)
         {
             // Get connection
             const connection = this.clients[user_id];
             if(connection == undefined)
-            {
-                console.log(`ERROR ---> Invalid connection with "${user_id}" in function sendPrivateMessage. User ID might not be valid or user might be disconnected`);
                 continue;
-            }
     
             // Send message to the user
             connection.sendUTF(JSON.stringify(message));
@@ -404,7 +404,7 @@ var SERVER =
         }
 
         // Send to the current/new room active users data of the new user
-        message = new Message("system", "USER_JOIN",[user.toJSON()], getTime());
+        message = new Message("system", "USER_JOIN", [user.toJSON()], getTime());
         this.sendRoomMessage(message, user.room, user.id);      
     },
 
