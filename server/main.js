@@ -33,7 +33,6 @@ const app = express(); // We use ExpressJS to deal with requests, since it allow
 // App settings
 app.set('appName', 'Jabbon');
 app.set('port', process.env.PORT || 9014);
-app.set('update_interval', 60000); // [ms]
 
 // Define session properties
 var session_properties = {
@@ -95,11 +94,8 @@ const server = http.createServer(app); // Instead of passing a custom function t
 // Launch the server
 server.listen(app.get('port'), () => SERVER.onReady(app.get('port')));
 
-// Update database each interval
-//setInterval(SERVER.updateWorld.bind(SERVER), 60000);
-
-// On server close
-//process.on('SIGINT', SERVER.onClose.bind(SERVER));
+// Update database on exit and periodically
+require("./utils/update.js");
 
 /***************** WEBSOCKET *****************/
 
@@ -141,7 +137,5 @@ wss.on('request', function(request) {
       
     }); 
 });
-
-
 
 module.exports = app;

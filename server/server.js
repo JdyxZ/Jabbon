@@ -51,15 +51,18 @@ var SERVER =
     },
 
     // Update world
-    updateWorld: function()
+    updateWorld: async function()
     {
-        DATABASE.updateModel(WORLD);
+       await DATABASE.updateModel(WORLD);
+       console.log("EVENT --> Model successfully updated");
     },
 
     // Before closing
-    onClose: function()
+    onClose: async function()
     {
-        this.updateWorld();        
+        await this.updateWorld();   
+        await DATABASE.pool.ClearAllPools();    
+        console.log("EVENT --> Server closing: Model has been successfully updated and pool connections to DATABASE removed");
     },
 
     /***************** WEBSOCKET CALLBACKS *****************/
