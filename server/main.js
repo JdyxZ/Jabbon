@@ -15,7 +15,6 @@ const flash = require('connect-flash');
 const bodyParser = require('body-parser');
 
 // Our modules
-
 const SERVER = require("./server.js");
 const CREDENTIALS = require("./database/credentials.js");
 require('./utils/strategies.js');
@@ -29,16 +28,15 @@ SERVER.init();
 // Create ExpressJS app
 const app = express(); // We use ExpressJS to deal with requests, since it allows us to manage request in a simpler way and easily serve files to the client
 
-
 // App settings
 app.set('appName', 'Jabbon');
 app.set('port', process.env.PORT || 9014);
 
 // Define session properties
 var session_properties = {
-  secret: 'JabbonSession',
-  resave: false, // avoids overwritting the session
-  saveUninitialized: false,
+  secret: 'JabbonSession', // Session name
+  resave: false, // avoids overwritting the current session with new info (first we have to drop the old session and then build a new one)
+  saveUninitialized: false, // avoids saving an uninitialized session to the database (avoids server trash)
   cookie: { name: "JabbonCookie", _expires: new Date(Date.now() + (30 * 86400 * 1000)) } , // Set 1 month of expiration time
   store: new MySQLSession(CREDENTIALS) // Persistent session
 };
@@ -52,7 +50,7 @@ app.set('view engine', 'ejs');
 
 // Middleware
 // app.use(morgan('short')); // To see the request specs
-app.use(bodyParser.urlencoded({extended: false})); // Parses encoded data send with post method through a form
+app.use(bodyParser.urlencoded({extended: false})); // Parses encoded data sent with post method through a form
 app.use(bodyParser.json()); // Parses json data directly to objects
 app.use(sessionParser); // Parses sessions
 app.use(flash()); // Allows to easily store data in the session
@@ -75,7 +73,7 @@ app.use((req, res, next) => {
   app.locals.login_user_error = req.flash('login_user_error');
   app.locals.login_error = req.flash('login_error');
 
-  // Pass to next middleware
+  // Pass to the next middleware
   next();
 });
 
