@@ -11,6 +11,10 @@ var VIEW = {
         talking: [0,1]
     },
 
+    sprite_size: {width: 32, height: 64},
+
+    height: 10,
+
     init: function()
     {
         // TODO
@@ -19,12 +23,12 @@ var VIEW = {
     draw: function(canvas, ctx, room, users, my_user)
     {
         // Clear rect
-        ctx.clearRect(0,0,canvas.width, canvas.height);
+        ctx.clearRect(0,0, canvas.width, canvas.height);
 
         // We save and apply some transformations to the scene
         ctx.save();
         ctx.translate( canvas.width/2, canvas.height/2 );
-        ctx.scale(this.scale_factor,this.scale_factor);
+        ctx.scale(this.scale_factor, this.scale_factor);
         ctx.translate( this.cam_offset, 0 );
 
         // Draw room and user of it
@@ -67,23 +71,34 @@ var VIEW = {
 
     drawUser: function(ctx, user)
     {
-        // Check
+        // Check user
         if(!user)
             return;
         
+        // Check animation
+        const anim = this.animations[user.animation];
+        if(!anim) 
+            return;
+
         // Get user sprite
-        var img = getImage(user.avatar);
-        
-        // Check if the animation exists
-        var anim = this.animations[user.animation];
-        if(!anim) return;
+        const sprite = getImage(user.avatar);
 
         // Get frame
-        var time = performance.now() * 0.001;
-        var frame = anim[Math.floor(time*12) % anim.length];
+        const time = performance.now() * 0.001;
+        const frame = anim[Math.floor(time*12) % anim.length];
 
-        // Or change all the scales or with a image editor modify all the images to have the same size more or less
-        ctx.drawImage( img, frame*32, user.facing*64,32,64, user.position, 10 , 32*this.scale_factor, 64*this.scale_factor);           
+        // Or change all the scales or with an image editor modify all the images to have the same size more or less
+        ctx.drawImage(
+            sprite, 
+            frame * this.sprite_size.width, // sprite x-offset
+            user.facing * this.sprite_size.height, // sprite y-offset
+            this.sprite_size.width, // sprite width
+            this.sprite_size.height, // sprite height
+            user.position, // x position of the canvas to draw in
+            this.height, // y position of the canvas to draw in
+            this.sprite_size.width * this.scale_factor, // x scale factor
+            this.sprite_size.height * this.scale_factor // y scale factor
+        );            
     },
 
 }

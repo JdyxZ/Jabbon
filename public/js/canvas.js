@@ -4,13 +4,24 @@
 // HTML Elements
 const canvas = document.getElementById('canvas');
 // const exit = document.get('div[name="exit"]');
-const logout_button = document.get("#logout"); 
+const logout_button = document.get("#logout-button"); 
+
+// CSS variables
+const available_height = window.screen.availHeight;
+const available_width = window.screen.availWidth;
+document.documentElement.style.setProperty('--screen_width', available_width + "px");
+document.documentElement.style.setProperty('--screen_height', available_height + "px");
 
 // Auxiliar elements
 let last = performance.now(); //last stores timestamp from previous frame
 let mouse_pos = [0,0];
 let mouse_buttons = 0;
 let imgs = {};
+
+// Canvas variables
+const canvas_offset = 20;
+const canvas_left_boundary = -available_width/2 + VIEW.sprite_size.width;
+const canvas_right_boundary = available_width/2 - VIEW.sprite_size.width;
 
 function loop()
 {
@@ -86,8 +97,8 @@ function getImage(url)
 function draw() {
     var parent = canvas.parentNode;
     var rect = parent.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = rect.height;
+    canvas.width = rect.width - canvas_offset;
+    canvas.height = rect.height - canvas_offset;
     var ctx = canvas.getContext('2d');
 
     MYAPP.draw(canvas, ctx);

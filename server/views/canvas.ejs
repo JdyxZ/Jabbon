@@ -4,10 +4,20 @@
         <link rel="stylesheet" type="text/css" href="css/canvas.css"/>
     </head>
     <body>
-        <form action="/logout">
-            <button type="submit" id="logout"> Logout </button>
-        </form>
-        <canvas id="canvas"></canvas>
+        <div id="main">
+            <div id="Jabbon">
+                <div id="canvas_container">
+                    <canvas id="canvas"></canvas>
+                </div>
+                <div id="chats" class="grid-chats">
+                    <div class="fix"></div>
+                </div>
+    
+                <form action="/logout" id="logout-form">
+                    <button type="submit" id="logout-button"> Logout </button>
+                </form>
+            </div>
+        </div>
     </body>
 
 <script type="application/javascript" src="model/model.js"></script>

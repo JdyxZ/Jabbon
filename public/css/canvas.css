@@ -1,42 +1,83 @@
-/* CANVAS */
+/*VARIABLES*/
+:root
+{
+    --screen_height: 864px;
+    --screen_width: 1536px;
+}
+
+/* GLOBAL SETTINGS */
 * {
     margin: 0px;
     padding: 0px;
+    width: auto;
 }
 
-html,body {
-    width: 100%;
-    height: 94%;
-    overflow: hidden;
+body {
+    width: calc(var(--screen_width) * 0.975);
+    height: calc(var(--screen_height) * 0.917);
+    min-width: calc(var(--screen_width) * 0.975);
+    min-height: calc(var(--screen_height) * 0.917);
     background-color: rgb(44, 52, 49);
+    overflow: auto;
 }
 
-/* MENU + CHATS */
+/* APP */
 
-.menu_bar{
-    width: 100%;
-    height: 6%;
-    background-color: #581845;
-}
-
-.chat:hover {
-    background-color: #C70039;
-  }
-
-.chat{
-    overflow: hidden;
-    transition: all 0.3s ease;
-    height: 100%;
-    width: 10%;
-    background-color: #900C3F;
-    float: left;
-    font-size: x-large;
-    font-weight: bold;
-    text-align: center;
-}
-
-.logout
+#main
 {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    place-items:center;
+}
+
+#Jabbon
+{
+    display: grid;
+    height: 100%;
+    width: 100%;
+    padding: 1rem;
+    grid-template-columns: 70% 30%;
+    grid-template-rows: 90% 10%;
+}
+
+/* CANVAS */
+
+#Jabbon #canvas_container
+{
+    grid-row: 1;
+    grid-column: 1;
+    display: flex;
+    place-items: center;
+    justify-content: center;
+}
+
+
+/* CHATS */
+
+#Jabbon #chat
+{
+    grid-row: 1;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    background-image: url("../media/images/wallpaper_chat_5.png");
+    background-size: cover;
+    height: 100%;
+}
+
+#Jabbon #chat > .fix 
+{
+    flex: 1 1 auto;
+    margin-bottom: 3.5%;
+}
+
+/* LOGOUT */
+
+#Jabbon #logout-form
+{
+    grid-row: 2;
+    grid-column: 1/3;
     display: flex;
     width:100%;
     height: fit-content;
@@ -44,12 +85,7 @@ html,body {
     padding-top: 1em;
 }
 
-.logout a
-{
-    display:none;
-}
-
-#logout
+#Jabbon #logout-button
 {
     background-color:aquamarine;
     height: 4em;

@@ -16,7 +16,7 @@ var MYAPP = {
 
     draw: function(canvas,ctx) 
     {
-        VIEW.draw(canvas,ctx, this.current_room, this.users_arr, this.my_user);
+        VIEW.draw(canvas, ctx, this.current_room, this.users_arr, this.my_user);
     },
 
     update:function(dt)
@@ -36,55 +36,59 @@ var MYAPP = {
         if(!this.current_room || !user)
             return;
 
-        // Check user position
-        const left_range = user.position < this.current_room.range[0];
-        const right_range = user.position > this.current_room.range[1];
-
-        // There is something wrong with the position of the user when you change tabs, so this is just a temporary fix
-        if(left_range || right_range)
-        {
-            if(left_range) user.position = this.current_room.range[0];
-            if(right_range) user.position = this.current_room.range[1];
-            return;
-        }
+        // Temporal fix: Clamp player position in case there is something wrong  when you change tabs
+        user.position = user.position.clamp(this.current_room.range[0], this.current_room.range[1])
         
         // Clamp the movement of the user
         user.target[0] = user.target[0].clamp(this.current_room.range[0], this.current_room.range[1]);
 
-        // To manage the movement of the avatar
-        var diff = (user.target[0] - user.position);
-        var delta = diff;
-        if(delta > 0) 
-        {
-            user.facing = FACING_RIGHT;
-            delta = 40;
-        }
-        else if(delta < 0) 
-        {
-            user.facing = FACING_LEFT;
-            delta = -40;
-        }
-        else delta = 0;
+        // Declare some vars
+        const diff = (user.target[0] - user.position);
+        let delta = diff;
 
-        // When the avatar is almost at the target just put it there
+        // Manage the movement of the avatar
+        if(delta != 0) 
+        {
+            // If the difference between the target and the position of the avatar is not 0, the avatar is walking
+            user.animation = "walking";
+
+            if(delta > 0) 
+            {
+                user.facing = FACING_RIGHT;
+                delta = 40;
+            }
+            else
+            {
+                user.facing = FACING_LEFT;
+                delta = -40;
+            }
+        }
+        else
+        {
+            user.animation = "idle";
+            user.facing = FACING_FRONT;
+            delta = 0;
+        }
+
+        // When the avatar is almost at the target just place it there
         if( Math.abs(diff) < 1)
         {
             delta = 0
             user.position = user.target[0];
         } 
-        else user.position += delta * dt;
-
-        // If the difference between the target and the position of the avatar is not 0, the avatar is walking
-        if(delta != 0) user.animation = "walking"
-        else 
+        else
         {
-            user.facing = FACING_FRONT;
-            user.animation = "idle"
-        }
-        if(user.position )
+            user.position += delta * dt;
+        } 
 
-        // To interpolate the movement of the cam
-        VIEW.cam_offset = VIEW.cam_offset.lerp(-user.position, 0.02);
+        // Camera motion vars
+        const new_camera_focus = 
+            user.position < canvas_left_boundary ? -(user.position - canvas_left_boundary) : 
+            user.position > canvas_right_boundary ? -(user.position - canvas_right_boundary) :
+            0;
+        
+        // Lerp camera position
+        VIEW.cam_offset = VIEW.cam_offset.lerp(new_camera_focus, 0.02);
     },
 
     onMouse:function(e)
