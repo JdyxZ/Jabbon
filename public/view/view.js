@@ -98,7 +98,56 @@ var VIEW = {
             this.height, // y position of the canvas to draw in
             this.sprite_size.width * this.scale_factor, // x scale factor
             this.sprite_size.height * this.scale_factor // y scale factor
-        );            
+        );
+        
+        // Draw user label
+        this.drawUserLabel(ctx, user);
     },
+
+    drawUserLabel: function(ctx, user) 
+    {
+        // Save context
+        ctx.save();
+
+        // Let font
+        let font = "8px Arial";
+        ctx.font = font;
+    
+        // Draw text from top - makes life easier at the moment
+        ctx.textBaseline = 'top';
+    
+        // Color for background
+        ctx.fillStyle = '#000000';
+        
+        // Get text and width of text
+        const txt = user.name;
+        var width = ctx.measureText(txt).width;
+
+        // Set background margin
+        const horizontal_margin = 10;
+        const vertical_margin = 10;
+
+        // Compute text position
+        const x = user.position + this.sprite_size.width - (width + horizontal_margin) / 2 - 2;
+        const y = (this.height + vertical_margin) - 30;
+    
+        // Draw background rect assuming height of font
+        ctx.beginPath();
+        ctx.roundRect(x, y, width + horizontal_margin, parseInt(font, 10) + vertical_margin, 5);
+        ctx.fill();
+        ctx.stroke();
+
+        // Set bold font to canvas
+        ctx.font = "bold 8px Arial";
+        
+        // Text color
+        ctx.fillStyle = '#FFFFFF';
+    
+        // Draw text on top
+        ctx.fillText(txt, x + horizontal_margin/2, y + vertical_margin/2);
+
+        // Save restire context
+        ctx.restore();
+    }
 
 }

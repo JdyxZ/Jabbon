@@ -2,28 +2,70 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css/canvas.css"/>
+        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     </head>
     <body>
-        <div id="main">
-            <div id="Jabbon">
+        
+        <!--- JABBON -->
+        <div id="Jabbon">
+
+            <!--- GRID -->
+            <div class="grid-layout">
+                 
+                <!--- CANVAS -->
                 <div id="canvas_container">
                     <canvas id="canvas"></canvas>
                 </div>
-                <div id="chats" class="grid-chats">
-                    <div class="fix"></div>
+
+                <!--- CHAT -->
+                <div id="chat">
+                    <div class="banner">
+                        <div class="room-name"></div>
+                        <div class="room-people">You</div>
+                    </div>
+                    <div id="conversation">
+                        <div class="fix"></div>
+                    </div>
+
+                    <div class="input"> 
+                        <input id="keyboard-input" placeholder="Start typing some message" type="text"\>
+                    </div>
                 </div>
-    
+                
+                <!--- LOGOUT -->
                 <form action="/logout" id="logout-form">
                     <button type="submit" id="logout-button"> Logout </button>
                 </form>
             </div>
+
+            <!--- TEMPLATES -->
+            <div id="new-user-message-template" class="user-message-layout">
+                <div class="message">
+                    <div class="username"></div>
+                    <div class="fix">
+                        <div class="message-content"></div>
+                        <div class="message-time"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="concurrent-user-message-template" class="message">
+                <div class="fix">
+                    <div class="message-content"></div>
+                    <div class="message-time"></div>
+                </div>
+            </div>
         </div>
+
+
     </body>
 
-<script type="application/javascript" src="model/model.js"></script>
-<script type="application/javascript" src="view/view.js"></script> 
-<script type="application/javascript" src="controller/myapp.js"></script> 
-<script type="application/javascript" src="client.js"></script> 
-<script type="application/javascript" src="framework.js"></script>
-<script type="application/javascript" src="js/canvas.js"></script>
+    <!--- SCRIPTS -->
+    <script type="application/javascript" src="model/model.js"></script>
+    <script type="application/javascript" src="view/view.js"></script> 
+    <script type="application/javascript" src="controller/myapp.js"></script> 
+    <script type="application/javascript" src="client.js"></script> 
+    <script type="application/javascript" src="framework.js"></script>
+    <script type="application/javascript" src="js/canvas.js"></script>
+</html>
 

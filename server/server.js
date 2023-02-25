@@ -148,17 +148,21 @@ var SERVER =
         const public_types = this.messages_types.clone().remove("PRIVATE");
         const private_types = ["PRIVATE"];
 
-        // Check that the sender is registered in the WORLD
-        if(user == undefined)
-            return "SENDER_EXISTS_ERROR";
-
-        // Check the sender id and the connection user id matches
-        if (message.sender != user_id)
-            return "SENDER_MATCH_ERROR";
-
         // Check the sender is sending a valid type of message 
         if(!this.messages_types.includes(message.type))
             return "TYPE_MESSAGE_ERROR";
+        
+        // Check that the sender is registered in the WORLD
+        if(user == undefined)
+            return "SENDER_EXISTS_ERROR";
+        
+        // Check the sender id and the connection user id matches
+        if (message.sender != user_id)
+            return "SENDER_MATCH_ERROR";
+        
+        // Check message content is not empty
+        if(message.content.length == 0)
+            return "MESSAGE_EMPTY_ERROR";
 
         // Check the sender is coherent with the type of message they are sending
         if(public_types.includes(message.type) && message.addressees != undefined)
@@ -168,7 +172,7 @@ var SERVER =
             return "PRIVATE_WITHOUT_ADDRESSES_ERROR";
 
         // Check addresses property
-        if(private_types.includes(message.type) && !(message.addressees instanceof Array))
+        if(private_types.includes(message.type) && !isArray(message.addressees))
             return "ADDRESSES_TYPE_ERROR";
 
         // Check the sender is sending messages to people of the same room and filter the ones which are active
@@ -262,7 +266,8 @@ var SERVER =
         // Log
         console.log(`EVENT --> User ${user.name} has sent a PUBLIC message`);
 
-        // TODO
+        // Redirect the message to the active room users
+        this.sendRoomMessage(message, user.room, sender_id);
     },
 
     onExit: function(message)

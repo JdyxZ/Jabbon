@@ -78,8 +78,14 @@ var CLIENT =
         console.log("New ROOM message received\n");
         console.table(message.content);
 
+        // Get data
+        const room = message.content;
+
         // Assign new room
-        MYAPP.current_room = message.content;
+        MYAPP.current_room = room;
+
+        // Set room name into the chat
+        room_name.innerText = room.name;
     },
 
     setMyUser: function(message)
@@ -104,6 +110,9 @@ var CLIENT =
         // Append new users to users
         users.forEach(user => MYAPP.users_obj[user.id] = user);
         MYAPP.users_arr = MYAPP.users_arr.concat(users);
+
+        // Set room people
+        setRoomPeople();
     },
 
     onUserLeft: function(message)
@@ -126,6 +135,9 @@ var CLIENT =
         // Delete left user from users
         delete MYAPP.users_obj.user_id;
         MYAPP.users_arr.splice(index, 1);
+
+        // Set room people
+        setRoomPeople();
     },
 
     onTick: function(message)
@@ -163,6 +175,52 @@ var CLIENT =
         // Log
         console.log("New PUBLIC message received\n");
         console.table(message.content);
+
+        // Get some vars
+        const sender_id = message.sender;
+        const sender = MYAPP.users_obj[sender_id];
+        const content = message.content;
+        const time = message.time;
+        const user_id = MYAPP.my_user.id;
+
+        // Get layout type
+        let layout_type;
+        switch(true)
+        {
+            case last_sender == null:
+                layout_type = "new";
+                break;
+            case last_sender == sender_id:
+                layout_type = "concurrent";
+                break;
+            default:
+                layout_type = "new";
+                break;
+        }
+
+        // Fetch and clone proper message template
+        const message_template = layout_type == "new" ? new_user_message_template : concurrent_user_message_template;
+        let message_box = message_template.cloneNode(true);
+
+        // Set message contents
+        if (layout_type == "new") message_box.get(".message .username").innerText = sender.name;
+        message_box.get(".message-content").innerText = content;
+        message_box.get(".message-time").innerText = time;
+
+        // Add template to the DOM
+        layout_type == "new" ? conversation.appendChild(message_box) : conversation.lastElementChild.appendChild(message_box);
+
+        //Delete template old attributes
+        message_box.removeAttribute('id');
+
+        // Show new message
+        message_box.show();
+
+        //Update scrollbar focus
+        message_box.scrollIntoView();		
+
+        // Update last sender id
+        last_sender = sender_id;
     },
 
 
