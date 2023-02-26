@@ -31,5 +31,7 @@ Iterate through an object with a for loop: https://www.freecodecamp.org/news/how
 Run SQL scripts in MySQL: https://stackoverflow.com/questions/8940230/how-to-run-sql-script-in-mysql 
 Run several SQL statements in mysql2 module: https://stackoverflow.com/questions/61103430/multiple-statements-in-mysql2-nodejs 
 Create DATABASE if not exists with Sequelize: https://stackoverflow.com/questions/63473744/is-there-a-way-to-create-the-database-if-it-doesnt-exist-with-sequelize 
+Problem with varchar length in UPF server: https://stackoverflow.com/questions/1814532/mysql-error-1071-specified-key-was-too-long-max-key-length-is-767-bytes 
+Screen session: https://www.youtube.com/watch?v=3S3I9lT6eKE  
 
 # Sr.OjeteSucio

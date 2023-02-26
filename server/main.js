@@ -24,6 +24,7 @@ async function main()
 
     // Our modules
     const SERVER = require("./server.js");
+    const SERVER_SETTINGS = require("./settings.js");
     const {SESSION, SESSION_PROPERTIES} = require("./database/session.js");
     require('./utils/strategies.js');
     require('./utils/serializer.js');
@@ -39,8 +40,8 @@ async function main()
     const app = express(); // We use ExpressJS to deal with requests, since it allows us to manage request in a simpler way and easily serve files to the client
 
     // App settings
-    app.set('appName', 'Jabbon');
-    app.set('port', process.env.PORT || 9014);
+    app.set('appName', SERVER_SETTINGS.app_name);
+    app.set('port', SERVER_SETTINGS.port);
 
     // View Engine
     app.set('views', path.join(__dirname, 'views'));
@@ -131,9 +132,7 @@ async function main()
                 SERVER.onUserConnected(connection, user_id);
                 connection.on('message', (message) => SERVER.onMessage(connection, message));
                 connection.on('close', (message) => SERVER.onUserDisconnected(connection));
-            }      
-
-        
+            }       
         }); 
     });
 }
