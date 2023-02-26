@@ -38,10 +38,10 @@ async function exitHandler(exit_code)
 /***************** UPDATE DATABASE PERIODICALLY *****************/
 
 // Define update interval
-const update_interval = 60000; // [ms]
+const update_interval = 10000; // [ms]
 
-// Update database each interval
-setInterval(SERVER.updateWorld.bind(SERVER), update_interval);
-
-
+// Update database in each interval
+setInterval(() => {
+    if(!SERVER.clients.isEmpty()) SERVER.updateWorld();
+}, update_interval);
   

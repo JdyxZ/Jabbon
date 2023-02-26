@@ -336,6 +336,16 @@ Object.prototype.concat = function(obj)
 	return {...this, ...obj};
 };
 
+Object.prototype.isEmpty = function()
+{
+	for(const key in this) 
+	{
+      if (this.hasOwnProperty(key)) return false;
+    }
+
+    return true;
+}
+
  /***************** FUNCTIONS *****************/
 
 function getTime()
@@ -350,9 +360,9 @@ function getDate()
 	return date.getDate2();
 }
 
-function getKeyFromValue(array, value)
+function getKeyFromValue(arr, value)
 {
-	const result = Object.entries(array).filter(([current_key, current_value]) => current_value == value);
+	const result = arr.entries().filter(([_, current_value]) => current_value == value);
 
 	switch(result.length)
 	{

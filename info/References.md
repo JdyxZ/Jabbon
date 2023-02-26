@@ -26,5 +26,7 @@ Websocket reject connection request: https://stackoverflow.com/questions/1056059
 Use an HTML button as a link: https://stackoverflow.com/questions/2906582/how-do-i-create-an-html-button-that-acts-like-a-link 
 Promisify logout function of passport: https://github.com/jaredhanson/passport/issues/929
 Customized MySQL session tables: https://github.com/chill117/express-mysql-session/issues/83
+Fastest way to check if an object is empty: https://stackoverflow.com/questions/679915/how-do-i-test-for-an-empty-javascript-object 
+Iterate through an object with a for loop: https://www.freecodecamp.org/news/how-to-iterate-over-objects-in-javascript/
 
 # Sr.OjeteSucio

@@ -14,7 +14,6 @@ SELECT * FROM mysql.USER;
 -- DROP USER IF EXISTS 'mysql'@'localhost';
 
 -- CREATE DATABASE
-
 CREATE DATABASE IF NOT EXISTS JabbonDB;
 
 USE JabbonDB;
@@ -45,7 +44,6 @@ CREATE TABLE IF NOT EXISTS jabbon_rooms (
 );
 
 -- DROP DATABASE IF EXISTS JabbonDB;
-
 
 -- QUERIES
 
