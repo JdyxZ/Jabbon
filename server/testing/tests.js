@@ -2,7 +2,7 @@
 
 const DATABASE = require("../database/database.js");
 const CRYPTO = require("../utils/crypto.js");
-const fs = require('fs').promises;
+const fs = require('fs/promises');
 
 async function test()
 {
@@ -10,13 +10,11 @@ async function test()
     await DATABASE.init();
 
     // Read files
-    const data = await fs.readFile("../database/init.sql");
-    console.log(data);
+    const data = await fs.readFile("./server/database/init.sql", 'utf8');
 
     // Queries
-    //const result = await DATABASE.pool.execute("");
-    //console.log(result[0]);
-
+    const result = await DATABASE.pool.execute("CREATE DATABASE IF NOT EXISTS JabbonDB;");
+    console.log("OK");
 }
 
 test();
