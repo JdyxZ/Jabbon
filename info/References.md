@@ -28,5 +28,6 @@ Promisify logout function of passport: https://github.com/jaredhanson/passport/i
 Customized MySQL session tables: https://github.com/chill117/express-mysql-session/issues/83
 Fastest way to check if an object is empty: https://stackoverflow.com/questions/679915/how-do-i-test-for-an-empty-javascript-object 
 Iterate through an object with a for loop: https://www.freecodecamp.org/news/how-to-iterate-over-objects-in-javascript/
+Run SQL scripts in MySQL: https://stackoverflow.com/questions/8940230/how-to-run-sql-script-in-mysql 
 
 # Sr.OjeteSucio

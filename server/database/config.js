@@ -3,6 +3,7 @@
 // Imports
 const SESSION = require('express-session'); 
 const MySQLSession = require('express-mysql-session')(SESSION);
+require("../../public/framework.js");
 
 // Define database credentials
 const CREDENTIALS = 
@@ -12,7 +13,8 @@ const CREDENTIALS =
     password: process.env.DB_PASSWORD || "Cacahuete200$",
     database: process.env.DB_DATABASE || "JabbonDB",
     port: process.env.DB_PORT || 3306,
-    debug: false
+    debug: false,
+    multipleStatements: true
 }
 
 // Define schema properties

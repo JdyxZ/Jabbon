@@ -14,6 +14,8 @@ SELECT * FROM mysql.USER;
 -- DROP USER IF EXISTS 'mysql'@'localhost';
 
 -- CREATE DATABASE
+
+-- DROP DATABASE IF EXISTS JabbonDB;
 CREATE DATABASE IF NOT EXISTS JabbonDB;
 
 USE JabbonDB;
@@ -43,25 +45,25 @@ CREATE TABLE IF NOT EXISTS jabbon_rooms (
     PRIMARY KEY (id)
 );
 
--- DROP DATABASE IF EXISTS JabbonDB;
-
--- QUERIES
+-- INSERTS
 
 USE JabbonDB;
 
-INSERT INTO jabbon_users (name, password, position, avatar, room)
-VALUES ('javi', 'Cacahuete', 0, 'media/images/char2.png', 1);
+INSERT IGNORE INTO jabbon_users (id, name, password, position, avatar, room)
+VALUES (1, 'javi', 'Cacahuete', 0, 'media/images/char2.png', 1);
 
-INSERT INTO jabbon_users (name, password, position, avatar, room)
-VALUES ('eric', 'Avocado', 0, 'media/images/char2.png', 1);
+INSERT IGNORE INTO jabbon_users (id, name, password, position, avatar, room)
+VALUES (2, 'eric', 'Avocado', 0, 'media/images/char2.png', 1);
 
 USE JabbonDB;
 
-INSERT INTO jabbon_rooms (name, background, exits, people, range_left, range_right)
-VALUES ('Camping', 'media/images/background.png', '{"exit1": [-1,-260,2,1]}', '{"user1": 1, "user2": 2}', -260, 200);
+INSERT IGNORE INTO jabbon_rooms (id, name, background, exits, people, range_left, range_right)
+VALUES (1, 'Camping', 'media/images/background.png', '{"exit1": [-1,-260,2,1]}', '{"user1": 1, "user2": 2}', -260, 200);
 
-INSERT INTO jabbon_rooms (name, background, exits, people, range_left, range_right)
-VALUES ('Forest', 'media/images/forest.png', '{"exit1": [1,200,1,1]}', '{}', -300, 240);
+INSERT IGNORE INTO jabbon_rooms (id, name, background, exits, people, range_left, range_right)
+VALUES (2, 'Forest', 'media/images/forest.png', '{"exit1": [1,200,1,1]}', '{}', -300, 240);
+
+-- UPDATE USERS
 
 USE JabbonDB;
 

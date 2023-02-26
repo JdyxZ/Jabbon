@@ -19,7 +19,7 @@ var SERVER =
     init: async function(){
 
         // MySQL Connection
-        DATABASE.initConnection();
+        await DATABASE.init();
 
         // Load world data
         const [status, model] = await DATABASE.fetchModel();

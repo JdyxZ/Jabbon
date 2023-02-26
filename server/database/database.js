@@ -14,9 +14,9 @@ var DATABASE = {
     sessions: 'jabbon_sessions',
 
     // Methods
-    initConnection: async function()
+    init: async function()
     {
-        this.pool = mysql.createPool(CREDENTIALS);
+        this.pool = await mysql.createPool(CREDENTIALS);
     },
 
     /***************** USER *****************/

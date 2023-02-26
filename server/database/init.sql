@@ -1,6 +1,5 @@
 -- CREATE DATABASE
-DROP DATABASE IF EXISTS JabbonDB;
-CREATE DATABASE JabbonDB;
+CREATE DATABASE IF NOT EXISTS JabbonDB;
 USE JabbonDB;
 
 -- CREATE TABLES
@@ -28,8 +27,8 @@ CREATE TABLE IF NOT EXISTS jabbon_rooms (
 );
 
 -- CREATE ROOMS
-INSERT INTO jabbon_rooms (name, background, exits, people, range_left, range_right)
-VALUES ('Camping', 'media/images/background.png', '{"exit1": [-1,-260,2,1]}', '{"user1": 1, "user2": 2}', -260, 200);
+INSERT IGNORE INTO jabbon_rooms (id, name, background, exits, people, range_left, range_right)
+VALUES (1, 'Camping', 'media/images/background.png', '{"exit1": [-1,-260,2,1]}', '{"user1": 1, "user2": 2}', -260, 200);
 
-INSERT INTO jabbon_rooms (name, background, exits, people, range_left, range_right)
-VALUES ('Forest', 'media/images/forest.png', '{"exit1": [1,200,1,1]}', '{}', -300, 240);
+INSERT IGNORE INTO jabbon_rooms (id, name, background, exits, people, range_left, range_right)
+VALUES (2, 'Forest', 'media/images/forest.png', '{"exit1": [1,200,1,1]}', '{}', -300, 240);
