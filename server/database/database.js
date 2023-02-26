@@ -2,7 +2,8 @@
 /***************** DATABASE CRUD *****************/
 
 const mysql = require('mysql2/promise');
-const {CREDENTIALS} = require('./config.js');
+const {USER_CREDENTIALS} = require('./credentials.js');
+const fs = require('fs/promises');
 require("../../public/framework.js");
 
 var DATABASE = {
@@ -16,7 +17,14 @@ var DATABASE = {
     // Methods
     init: async function()
     {
-        this.pool = await mysql.createPool(CREDENTIALS);
+        // Create pool
+        this.pool = await mysql.createPool(USER_CREDENTIALS);
+         
+        // Read and parse init.sql script
+        const script = await fs.readFile("./server/database/init.sql", 'utf8');
+
+        // Run init.sql script
+        const result = await this.pool.query(script);
     },
 
     /***************** USER *****************/

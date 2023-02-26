@@ -3,7 +3,6 @@ const {User, Room, WORLD, Message} = require("./model/model.js");
 const {getTime, isNumber, isString, isArray} = require("../public/framework.js");
 const DATABASE = require("./database/database.js");
 
-
 /***************** SERVER *****************/
 var SERVER = 
 {
@@ -16,10 +15,7 @@ var SERVER =
     /***************** HTTP SERVER CALLBACKS *****************/
 
     // Init server
-    init: async function(){
-
-        // MySQL Connection
-        await DATABASE.init();
+    init: async function() {
 
         // Load world data
         const [status, model] = await DATABASE.fetchModel();
@@ -33,11 +29,10 @@ var SERVER =
         else
         {
             WORLD.init(model.rooms, model.users);
-            console.log("*********** MODEL INFO *********** \n");
+            console.log("\n*********** MODEL INFO *********** \n");
             console.log(`World data successfully loaded!`);
             console.log(`Number of rooms ${WORLD.num_rooms}`);
-            console.log("\n*********** SERVER LOG *********** \n");
-        }
+        } 
     },
 
     // Ready callback
@@ -45,8 +40,8 @@ var SERVER =
     {
         console.log("\n*********** SERVER INFO *********** \n");
         console.log(`Serving with pid ${process.pid}`); // Good practice to know my process pid
-        console.log(`Server listening at port ${port}!`);
-        console.log("\n");
+        console.log(`Server listening at port ${port}`);
+        console.log("\n*********** SERVER LOG *********** \n");
         this.port = port;
     },
 
@@ -61,7 +56,7 @@ var SERVER =
     onClose: async function()
     {
         await this.updateWorld();   
-        await DATABASE.pool.ClearAllPools();    
+        await DATABASE.pool.end();    
         console.log("EVENT --> Server closing: Model has been successfully updated and pool connections to DATABASE removed");
     },
 

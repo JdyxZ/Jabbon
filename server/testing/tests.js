@@ -13,8 +13,7 @@ async function test()
     const data = await fs.readFile("./server/database/init.sql", 'utf8');
 
     // Queries
-    const result = await DATABASE.pool.execute("CREATE DATABASE IF NOT EXISTS JabbonDB;");
-    console.log("OK");
+    const result = await DATABASE.pool.query(data);
 }
 
 test();

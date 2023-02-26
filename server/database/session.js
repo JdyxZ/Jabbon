@@ -1,21 +1,12 @@
-/***************** DATABASE CONFIG *****************/
+/***************** DATABASE SESSION *****************/
 
-// Imports
+// External modules
 const SESSION = require('express-session'); 
 const MySQLSession = require('express-mysql-session')(SESSION);
-require("../../public/framework.js");
 
-// Define database credentials
-const CREDENTIALS = 
-{
-    host: process.env.DB_HOST || "localhost",
-    user: process.env.DB_USER || "Jabbon",
-    password: process.env.DB_PASSWORD || "Cacahuete200$",
-    database: process.env.DB_DATABASE || "JabbonDB",
-    port: process.env.DB_PORT || 3306,
-    debug: false,
-    multipleStatements: true
-}
+// Our modules
+const {JABBON_CREDENTIALS} = require('./credentials.js');
+require("../../public/framework.js");
 
 // Define schema properties
 const SESSION_SCHEMA =
@@ -43,7 +34,7 @@ const SESSION_PROPERTIES =
         name: "JabbonCookie", 
         _expires: new Date(Date.now() + (30 * 86400 * 1000)) // Set 1 month of expiration time
     },
-    store: new MySQLSession(CREDENTIALS.concat(SESSION_SCHEMA)) // Persistent session
+    store: new MySQLSession(JABBON_CREDENTIALS.concat(SESSION_SCHEMA)) // Persistent session
 };  
 
-module.exports = {CREDENTIALS, SESSION_SCHEMA, SESSION_PROPERTIES, SESSION};
+module.exports = {SESSION_SCHEMA, SESSION_PROPERTIES, SESSION};
