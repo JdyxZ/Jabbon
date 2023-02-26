@@ -18,13 +18,19 @@ var DATABASE = {
     init: async function()
     {
         // Create pool
-        this.pool = await mysql.createPool(USER_CREDENTIALS);
-         
+        const pool = await mysql.createPool(USER_CREDENTIALS);
+                
         // Read and parse init.sql script
-        const script = await fs.readFile("./server/database/init.sql", 'utf8');
+        const script = await fs.readFile("./database/init.sql", 'utf8');
 
         // Run init.sql script
-        const result = await this.pool.query(script);
+        const result = await pool.query(script);
+
+        // Drop auxiliar pool
+        pool.end();
+
+        // Create a pool in the created database
+        this.pool = await mysql.createPool(JABBON_CREDENTIALS);
     },
 
     /***************** USER *****************/
