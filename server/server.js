@@ -175,7 +175,7 @@ var SERVER =
         if(private_types.includes(message.type) && !isArray(message.addressees))
             return "ADDRESSES_TYPE_ERROR";
 
-        // Check the sender is sending messages to people of the same room and filter the ones which are active
+        // Check the sender is sending messages to people of the same room
         if(private_types.includes(message.type))
         {
             message.addressees.forEach(addressee => {

@@ -2,13 +2,16 @@
 /***************** DATABASE CRUD *****************/
 
 const mysql = require('mysql2/promise');
-const CREDENTIALS = require('./credentials.js');
+const {CREDENTIALS} = require('./config.js');
 require("../../public/framework.js");
 
 var DATABASE = {
 
     // Properties
     pool: null,
+    users: 'jabbon_users',
+    rooms: 'jabbon_rooms',
+    sessions: 'jabbon_sessions',
 
     // Methods
     initConnection: async function()
@@ -33,7 +36,7 @@ var DATABASE = {
             if(position === "" || position === null || position === undefined) throw "You must send a valid position";
             
             // Query
-            const result = await this.pool.query( "INSERT INTO users SET name = ?, password = ?, avatar = ?, room = ?, position = ? ;", [name, password, avatar, room, position]);
+            const result = await this.pool.query(`INSERT INTO ${this.users} SET name = ?, password = ?, avatar = ?, room = ?, position = ? ;`, [name, password, avatar, room, position]);
             
             // Output
             return ["OK", result];
@@ -54,7 +57,7 @@ var DATABASE = {
             if(isNaN(id) || id === "") throw "You must send a valid ID";
             
             // Query
-            const result = await this.pool.query("SELECT * FROM users WHERE id = ? ;", [id]);
+            const result = await this.pool.query(`SELECT * FROM ${this.users} WHERE id = ? ;`, [id]);
 
             // Output
             return ["OK", result];
@@ -75,7 +78,7 @@ var DATABASE = {
             if(username === "" || username === null || username === undefined) throw "You must send a valid username";
             
             // Query
-            const result = await this.pool.query("SELECT * FROM users WHERE name = ? ;", [username])
+            const result = await this.pool.query(`SELECT * FROM ${this.users} WHERE name = ? ;`, [username])
 
             // Output
             return ["OK", result];
@@ -100,7 +103,7 @@ var DATABASE = {
             if(password === "" || password === null || password === undefined) throw "You must send a valid password";
 
             // Query
-            const result = await this.pool.query("SELECT * FROM users WHERE name = ? AND password = ? ;", [name, password]);
+            const result = await this.pool.query(`SELECT * FROM ${this.users} WHERE name = ? AND password = ? ;`, [name, password]);
 
             // Output
             return ["OK", result];
@@ -126,7 +129,7 @@ var DATABASE = {
             if(room === "" || room === null || room === undefined) throw "You must send a valid room";
 
             // Query
-            const result = await this.pool.query("UPDATE users SET room_name = ?, position = ? WHERE name = ? ;", [room, position, name]);
+            const result = await this.pool.query(`UPDATE ${this.users} SET room_name = ?, position = ? WHERE name = ? ;`, [room, position, name]);
 
             // Output
             return ["OK", result];
@@ -147,7 +150,7 @@ var DATABASE = {
             if(isNaN(user_id) || user_id === "") throw "You must send a valid user_id";
 
             // Query
-            const result = await this.pool.query("DELETE FROM users WHERE user_id = ? ;", [user_id]);
+            const result = await this.pool.query(`DELETE FROM ${this.users} WHERE user_id = ? ;`, [user_id]);
 
             // Output
             return ["OK", result];
@@ -168,7 +171,7 @@ var DATABASE = {
             if(isNaN(user_id) || user_id === "") throw "You must send a valid user_id";
 
             // Query
-            const result = await this.pool.query("SELECT * FROM users WHERE user_id = ? ;", user_id);
+            const result = await this.pool.query(`SELECT * FROM ${this.users} WHERE user_id = ? ;`, user_id);
 
             // Output
             return ["OK", result];
@@ -194,7 +197,7 @@ var DATABASE = {
             }, []);
 
             // Query
-            const result = await this.pool.query( "INSERT INTO users (id, name, position, avatar, room) VALUES ? ON DUPLICATE KEY UPDATE name = VALUES(name), position = VALUES(position), avatar = VALUES(avatar), room = VALUES(room);", [values]);
+            const result = await this.pool.query(`INSERT INTO ${this.users} (id, name, position, avatar, room) VALUES ? ON DUPLICATE KEY UPDATE name = VALUES(name), position = VALUES(position), avatar = VALUES(avatar), room = VALUES(room);`, [values]);
             
             // Output
             return ["OK", result];
@@ -212,7 +215,7 @@ var DATABASE = {
         try
         {
             // Query
-            const result = await this.pool.query("DELETE FROM users;");
+            const result = await this.pool.query(`DELETE FROM ${this.users};`);
 
             // Output
             return ["OK", result];
@@ -230,7 +233,7 @@ var DATABASE = {
         try
         {
             // Query
-            const result = await this.pool.query("SELECT * FROM users;");
+            const result = await this.pool.query(`SELECT * FROM ${this.users};`);
 
             // Output
             return ["OK", result];
@@ -257,7 +260,7 @@ var DATABASE = {
             }, []);
 
             // Query            
-            const result = await this.pool.query( "INSERT INTO rooms (id, people) VALUES ? ON DUPLICATE KEY UPDATE people = VALUES(people);", [values]);
+            const result = await this.pool.query(`INSERT INTO ${this.rooms} (id, people) VALUES ? ON DUPLICATE KEY UPDATE people = VALUES(people);`, [values]);
 
             // Output
             return ["OK", result];
@@ -275,7 +278,7 @@ var DATABASE = {
         try
         {
             // Query
-            const result = await this.pool.query("DELETE FROM rooms;");
+            const result = await this.pool.query(`DELETE FROM ${this.rooms};`);
 
             // Output
             return ["OK", result];
@@ -293,7 +296,7 @@ var DATABASE = {
         try
         {
             // Query
-            const result = await this.pool.query("SELECT * FROM rooms;");
+            const result = await this.pool.query(`SELECT * FROM ${this.rooms};`);
 
             // Output
             return ["OK", result]

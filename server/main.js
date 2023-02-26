@@ -7,16 +7,14 @@ const express = require('express');
 const morgan = require('morgan'); 
 const WebSocketServer = require('websocket').server;
 const path = require('path');
-const session = require('express-session'); 
 const passport = require('passport');
-const MySQLSession = require('express-mysql-session')(session);
 const ejs = require('ejs'); 
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
 
 // Our modules
 const SERVER = require("./server.js");
-const CREDENTIALS = require("./database/credentials.js");
+const {SESSION, SESSION_PROPERTIES} = require("./database/config.js");
 require('./utils/strategies.js');
 require('./utils/serializer.js');
 
@@ -32,17 +30,8 @@ const app = express(); // We use ExpressJS to deal with requests, since it allow
 app.set('appName', 'Jabbon');
 app.set('port', process.env.PORT || 9014);
 
-// Define session properties
-var session_properties = {
-  secret: 'JabbonSession', // Session name
-  resave: false, // avoids overwritting the current session with new info (first we have to drop the old session and then build a new one)
-  saveUninitialized: false, // avoids saving an uninitialized session to the database (avoids server trash)
-  cookie: { name: "JabbonCookie", _expires: new Date(Date.now() + (30 * 86400 * 1000)) } , // Set 1 month of expiration time
-  store: new MySQLSession(CREDENTIALS) // Persistent session
-};
-
 // Define session parser
-var sessionParser = session(session_properties);
+const sessionParser = SESSION(SESSION_PROPERTIES);
 
 // View Engine
 app.set('views', path.join(__dirname, 'views'));

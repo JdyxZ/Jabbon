@@ -19,7 +19,7 @@ CREATE DATABASE IF NOT EXISTS JabbonDB;
 
 USE JabbonDB;
 
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS jabbon_users (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) UNIQUE,
     password VARCHAR(255),
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 USE JabbonDB;
 
-CREATE TABLE IF NOT EXISTS rooms (
+CREATE TABLE IF NOT EXISTS jabbon_rooms (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) UNIQUE,
     background VARCHAR(255),
@@ -46,59 +46,62 @@ CREATE TABLE IF NOT EXISTS rooms (
 
 -- DROP DATABASE IF EXISTS JabbonDB;
 
+
 -- QUERIES
 
 USE JabbonDB;
 
-INSERT INTO users (name, password, position, avatar, room)
+INSERT INTO jabbon_users (name, password, position, avatar, room)
 VALUES ('javi', 'Cacahuete', 0, 'media/images/char2.png', 1);
 
-INSERT INTO users (name, password, position, avatar, room)
+INSERT INTO jabbon_users (name, password, position, avatar, room)
 VALUES ('eric', 'Avocado', 0, 'media/images/char2.png', 1);
 
 USE JabbonDB;
 
-INSERT INTO rooms (name, background, exits, people, range_left, range_right)
+INSERT INTO jabbon_rooms (name, background, exits, people, range_left, range_right)
 VALUES ('Camping', 'media/images/background.png', '{"exit1": [-1,-260,2,1]}', '{"user1": 1, "user2": 2}', -260, 200);
 
-INSERT INTO rooms (name, background, exits, people, range_left, range_right)
+INSERT INTO jabbon_rooms (name, background, exits, people, range_left, range_right)
 VALUES ('Forest', 'media/images/forest.png', '{"exit1": [1,200,1,1]}', '{}', -300, 240);
 
 USE JabbonDB;
 
-INSERT into users (id, name, position, avatar, room)
+INSERT into jabbon_users (id, name, position, avatar, room)
 VALUES (1, 'Haylo', 30, '1', 'Hall'), (2, 'Sr.OjeteSucio', 30, '2', 'Hall')
 ON DUPLICATE KEY UPDATE name = VALUES(name), position = VALUES(position), avatar = VALUES(avatar), room = VALUES(room);
 
 -- TABLE SHOW
 USE JabbonDB;
 
-TABLE users;
-TABLE rooms;
-TABLE sessions;
+SHOW TABLES;
+
+USE JabbonDB;
+
+TABLE jabbon_users;
+TABLE jabbon_rooms;
+TABLE jabbon_sessions;
 
 -- TABLE DELETE CONTENT
 
 USE JabbonDB;
 
-DELETE FROM users WHERE id = 6;
+DELETE FROM jabbon_sessions;
 
-DELETE FROM sessions;
+DELETE FROM jabbon_users;
 
-DELETE FROM users;
-
-DELETE FROM rooms;
+DELETE FROM jabbon_rooms;
 
 -- TABLE DROP
 
 USE JabbonDB;
 
-DROP TABLE users;
+DROP TABLE jabbon_users;
 
-DROP TABLE rooms;
+DROP TABLE jabbon_rooms;
 
 USE JabbonDB;
 
-DROP TABLE sessions;
+DROP TABLE jabbon_sessions;
 
 
