@@ -83,6 +83,9 @@ async function main()
     app.use(require("./routes/authenticate"));
     app.use(require("./routes/utils"));
 
+    // Error page
+    app.use(require("./routes/error"));
+
     // Default request folder
     app.use(express.static(path.join(__dirname, '../public')));
 

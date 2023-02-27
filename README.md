@@ -20,5 +20,6 @@ Suggestion:
 - Change Requires to Imports.
 - When fail, go to index page with all links.
 - Admin type accounts.
+- Add CSS to pages.
 
 
