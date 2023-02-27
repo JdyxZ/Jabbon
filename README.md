@@ -14,8 +14,11 @@ Suggestion:
 
 - Change between rooms.
 - Create an avatar table and adapt everything towards it.
-- Improve chat: Code structure in client, private and public chats with chat menu, emojis in the chat, typing messages, etc.
+- Improve chat: Code structure in client, private and public chats with chat menu, emojis in the chat, typing messages, status messages, etc.
 - Reestructure Agenjo's code: Create a Canvas object in canvas.js and more.
 - Use nodemon in UPF server.
+- Change Requires to Imports.
+- When fail, go to index page with all links.
+- Admin type accounts.
 
 

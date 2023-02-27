@@ -9,7 +9,7 @@ const router = express.Router();
 const LOCKER = require("../utils/locker.js");
 
 // Get routes
-router.get('/', (req, res) => {
+router.get('/', LOCKER.isSessionNotAvailable, (req, res) => {
     res.render("login");
 });
 
