@@ -3,9 +3,28 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/error.css"/>
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <title>Jabbon</title>
   </head>
   <body>
-	<h1> Error 404: Page not found </h1>
+    <div class="wrapper">
+      <div id="main">
+        <h1> Error 404: Page not found </h1>
+        <p>Available resources</p>
+        <div id="links">
+          <a href="http://localhost:9015/signup">Sign up</a> 
+          <a href="http://localhost:9015/login">Log in</a> 
+          <a href="http://localhost:9015/canvas">Canvas</a> 
+        </div>
+        <p>Session status</p>
+        <% if (session_status == true) { %>
+          <span class="active">Active -> <%= session_user %></div>
+        <% } else { %>
+          <span class="inactive">Inactive -> Try to log in or sign up first!</div>
+        <% } %>
+
+      </div>
+    </div>
   </body>
 </html>

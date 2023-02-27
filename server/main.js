@@ -75,6 +75,10 @@ async function main()
         app.locals.login_user_error = req.flash('login_user_error');
         app.locals.login_error = req.flash('login_error');
 
+        // Session 
+        app.locals.session_status = req.flash('session_status');
+        app.locals.session_user = req.flash('session_user');
+
         // Pass to the next middleware
         next();
     });
@@ -83,11 +87,11 @@ async function main()
     app.use(require("./routes/authenticate"));
     app.use(require("./routes/utils"));
 
-    // Error page
-    app.use(require("./routes/error"));
-
     // Default request folder
     app.use(express.static(path.join(__dirname, '../public')));
+
+    // Error page
+    app.use(require("./routes/error"));
 
     /***************** HTTP SERVER *****************/
 

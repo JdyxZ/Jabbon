@@ -15,7 +15,7 @@
                             <input id="username" name="name" type="text" autocomplete="username" placeholder="username" required autofocus>
                         </section>
 
-                        <% if (signup_username_error && signup_username_error.length > 0) { %>
+                        <% if (signup_username_error.length > 0) { %>
                             <div class="alert"><%= signup_username_error %></div>
                         <% } %>
 
@@ -23,7 +23,7 @@
                             <input id="password1" name="password" type="password" autocomplete="password" placeholder="password" required>
                         </section>
 
-                        <% if (signup_password_error && signup_password_error.length > 0) { %>
+                        <% if (signup_password_error.length > 0) { %>
                             <div class="alert"><%= signup_password_error %></div>
                         <% } %>
 
@@ -31,7 +31,7 @@
                             <input id="password2" type="password" autocomplete="password" placeholder="repeat password" required>
                         </section>
 
-                        <% if (signup_error && signup_error.length > 0) { %>
+                        <% if (signup_error.length > 0) { %>
                             <div class="alert"><%= signup_error %></div>
                         <% } %>
                         
@@ -39,7 +39,7 @@
                             <button type="submit">Submit</button>
                         </div>
                     </form>
-                    <div class="change"><a href="http://localhost:9014/login">log in</a></div>
+                    <div class="change"><a href="http://localhost:9015/login">log in</a></div>
                 </span>
         </div>
     </body>

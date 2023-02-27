@@ -19,11 +19,11 @@
                             <input id="password" name="password" type="password" autocomplete="password" placeholder="password" required>
                         </section>
     
-                        <% if (login_user_error && login_user_error.length > 0) { %>
+                        <% if (login_user_error.length > 0) { %>
                             <div class="alert"><%= login_user_error %></div>
                         <% } %>
     
-                        <% if (login_error && login_error.length > 0) { %>
+                        <% if (login_error.length > 0) { %>
                             <div class="alert"><%= login_error %></div>
                         <% } %>
                         
@@ -32,7 +32,7 @@
                         </div>
                     </form>
     
-                    <div class="change"><a href="http://localhost:9014/signup">sign up</a></div> 
+                    <div class="change"><a href="http://localhost:9015/signup">sign up</a></div> 
                 </span>                
         </div>
     </body>
