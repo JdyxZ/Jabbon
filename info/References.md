@@ -34,5 +34,7 @@ Create DATABASE if not exists with Sequelize: https://stackoverflow.com/question
 Problem with varchar length in UPF server: https://stackoverflow.com/questions/1814532/mysql-error-1071-specified-key-was-too-long-max-key-length-is-767-bytes 
 Screen session: https://www.youtube.com/watch?v=3S3I9lT6eKE  
 How to redirect 404 errors (not found page): https://stackoverflow.com/questions/6528876/how-to-redirect-404-errors-to-a-page-in-expressjs 
+GitBash configure: https://kbroman.org/github_tutorial/pages/first_time.html 
+
 
 # Sr.OjeteSucio
