@@ -5,10 +5,10 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 // Our modules
-const {WORLD} = require("../model/model.js");
-const DATABASE = require("../database/database.js");
-const CRYPTO = require("./crypto.js");
-const LOCKER = require("./locker.js");
+const {WORLD} = require("../../model/model.js");
+const DATABASE = require("../../database/database.js");
+const CRYPTO = require("../../utils/crypto.js");
+const LOCKER = require("../../session/locker.js");
 
 // Define signup strategy
 passport.use('signup', new LocalStrategy(

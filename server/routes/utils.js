@@ -6,9 +6,9 @@ const router = express.Router();
 
 // Our modules
 const {WORLD} = require("../model/model.js");
-const SERVER = require("../server.js");
+const SERVER = require("../main/server.js");
 const DATABASE = require("../database/database.js");
-const LOCKER = require("../utils/locker.js");
+const LOCKER = require("../session/locker.js");
 require("../../public/framework.js");
 
 // Util routes

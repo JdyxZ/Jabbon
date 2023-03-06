@@ -2,7 +2,7 @@
 /***************** DATABASE CRUD *****************/
 
 const mysql = require('mysql2/promise');
-const {USER_CREDENTIALS, JABBON_CREDENTIALS} = require('./credentials.js');
+const {USER_CREDENTIALS, JABBON_CREDENTIALS} = require('../config/database_credentials.js');
 const fs = require('fs/promises');
 require("../../public/framework.js");
 
@@ -40,7 +40,7 @@ var DATABASE = {
         try
         {
             // Destructure json
-            const { name, password, avatar, room, position} = user_json; 
+            const {name, password, avatar, room, position} = user_json; 
 
             // Throw errors
             if(name === "" || name === null || name === undefined) throw "You must send a valid name";

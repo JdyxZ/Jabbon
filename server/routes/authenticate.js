@@ -6,7 +6,7 @@ const passport = require("passport");
 const router = express.Router();
 
 // Our modules
-const LOCKER = require("../utils/locker.js");
+const LOCKER = require("../session/locker.js");
 
 // Get routes
 router.get('/', LOCKER.isSessionNotAvailable, (req, res) => {

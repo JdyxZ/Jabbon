@@ -5,7 +5,7 @@ const SESSION = require('express-session');
 const MySQLSession = require('express-mysql-session')(SESSION);
 
 // Our modules
-const {JABBON_CREDENTIALS} = require('./credentials.js');
+const {JABBON_CREDENTIALS} = require('../config/database_credentials.js');
 require("../../public/framework.js");
 
 // Define schema properties

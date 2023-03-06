@@ -1,7 +1,7 @@
 {
   "scripts": {
     "tests": "nodemon server/testing/tests.js",
-    "server": "nodemon server/main.js"
+    "server": "nodemon server/main/main.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

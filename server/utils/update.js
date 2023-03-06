@@ -1,7 +1,7 @@
 /***************** EXIT HANDLER *****************/
 
 // Modules
-const SERVER = require("../server.js");
+const SERVER = require("../main/server.js");
 const DATABASE = require("../database/database.js");
 
 // Define array of exit signals

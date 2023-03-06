@@ -3,7 +3,7 @@ async function main()
     /***************** DATABASE *****************/
 
     // Require DATABASE module
-    const DATABASE = require("./database/database.js");
+    const DATABASE = require("../database/database.js");
 
     // Init MySQL connection
     await DATABASE.init();
@@ -24,10 +24,10 @@ async function main()
 
     // Our modules
     const SERVER = require("./server.js");
-    const SERVER_SETTINGS = require("./settings.js");
-    const {SESSION, SESSION_PROPERTIES} = require("./database/session.js");
-    require('./utils/strategies.js');
-    require('./utils/serializer.js');
+    const SERVER_SETTINGS = require("../config/server_settings.js");
+    const {SESSION, SESSION_PROPERTIES} = require("../session/session.js");
+    require('../passport/strategies/local.js');
+    require('../passport/serializer.js');
 
     /***************** SERVER *****************/
 
@@ -44,7 +44,7 @@ async function main()
     app.set('port', SERVER_SETTINGS.port);
 
     // View Engine
-    app.set('views', path.join(__dirname, 'views'));
+    app.set('views', path.join(__dirname, '../views'));
     app.set('view engine', 'ejs');
 
     // Define session parser
@@ -84,14 +84,14 @@ async function main()
     });
 
     // Routers
-    app.use(require("./routes/authenticate"));
-    app.use(require("./routes/utils"));
+    app.use(require("../routes/authenticate"));
+    app.use(require("../routes/utils"));
 
     // Default request folder
-    app.use(express.static(path.join(__dirname, '../public')));
+    app.use(express.static(path.join(__dirname, '../../public')));
 
     // Error page
-    app.use(require("./routes/error"));
+    app.use(require("../routes/error"));
 
     /***************** HTTP SERVER *****************/
 
@@ -102,7 +102,7 @@ async function main()
     server.listen(app.get('port'), () => SERVER.onReady(app.get('port')));
 
     // Update database on exit and periodically
-    require("./utils/update.js");
+    require("../utils/update.js");
 
     /***************** WEBSOCKET *****************/
 

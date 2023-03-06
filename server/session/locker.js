@@ -1,5 +1,6 @@
 /***************** LOCKER MIDDLEWARES *****************/
-const SERVER = require("../server.js");
+
+const SERVER = require("../main/server.js");
 require("../../public/framework.js");
 
 var LOCKER =
