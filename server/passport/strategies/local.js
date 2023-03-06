@@ -1,4 +1,4 @@
-/***************** CREDENTIALS VERIFICATION *****************/
+/***************** LOCAL STRATEGY *****************/
 
 // External modules
 const passport = require('passport');

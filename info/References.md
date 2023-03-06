@@ -35,6 +35,7 @@ Problem with varchar length in UPF server: https://stackoverflow.com/questions/1
 Screen session: https://www.youtube.com/watch?v=3S3I9lT6eKE  
 How to redirect 404 errors (not found page): https://stackoverflow.com/questions/6528876/how-to-redirect-404-errors-to-a-page-in-expressjs 
 GitBash configure: https://kbroman.org/github_tutorial/pages/first_time.html 
+Remove from cache in Github: https://www.atlassian.com/git/tutorials/saving-changes/gitignore#:~:text=If%20you%20want%20to%20ignore,directory%20as%20an%20ignored%20file. 
 
 
 # Sr.OjeteSucio
