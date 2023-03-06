@@ -21,5 +21,6 @@ Suggestion:
 - When fail, go to index page with all links.
 - Admin type accounts.
 - Add CSS to pages.
+- Use includes in EJS views.
 
 

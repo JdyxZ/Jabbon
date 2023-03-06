@@ -3,17 +3,19 @@
     <head>
         <link rel="stylesheet" type="text/css" href="css/login.css"/>
         <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" type="image/x-icon" href="media/logos/jabbon.ico"/>
         <title>Jabbon</title>
     </head>
     <body>
-        <div id="container">
+        <div id="main">
+            <div id="main-grid">
                 <span class="loginspan">
 
-                    <img id="appLogo" src="media/Jabbon Logo Rounded.png"\>
+                    <img id="appLogo" src="media/logos/Jabbon Logo Rounded.png"\>
 
                     <div class="label">Log in</div>
 
-                    <form action="/login" method="post">
+                    <form action="/login" method="post" id="login-form">
                         <section>
                             <input id="username" name="name" type="text" autocomplete="username" placeholder="username" required autofocus>
                         </section>
@@ -30,15 +32,38 @@
                             <div class="alert"><%= login_error %></div>
                         <% } %>
                         
-                        <div class="submit-button-signup">
-                            <button type="submit">Go!</button>
-                        </div>
+                        <button type="submit">Go!</button>
+        
                     </form>
 
-                    <a href="<%=`${server_address}/signup`%>">Sign up</a>
+                    <form action="/signup" method="get" id="signup-redirect">
+                        <button type="submit"> Sign up </button>
+                    </form>
+
+                    <form action="/auth/google" method="post" id="google-login">
+                        <button type="submit" class="oauth-login" id="google-button"></button>
+                    </form>
+
+                    <form action="/auth/twitch" method="post" id="twitch-login">
+                        <button type="submit" class="oauth-login" id="twitch-button"></button>
+                    </form>
+
+                    <form action="/auth/github" method="post" id="github-login">
+                        <button type="submit" class="oauth-login" id="github-button"></button>
+                    </form>
+
+                    <form action="/auth/twitter" method="post" id="twitter-login">
+                        <button type="submit" class="oauth-login" id="twitter-button"></button>
+                    </form>
+
+                    <form action="/auth/facebook" method="post" id="facebook-login">
+                        <button type="submit" class="oauth-login" id="facebook-button"></button>
+                    </form>                    
   
                 </span>                
+            </div>
         </div>
+        
     </body>
     <script src="./js/ejs.js"></script>
     <script src="./framework.js"></script>

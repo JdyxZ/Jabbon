@@ -3,14 +3,19 @@
     <head>
         <link rel="stylesheet" type="text/css" href="css/signup.css"/>
         <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" type="image/x-icon" href="media/logos/jabbon.ico"/>
         <title>Jabbon</title>
     </head>
     <body>
-        <div id="container" >
+        <div id="main">
+            <div id="main-grid">
                 <span class="signupspan">
+
+                    <img id="appLogo" src="media/logos/Jabbon Logo Rounded.png"\>
+
                     <div class="label">Sign up</div>
 
-                    <form action="/signup" method="post">
+                    <form action="/signup" method="post" id="signup-form">
                         <section>
                             <input id="username" name="name" type="text" autocomplete="username" placeholder="username" required autofocus>
                         </section>
@@ -34,15 +39,36 @@
                         <% if (signup_error.length > 0) { %>
                             <div class="alert"><%= signup_error %></div>
                         <% } %>
-                        
-                        <div class="submit-button-signup">
-                            <button type="submit">Submit</button>
-                        </div>
+                    
+                        <button type="submit">Submit</button>
                     </form>
                     
-                    <a href="<%=`${server_address}/login`%>">Log in</a>
+                    <form action="/login" method="get" id="login-redirect">
+                        <button type="submit"> Log in </button>
+                    </form>
+
+                    <form action="/auth/google" method="post" id="google-login">
+                        <button type="submit" class="oauth-login" id="google-button"></button>
+                    </form>
+
+                    <form action="/auth/twitch" method="post" id="twitch-login">
+                        <button type="submit" class="oauth-login" id="twitch-button"></button>
+                    </form>
+
+                    <form action="/auth/github" method="post" id="github-login">
+                        <button type="submit" class="oauth-login" id="github-button"></button>
+                    </form>
+
+                    <form action="/auth/twitter" method="post" id="twitter-login">
+                        <button type="submit" class="oauth-login" id="twitter-button"></button>
+                    </form>
+
+                    <form action="/auth/facebook" method="post" id="facebook-login">
+                        <button type="submit" class="oauth-login" id="facebook-button"></button>
+                    </form>                    
 
                 </span>
+            </div>
         </div>
     </body>
     <script src="./js/ejs.js"></script>
