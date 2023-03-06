@@ -13,9 +13,9 @@
         <h1> Error 404: Page not found </h1>
         <p>Available resources</p>
         <div id="links">
-          <a href="http://localhost:9015/signup">Sign up</a> 
-          <a href="http://localhost:9015/login">Log in</a> 
-          <a href="http://localhost:9015/canvas">Canvas</a> 
+          <a href="<%=`${server_address}/signup`%>">Sign up</a>
+          <a href="<%=`${server_address}/login`%>">Log in</a>
+          <a href="<%=`${server_address}/canvas`%>">Canvas</a>
         </div>
         <p>Session status</p>
         <% if (session_status == true) { %>

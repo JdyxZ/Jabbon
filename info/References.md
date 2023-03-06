@@ -36,6 +36,7 @@ Screen session: https://www.youtube.com/watch?v=3S3I9lT6eKE
 How to redirect 404 errors (not found page): https://stackoverflow.com/questions/6528876/how-to-redirect-404-errors-to-a-page-in-expressjs 
 GitBash configure: https://kbroman.org/github_tutorial/pages/first_time.html 
 Remove from cache in Github: https://www.atlassian.com/git/tutorials/saving-changes/gitignore#:~:text=If%20you%20want%20to%20ignore,directory%20as%20an%20ignored%20file. 
+Concat strings in EJS: https://stackoverflow.com/questions/56095635/how-to-concatenate-strings-in-an-html-attribute-using-ejs 
 
 
 # Sr.OjeteSucio

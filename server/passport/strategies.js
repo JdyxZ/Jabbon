@@ -10,10 +10,9 @@ const TwitchStrategy = require('passport-twitch').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 
 // Our modules
-const LOCKER = require("../../session/locker.js");
-const OAUTH_CREDENTIALS = require('../../config/oauth_credentials.js');
-const LOCAL_VERIFICATION = require("../verifications/local.js");
-const SOCIAL_VERIFICATION = require("../verifications/social.js");
+const LOCKER = require("../session/locker.js");
+const OAUTH_CREDENTIALS = require('../config/oauth_credentials.js');
+const {LOCAL_VERIFICATION, SOCIAL_VERIFICATION} = require("./verifications.js");
 
 /***************** LOCAL STRATEGY *****************/
 

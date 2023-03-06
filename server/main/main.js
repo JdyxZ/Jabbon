@@ -42,8 +42,9 @@ async function main()
     const app = express(); // We use ExpressJS to deal with requests, since it allows us to manage request in a simpler way and easily serve files to the client
 
     // App settings
+    app.set('server_port', SERVER_SETTINGS.port);
+    app.set('server_address', SERVER_SETTINGS.address);
     app.set('appName', SERVER_SETTINGS.app_name);
-    app.set('port', SERVER_SETTINGS.port);
 
     // View Engine
     app.set('views', path.join(__dirname, '../views'));
@@ -63,6 +64,11 @@ async function main()
 
     // Global session variables
     app.use((req, res, next) => {
+
+        // Server settings
+        app.locals.server_port = app.get("server_port");
+        app.locals.server_address = app.get("server_address");
+        app.locals.appName = app.get("appName");
 
         // Sign up variables
         app.locals.signup_username = req.flash('signup_username');
@@ -86,6 +92,7 @@ async function main()
     });
 
     // Routers
+    app.use(require("../routes/app"));
     app.use(require("../routes/authenticate"));
     app.use(require("../routes/utils"));
 
@@ -101,7 +108,7 @@ async function main()
     const server = http.createServer(app); // Instead of passing a custom function to manage requests, we pass the express app and let it process the requests for us
 
     // Launch the server
-    server.listen(app.get('port'), () => SERVER.onReady(app.get('port')));
+    server.listen(app.get('server_port'), () => SERVER.onReady(app.get('server_port')));
 
     // Update database on exit and periodically
     require("../utils/update.js");

@@ -4,7 +4,7 @@
 var CLIENT =
 {
     // Client data
-    port: 9015,
+    port: 9014,
     socket: null,
     debug: null,
     

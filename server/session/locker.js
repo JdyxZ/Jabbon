@@ -20,7 +20,7 @@ var LOCKER =
               // console.log(`LOCKER CONTROL ---> User ${user_id} status: Session active and no connection`);
               return next();
           }
-  
+            
           return res.redirect("/login");
     },
 

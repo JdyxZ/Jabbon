@@ -10,3 +10,5 @@ const LOCKER = require("../session/locker.js");
 router.get('/canvas', LOCKER.isSessionAvailable, (req, res) => {
     res.render("canvas");
 });
+
+module.exports = router;

@@ -103,7 +103,7 @@ var DATABASE = {
             console.log(`${err}`);
             return ["ERROR", `${err}`];
         }
-    }
+    },
 
     validateUsername: async function(username) 
     {
