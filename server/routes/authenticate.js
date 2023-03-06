@@ -8,7 +8,7 @@ const router = express.Router();
 // Our modules
 const LOCKER = require("../session/locker.js");
 
-// Get routes
+// Main routes
 router.get('/', LOCKER.isSessionNotAvailable, (req, res) => {
     res.render("login");
 });
@@ -21,10 +21,6 @@ router.get('/signup', LOCKER.isSessionNotAvailable, (req, res) => {
     res.render("signup");
 });
 
-router.get('/canvas', LOCKER.isSessionAvailable, (req, res) => {
-    res.render("canvas");
-});
-
 router.get('/logout', LOCKER.isSessionAvailable, (req, res, next) => {
     req.logout(function(err) {
         if (err) return next(err);
@@ -32,18 +28,29 @@ router.get('/logout', LOCKER.isSessionAvailable, (req, res, next) => {
     });
 });
 
-// Post routes
-router.post('/signup', LOCKER.isSessionNotAvailable, passport.authenticate("signup", {
+// Local strategy
+router.post('/signup', LOCKER.isSessionNotAvailable, passport.authenticate("local_signup", {
     successRedirect: "/canvas",
     failureRedirect: "/signup",
     failureFlash: true
 }));
 
-router.post('/login', LOCKER.isSessionNotAvailable, passport.authenticate("login", {
+router.post('/login', LOCKER.isSessionNotAvailable, passport.authenticate("local_login", {
     successRedirect: "/canvas",
     failureRedirect: "/login",
     failureFlash: true
 }));
+
+// Google strategy
+router.post('auth/google', LOCKER.isSessionNotAvailable, passport.authenticate("google", {
+   scope: ['profile'] 
+}))
+
+router.get('auth/google/callback', LOCKER.isSessionNotAvailable, passport.authenticate("google", {
+    successRedirect: "/canvas",
+    failureRedirect: "/login",
+    failureFlash: true
+}))
 
 // Export module
 module.exports = router;

@@ -17,8 +17,8 @@ passport.deserializeUser(async (user_id, done) => {
     const [status, result] = await DATABASE.validateUserID(user_id);
 
     // Check
-    if(status == "ERROR") return done(result);
-    if(result[0].length == 0) return done("ID not valid");
+    if(status == "ERROR") return done(result, null);
+    if(result[0].length == 0) return done("ID not valid", null);
 
     // Flush user ID
     done(null, user_id);

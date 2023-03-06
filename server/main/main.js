@@ -26,7 +26,9 @@ async function main()
     const SERVER = require("./server.js");
     const SERVER_SETTINGS = require("../config/server_settings.js");
     const {SESSION, SESSION_PROPERTIES} = require("../session/session.js");
-    require('../passport/strategies/local.js');
+
+    // Passport modules 
+    require('../passport/strategies.js');
     require('../passport/serializer.js');
 
     /***************** SERVER *****************/

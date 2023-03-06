@@ -4,7 +4,7 @@
 const mysql = require('mysql2/promise');
 const {USER_CREDENTIALS, JABBON_CREDENTIALS} = require('../config/database_credentials.js');
 const fs = require('fs/promises');
-require("../../public/framework.js");
+const {isObject, isNumber} = require("../../public/framework.js");
 
 var DATABASE = {
 
@@ -83,6 +83,27 @@ var DATABASE = {
             return ["ERROR", `${err}`];
         }
     },
+
+    validateUserSocialID: async function(social)
+    {
+        try
+        {
+            // Throw errors
+            if(!isObject(social)) throw "You must send a valid ID";
+            
+            // Query
+            const result = await this.pool.query(`SELECT * FROM ${this.users} WHERE social = ? ;`, [JSON.stringify(social)]);
+
+            // Output
+            return ["OK", result];
+        }
+        catch(err)
+        {
+            // Error
+            console.log(`${err}`);
+            return ["ERROR", `${err}`];
+        }
+    }
 
     validateUsername: async function(username) 
     {
