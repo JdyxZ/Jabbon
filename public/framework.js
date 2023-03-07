@@ -311,45 +311,52 @@ Array.prototype.toObject = function(prefix)
 
 /***************** OBJECT *****************/
 
-Object.prototype.keys = function()
+function setObjectProperty(property, value)
 {
+	const descriptor =
+	{
+		writable: true, 
+		enumerable: false,
+		value
+	};
+
+	Object.defineProperty(Object.prototype, property, descriptor);
+};
+
+setObjectProperty("owns", function(property) { 
+	if(!isString(property)) throw "Property must be a string";
+	return Object.prototype.hasOwnProperty.call(this, property)
+});
+
+setObjectProperty("keys", function() { 
 	return Object.keys(this);
-};
+});
 
-Object.prototype.values = function()
-{
+setObjectProperty("values", function() { 
 	return Object.values(this);
-};
+});
 
-Object.prototype.entries = function()
-{
+setObjectProperty("entries", function() { 
 	return Object.entries(this);
-};
+});
 
-Object.prototype.clone = function()
-{
+setObjectProperty("clone", function() { 
 	return structuredClone(this);
-};
+});
 
-Object.prototype.concat = function(obj)
-{
+setObjectProperty("concat", function(obj) { 
+	if(!isObject(obj)) throw "You have to pass a valid object";
 	return {...this, ...obj};
-};
+});
 
-Object.prototype.isEmpty = function()
-{
+setObjectProperty("isEmpty", function() { 
 	for(const key in this) 
 	{
-      if (this.hasOwnProperty(key)) return false;
+      	if (this.owns(key)) return false;
     }
 
     return true;
-}
-
-Object.prototype.owns = function(property)
-{
-	return Object.prototype.hasOwnProperty.call(this, property)
-}
+});
 
  /***************** FUNCTIONS *****************/
 

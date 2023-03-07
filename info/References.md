@@ -42,5 +42,6 @@ OAuth passport tutorial: https://www.youtube.com/watch?v=sakQbeRjgwg&list=PL4cUx
 Another framework error 😭: https://stackoverflow.com/questions/8312459/iterate-through-object-properties   
 Query JSONs in MySQL: https://medium.com/geekculture/how-to-query-json-objects-in-mysql-dab878c37aeb 
 Include partials: https://stackoverflow.com/questions/5404830/node-js-ejs-including-a-partial 
+Polyfill objects avoiding enumerability: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty 
 
 # Sr.OjeteSucio
