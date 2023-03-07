@@ -39,5 +39,6 @@ Remove from cache in Github: https://www.atlassian.com/git/tutorials/saving-chan
 Concat strings in EJS: https://stackoverflow.com/questions/56095635/how-to-concatenate-strings-in-an-html-attribute-using-ejs 
 OAuth passport tutorial: https://www.youtube.com/watch?v=Oy5ds6z4R-c&
 OAuth passport tutorial: https://www.youtube.com/watch?v=sakQbeRjgwg&list=PL4cUxeGkcC9jdm7QX143aMLAqyM-jTZ2x 
+Another framework error 😭: https://stackoverflow.com/questions/8312459/iterate-through-object-properties   
 
 # Sr.OjeteSucio

@@ -2,11 +2,11 @@
 
 // External modules
 const passport = require('passport');
-const FacebookStrategy = require('passport-facebook').Strategy;
-const GithubStrategy = require('passport-github2').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
-const TwitchStrategy = require('passport-twitch').Strategy;
+// const FacebookStrategy = require('passport-facebook').Strategy;
+// const GithubStrategy = require('passport-github2').Strategy;
+//const TwitchStrategy = require('passport-twitch').Strategy;
 //const TwitterStrategy = require('passport-twitter').Strategy;
 
 // Our modules

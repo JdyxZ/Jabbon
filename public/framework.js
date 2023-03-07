@@ -346,6 +346,11 @@ Object.prototype.isEmpty = function()
     return true;
 }
 
+Object.prototype.owns = function(property)
+{
+	return Object.prototype.hasOwnProperty.call(this, property)
+}
+
  /***************** FUNCTIONS *****************/
 
 function getTime()

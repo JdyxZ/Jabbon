@@ -3,17 +3,30 @@
 const DATABASE = require("../database/database.js");
 const CRYPTO = require("../utils/crypto.js");
 const fs = require('fs/promises');
+require("../../public/framework.js");
 
 async function test()
 {
     // Init database connection
     await DATABASE.init();
 
-    // Read files
-    const data = await fs.readFile("./server/database/init.sql", 'utf8');
+    var hola = {"number": 1};
 
-    // Queries
-    const result = await DATABASE.pool.query(data);
+    console.log("THE PROBLEM\n")
+
+    for(var key in hola)
+    {
+        console.log(key);
+    }
+
+    console.log("\nTHE SOLUTION\n")
+
+    for(var key in hola)
+    {
+        if(hola.owns(key))
+            console.log(key);
+    }
+
 }
 
 test();
