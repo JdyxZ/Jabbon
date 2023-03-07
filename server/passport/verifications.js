@@ -60,10 +60,17 @@ const LOCAL_VERIFICATION =
         WORLD.addUsertoRoom(user.id, user.room);
 
         // If old session is active, delete it
-        await LOCKER.deleteCurrentSession(req);
-
-        // Pass user id to the serializer to store in the sessions table
-        return done(null, user.id);
+        LOCKER.deleteCurrentSession(req)
+        .then(() =>
+        {
+            // Pass user id to the serializer to store in the sessions table
+            return done(null, user_id);
+        })
+        .catch((err) =>
+        {
+            console.log(err);
+            return done(null, false, req.flash('signup_error', 'Something wrong happened. Try again.'));
+        })
     },
 
     login: async function(req, name, password, done)
@@ -110,18 +117,18 @@ const LOCAL_VERIFICATION =
 
 const SOCIAL_VERIFICATION = 
 {
-    process: async function(accessToken, refreshToken, profile, done)
+    process: async function(req, accessToken, refreshToken, profile, done)
     {
-
         // Define the attributes we want to store from profile
         const social =
         {
             id: profile.id,
+            name: profile.displayName,
             provider: profile.provider
         }
 
         // Check user credentials
-        let [status, result] = await DATABASE.validateUserSocialID(social);
+        let [status, result] = await DATABASE.validateUserSocial(social);
 
         // Handle errors
         if (status == "ERROR")
@@ -140,7 +147,6 @@ const SOCIAL_VERIFICATION =
             let user_obj =
             {
                 social: social,
-                name : profile.displayName,
                 avatar : "media/images/char1.png",
                 room : 1,
                 position: 0
@@ -187,8 +193,8 @@ const SOCIAL_VERIFICATION =
         {
             console.log(err);
             return done(null, false, req.flash('social_error', 'Something wrong happened. Try again.'));
-        })
-    }
+        }) 
+    } 
 }
 
 module.exports = {LOCAL_VERIFICATION, SOCIAL_VERIFICATION};

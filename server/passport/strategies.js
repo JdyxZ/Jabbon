@@ -38,7 +38,8 @@ passport.use(new GoogleStrategy(
 {
     clientID: OAUTH_CREDENTIALS.google.ID,
     clientSecret: OAUTH_CREDENTIALS.google.secret,
-    callbackURL: '/auth/google/callback'
+    callbackURL: '/auth/google/callback',
+    passReqToCallback: true
 },
 SOCIAL_VERIFICATION.process));
 

@@ -64,6 +64,14 @@ var LOCKER =
             });
         })
 
+    },
+
+    deleteCurrentSessionInline: function(req, res, next)
+    {
+        req.logout(function(err){
+            if(err) res.end("Error: Impossible to logout from your current session.");
+            else next();            
+        });
     }
 }
 

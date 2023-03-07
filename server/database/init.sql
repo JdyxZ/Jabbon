@@ -6,7 +6,7 @@ USE Jabbon_DB;
 CREATE TABLE IF NOT EXISTS jabbon_users (
     id INT NOT NULL AUTO_INCREMENT,
     social JSON,
-    name VARCHAR(255) UNIQUE,
+    name VARCHAR(255) UNIQUE DEFAULT NULL,
     password VARCHAR(255) DEFAULT NULL,
     position INT,
     avatar VARCHAR(255),

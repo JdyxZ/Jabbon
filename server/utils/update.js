@@ -19,6 +19,9 @@ exit_signals.forEach(signal => process.on(signal, exitHandler));
 // Exit Handler
 async function exitHandler(exit_code) 
 {
+    // Output error
+    console.log("\n", exit_code, "\n");
+
     try 
     {
         // Server on close callback

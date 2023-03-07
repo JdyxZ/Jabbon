@@ -12,7 +12,7 @@ const FACING_BACK = 3;
 function User(data)
 {   
     this.id = data == undefined ? -1 : data.id || -1;
-    this.name = data == undefined ? "unnamed" : data.name || "unamed";
+    this.name = data == undefined ? "unnamed" : (data.name != undefined ? data.name : data.social.name || "unamed");
     this.position = data == undefined ? 0 : data.position || 0;
     this.avatar = data == undefined ? "./media/images/char1.png" : data.avatar || "./media/images/char1.png";
     this.facing = data == undefined ? FACING_FRONT : data.facing || FACING_FRONT;

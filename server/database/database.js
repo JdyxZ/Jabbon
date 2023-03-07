@@ -44,7 +44,6 @@ var DATABASE = {
 
             // Throw errors
             if(!isObject(social)) throw "You must send a valid social object";
-            if(name === "" || name === null || name === undefined) throw "You must send a valid name";
             if(avatar === "" || avatar === null || avatar === undefined) throw "You must send an valid avatar";
             if(room === "" || room === null || room === undefined) throw "You must send a valid room";
             if(position === "" || position === null || position === undefined) throw "You must send a valid position";
@@ -52,11 +51,11 @@ var DATABASE = {
             // Declare result
             let result;
             
-            // Local user query
-            if(password != undefined) result = await this.pool.query(`INSERT INTO ${this.users} SET social = ?, name = ?, password = ?, avatar = ?, room = ?, position = ? ;`, [JSON.stringify(social), name, password, avatar, room, position]);
+            // Local user push
+            if(name != undefined && password != undefined) result = await this.pool.query(`INSERT INTO ${this.users} SET social = ?, name = ?, password = ?, avatar = ?, room = ?, position = ? ;`, [JSON.stringify(social), name, password, avatar, room, position]);
             
-            // Local user query
-            else result = await this.pool.query(`INSERT INTO ${this.users} SET social = ?, name = ?, avatar = ?, room = ?, position = ? ;`, [JSON.stringify(social), name, avatar, room, position]);
+            // Social user push
+            else result = await this.pool.query(`INSERT INTO ${this.users} SET social = ?, avatar = ?, room = ?, position = ? ;`, [JSON.stringify(social), avatar, room, position]);
             
             // Output
             return ["OK", result];
@@ -68,8 +67,6 @@ var DATABASE = {
             return ["ERROR", `${err}`];
         }
     },
-
-
 
     validateUserID: async function(id)
     {
@@ -92,7 +89,7 @@ var DATABASE = {
         }
     },
 
-    validateUserSocialID: async function(social)
+    validateUserSocial: async function(social)
     {
         try
         {
@@ -235,12 +232,12 @@ var DATABASE = {
         {
             // Wrap values into an array
             const values = users.values().reduce((values, user) => {
-                values.push([user.id, user.name, user.position, user.avatar, user.room]);
+                values.push([user.id, user.position, user.room]);
                 return values;
             }, []);
 
             // Query
-            const result = await this.pool.query(`INSERT INTO ${this.users} (id, name, position, avatar, room) VALUES ? ON DUPLICATE KEY UPDATE name = VALUES(name), position = VALUES(position), avatar = VALUES(avatar), room = VALUES(room);`, [values]);
+            const result = await this.pool.query(`INSERT INTO ${this.users} (id, position, room) VALUES ? ON DUPLICATE KEY UPDATE id = VALUES(id), position = VALUES(position), room = VALUES(room);`, [values]);
             
             // Output
             return ["OK", result];
