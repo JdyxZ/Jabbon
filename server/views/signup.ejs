@@ -43,9 +43,7 @@
                         <button type="submit">Go!</button>
                     </form>
                     
-                    <form action="/login" method="get" id="login-redirect">
-                        <button type="submit"> Log in </button>
-                    </form>
+                    <a id="login-redirect" href="<%=`${server_address}/login`%>">Log in</a>
 
                     <% if (social_error.length > 0) { %>
                         <div class="alert"><%= social_error %></div>

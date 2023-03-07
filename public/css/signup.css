@@ -85,7 +85,8 @@ input {
     margin-bottom: 2em;
 }
 
-#signup-form button {
+#signup-form button 
+{
     color: white;
     transition: all 0.3s ease;
     width: 12em;
@@ -98,27 +99,16 @@ input {
     margin-bottom: 1em;
 }
 
-#signup-form button:hover {
+#signup-form button:hover 
+{
     background-color: #034848;
 }
 
-#login-redirect button
+#login-redirect
 {
-    color: white;
-    transition: all 0.3s ease;
-    width: 12em;
-    height: 3.5em;
-    border-radius: 5px;
-    border-width: 0px;
-    background-color: #72327c;
-    font-size: 100%;
-    font-weight: bold;
-    margin-top: 1em;
-    margin-bottom: 2em;
-}
-
-#login-redirect button:hover {
-    background-color: #851a92;
+    color: #b9b9b9;
+    font-family: 'Roboto';
+    font-size: 17px;
 }
 
 
@@ -148,6 +138,7 @@ input {
     background-color: #e9e9e9;
     background-image: url("../media/logos/google.png");
     background-size: 20%;
+    margin-top: 2em;
 }
 
 #twitch-button

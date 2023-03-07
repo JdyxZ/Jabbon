@@ -27,8 +27,6 @@ async function main()
     const SERVER_SETTINGS = require("../config/server_settings.js");
     const {SESSION, SESSION_PROPERTIES} = require("../config/session_settings.js");
     const globals = require("./globals.js");
-
-    // Passport modules 
     require('../passport/strategies.js');
     require('../passport/serializer.js');
 
@@ -55,11 +53,11 @@ async function main()
     const sessionParser = SESSION(SESSION_PROPERTIES);
 
     // Middleware
-    // app.use(morgan('short')); // To see the request specs
+    // app.use(morgan('short')); // Promps the request specs
     app.use(bodyParser.urlencoded({extended: false})); // Parses encoded data sent with post method through a form
     app.use(bodyParser.json()); // Parses json data directly to objects
     app.use(sessionParser); // Parses sessions
-    app.use(flash()); // Allows to easily store data in the session
+    app.use(flash()); // Allows to easily store data in the app
     app.use(passport.initialize());  // Processes signup and login requests
     app.use(passport.session()); // Let passport know we are using a session context
 

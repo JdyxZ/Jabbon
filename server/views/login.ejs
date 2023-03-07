@@ -35,9 +35,7 @@
                         <button type="submit">Go!</button>
                     </form>
 
-                    <form action="/signup" method="get" id="signup-redirect">
-                        <button type="submit"> Sign up </button>
-                    </form>
+                    <a id="signup-redirect" href="<%=`${server_address}/signup`%>">Sign up</a>
 
                     <% if (social_error.length > 0) { %>
                         <div class="alert"><%= social_error %></div>
