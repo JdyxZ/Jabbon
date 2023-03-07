@@ -64,7 +64,7 @@ const LOCAL_VERIFICATION =
         .then(() =>
         {
             // Pass user id to the serializer to store in the sessions table
-            return done(null, user_id);
+            return done(null, user.id);
         })
         .catch((err) =>
         {
