@@ -40,5 +40,7 @@ Concat strings in EJS: https://stackoverflow.com/questions/56095635/how-to-conca
 OAuth passport tutorial: https://www.youtube.com/watch?v=Oy5ds6z4R-c&
 OAuth passport tutorial: https://www.youtube.com/watch?v=sakQbeRjgwg&list=PL4cUxeGkcC9jdm7QX143aMLAqyM-jTZ2x 
 Another framework error 😭: https://stackoverflow.com/questions/8312459/iterate-through-object-properties   
+Query JSONs in MySQL: https://medium.com/geekculture/how-to-query-json-objects-in-mysql-dab878c37aeb 
+
 
 # Sr.OjeteSucio

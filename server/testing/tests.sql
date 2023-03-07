@@ -22,8 +22,9 @@ USE Jabbon_DB;
 
 CREATE TABLE IF NOT EXISTS jabbon_users (
     id INT NOT NULL AUTO_INCREMENT,
+    social JSON,
     name VARCHAR(255) UNIQUE,
-    password VARCHAR(255),
+    password VARCHAR(255) DEFAULT NULL,
     position INT,
     avatar VARCHAR(255),
     room INT,
@@ -71,6 +72,11 @@ INSERT into jabbon_users (id, name, position, avatar, room)
 VALUES (1, 'Haylo', 30, '1', 'Hall'), (2, 'Sr.OjeteSucio', 30, '2', 'Hall')
 ON DUPLICATE KEY UPDATE name = VALUES(name), position = VALUES(position), avatar = VALUES(avatar), room = VALUES(room);
 
+-- JSON QUERIES
+
+USE Jabbon_DB;
+SELECT * FROM jabbon_users WHERE JSON_EXTRACT(social, '$.id') = 1 AND JSON_EXTRACT(social, '$.provider') = 'google';
+
 -- TABLE SHOW
 USE Jabbon_DB;
 
@@ -87,6 +93,8 @@ TABLE jabbon_sessions;
 USE Jabbon_DB;
 
 DELETE FROM jabbon_sessions;
+
+USE Jabbon_DB;
 
 DELETE FROM jabbon_users;
 

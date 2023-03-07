@@ -35,6 +35,7 @@ const LOCAL_VERIFICATION =
         // Push user info into the database
         let user_obj =
         {
+            social : {},
             name : name,
             password: hashed_password,
             avatar : "media/images/char1.png",
@@ -111,9 +112,8 @@ const SOCIAL_VERIFICATION =
 {
     process: async function(accessToken, refreshToken, profile, done)
     {
-        console.log(profile);
 
-       /*  // Define the attributes we want to store from profile
+        // Define the attributes we want to store from profile
         const social =
         {
             id: profile.id,
@@ -139,8 +139,8 @@ const SOCIAL_VERIFICATION =
             // Create user object        
             let user_obj =
             {
-                name : profile.displayName,
                 social: social,
+                name : profile.displayName,
                 avatar : "media/images/char1.png",
                 room : 1,
                 position: 0
@@ -187,7 +187,7 @@ const SOCIAL_VERIFICATION =
         {
             console.log(err);
             return done(null, false, req.flash('social_error', 'Something wrong happened. Try again.'));
-        }) */
+        })
     }
 }
 

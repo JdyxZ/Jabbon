@@ -10,9 +10,22 @@ async function test()
     // Init database connection
     await DATABASE.init();
 
+    // Try validate social user
+    const social =
+    {
+        id: 1,
+        provider: "google"
+    }
+
+    const [status, result] = await DATABASE.validateUserSocialID(social);
+    
+    console.log(status);
+    console.log(result[0]);
+
+    // hasOwnProperty problem
     var hola = {"number": 1};
 
-    console.log("THE PROBLEM\n")
+    console.log("\nTHE PROBLEM\n")
 
     for(var key in hola)
     {

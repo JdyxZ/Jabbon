@@ -40,17 +40,23 @@ var DATABASE = {
         try
         {
             // Destructure json
-            const {name, password, avatar, room, position} = user_json; 
+            const {social, name, password, avatar, room, position} = user_json; 
 
             // Throw errors
+            if(!isObject(social)) throw "You must send a valid social object";
             if(name === "" || name === null || name === undefined) throw "You must send a valid name";
-            if(password === "" || password === null || password === undefined) throw "You must send a valid password";
             if(avatar === "" || avatar === null || avatar === undefined) throw "You must send an valid avatar";
             if(room === "" || room === null || room === undefined) throw "You must send a valid room";
             if(position === "" || position === null || position === undefined) throw "You must send a valid position";
+
+            // Declare result
+            let result;
             
-            // Query
-            const result = await this.pool.query(`INSERT INTO ${this.users} SET name = ?, password = ?, avatar = ?, room = ?, position = ? ;`, [name, password, avatar, room, position]);
+            // Local user query
+            if(password != undefined) result = await this.pool.query(`INSERT INTO ${this.users} SET social = ?, name = ?, password = ?, avatar = ?, room = ?, position = ? ;`, [JSON.stringify(social), name, password, avatar, room, position]);
+            
+            // Local user query
+            else result = await this.pool.query(`INSERT INTO ${this.users} SET social = ?, name = ?, avatar = ?, room = ?, position = ? ;`, [JSON.stringify(social), name, avatar, room, position]);
             
             // Output
             return ["OK", result];
@@ -62,6 +68,8 @@ var DATABASE = {
             return ["ERROR", `${err}`];
         }
     },
+
+
 
     validateUserID: async function(id)
     {
@@ -92,7 +100,7 @@ var DATABASE = {
             if(!isObject(social)) throw "You must send a valid ID";
             
             // Query
-            const result = await this.pool.query(`SELECT * FROM ${this.users} WHERE social = ? ;`, [JSON.stringify(social)]);
+            const result = await this.pool.query(`SELECT * FROM jabbon_users WHERE JSON_EXTRACT(social, '$.id') = ? AND JSON_EXTRACT(social, '$.provider') = ?;`, [social.id, social.provider]);
 
             // Output
             return ["OK", result];
