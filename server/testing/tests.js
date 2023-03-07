@@ -17,7 +17,7 @@ async function test()
         provider: "google"
     }
 
-    const [status, result] = await DATABASE.validateUserSocialID(social);
+    const [status, result] = await DATABASE.validateUserSocial(social);
     
     console.log(status);
     console.log(result[0]);
