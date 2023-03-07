@@ -8,7 +8,7 @@ const router = express.Router();
 const LOCKER = require("../utils/locker.js");
 
 router.get('/canvas', LOCKER.isSessionAvailable, (req, res) => {
-    res.render("canvas");
+    res.render("canvas", {current_view: "canvas"});
 });
 
 module.exports = router;

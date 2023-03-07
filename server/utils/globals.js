@@ -3,9 +3,13 @@
 function globals(app, req, res, next)
 {
     // Server settings
-    app.locals.server_port = app.get("server_port");
+    app.locals.server_protocol = app.get("server_protocol");
     app.locals.server_address = app.get("server_address");
+    app.locals.server_port = app.get("server_port");
     app.locals.appName = app.get("appName");
+
+    // Current view
+    app.locals.current_view = app.get("current_view");
 
     // Sign up
     app.locals.signup_username = req.flash('signup_username');

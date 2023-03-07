@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="css/error.css"/>
-    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-    <title>Jabbon</title>
-  </head>
-  <body>
-    <div class="wrapper">
-      <div id="main">
-        <h1> Error 404: Page not found </h1>
-        <p>Available resources</p>
-        <div id="links">
-          <a href="<%=`${server_address}/signup`%>">Sign up</a>
-          <a href="<%=`${server_address}/login`%>">Log in</a>
-          <a href="<%=`${server_address}/canvas`%>">Canvas</a>
-        </div>
-        <p>Session status</p>
-        <% if (session_status == true) { %>
-          <span class="active">Active -> <%= session_user %></div>
-        <% } else { %>
-          <span class="inactive">Inactive -> Try to log in or sign up first!</div>
-        <% } %>
 
-      </div>
-    </div>
-  </body>
+    <!--- Header -->
+    <%- include('partials/header.ejs') %>
+
+    <body>
+        <div class="wrapper">
+            <div id="main">
+                <h1> Error 404: Page not found </h1>
+                <p>Available resources</p>
+
+                <div id="links">
+                    <a href="<%=`${server_protocol == 'secure' ? 'https://' : 'http://'}${server_address}:${server_port}/signup`%>">Sign up</a>
+                    <a href="<%=`${server_protocol == 'secure' ? 'https://' : 'http://'}${server_address}:${server_port}/login`%>">Log in</a>
+                    <a href="<%=`${server_protocol == 'secure' ? 'https://' : 'http://'}${server_address}:${server_port}/canvas`%>">Canvas</a>
+                </div>
+
+                <p>Session status</p>
+
+                <% if (session_status == true) { %>
+                    <span class="active">Active -> <%= session_user %></div>
+                <% } else { %>
+                    <span class="inactive">Inactive -> Try to log in or sign up first!</div>
+                <% } %>
+
+            </div>
+        </div>
+    </body>
 </html>

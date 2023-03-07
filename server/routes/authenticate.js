@@ -10,15 +10,15 @@ const LOCKER = require("../utils/locker.js");
 
 // Main routes
 router.get('/', LOCKER.isSessionNotAvailable, (req, res) => {
-    res.render("login");
+    res.redirect("/login");
 });
 
 router.get('/login', LOCKER.isSessionNotAvailable, (req, res) => { 
-    res.render("login");
+    res.render("login", {current_view: "login"});
 });
 
 router.get('/signup', LOCKER.isSessionNotAvailable, (req, res) => { 
-    res.render("signup");
+    res.render("signup", {current_view: "signup"});
 });
 
 router.get('/logout', LOCKER.isSessionAvailable, (req, res, next) => {

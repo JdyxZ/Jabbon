@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="css/signup.css"/>
-        <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-        <link rel="shortcut icon" type="image/x-icon" href="media/logos/jabbon.ico"/>
-        <title>Jabbon</title>
-    </head>
+    <!--- Header -->
+    <%- include('partials/header.ejs') %>
+
     <body>
         <div id="main">
             <div id="main-grid">
@@ -43,31 +40,10 @@
                         <button type="submit">Go!</button>
                     </form>
                     
-                    <a id="login-redirect" href="<%=`${server_address}/login`%>">Log in</a>
+                    <a id="login-redirect" href="<%=`${server_protocol == 'secure' ? 'https://' : 'http://'}${server_address}:${server_port}/login`%>">Log in</a>
 
-                    <% if (social_error.length > 0) { %>
-                        <div class="alert"><%= social_error %></div>
-                    <% } %>
-
-                    <form action="/auth/google" method="post" id="google-login">
-                        <button type="submit" class="oauth-login" id="google-button"></button>
-                    </form>
-
-                    <form action="/auth/twitch" method="post" id="twitch-login">
-                        <button type="submit" class="oauth-login" id="twitch-button"></button>
-                    </form>
-
-                    <form action="/auth/github" method="post" id="github-login">
-                        <button type="submit" class="oauth-login" id="github-button"></button>
-                    </form>
-
-                    <form action="/auth/twitter" method="post" id="twitter-login">
-                        <button type="submit" class="oauth-login" id="twitter-button"></button>
-                    </form>
-
-                    <form action="/auth/facebook" method="post" id="facebook-login">
-                        <button type="submit" class="oauth-login" id="facebook-button"></button>
-                    </form>                    
+                    <!--- OAUTH -->
+                    <%- include('partials/oauth.ejs') %>
 
                 </span>
             </div>

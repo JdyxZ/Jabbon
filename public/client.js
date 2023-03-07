@@ -4,19 +4,59 @@
 var CLIENT =
 {
     // Client data
-    port: 9014,
+    server_protoccol: null,
+    server_port: null,
+    server_address: null,
+    protocol: null,
     socket: null,
     debug: null,
     
-    init: function()
+    init: async function()
     {
+        // Fetch server settings
+        const settings = await this.fetchServerSettings();
+
+        // Set server settings        
+        this.server_protocol = settings.protocol;
+        this.server_address = settings.address;
+        this.server_port = settings.port;
+
         // New WebSocket instance
-        this.socket = new WebSocket(`ws://localhost:${this.port}`);
+        this.socket = new WebSocket(`${this.server_protocol == "secure" ? "wss://" : "ws://"}${this.server_address}:${this.server_port}`);
 
         // Callbacks
         this.socket.onmessage = this.onMessage.bind(this);
         this.socket.onopen = this.onOpen.bind(this);
         this.socket.onclose = this.onClose.bind(this);
+    },
+
+    fetchServerSettings: async function ()
+    {
+        try
+        {
+            // URL
+            const url = "/server_settings";
+
+            // Fetch image from url    
+            const response = await fetch(url, {method: "GET"}); 
+        
+            // Check response
+            if (response.status !== 200) {
+                console.log(`HTTP-Error ${response.status} upon fetching url ${url} `);
+                throw "Bad response";
+            };
+                
+            // Convert response into json
+            const settings = await response.json()
+
+            // Return settings
+            return settings;
+        }
+        catch(error)
+        {
+            console.log(error);
+            throw "Something went wrong upon fetching server settings";
+        }
     },
 
     // WebSocket callbacks

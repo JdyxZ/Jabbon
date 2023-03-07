@@ -16,16 +16,17 @@ router.use((req, res, next) => {
     // Set response status to indicate the client that the page hasn't been found
     res.status(404);
 
-    // Build session object to use in the ejs
-    const session =
+    // Build auxiliar object to use inside ejs view
+    const aux =
     {
+        current_view : "error",
         session_status: req.isAuthenticated(),
         session_user: req.session.passport == undefined ? null: WORLD.getUser(req.session.passport.user).name
     };
   
     // Respond with the error page
     if (req.accepts('html')) {
-      res.render("error", session);
+      res.render("error", aux);
       return;
     }
   

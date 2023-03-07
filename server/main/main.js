@@ -41,8 +41,9 @@ async function main()
     const app = express(); // We use ExpressJS to deal with requests, since it allows us to manage request in a simpler way and easily serve files to the client
 
     // App settings
-    app.set('server_port', SERVER_SETTINGS.port);
+    app.set('server_protocol', SERVER_SETTINGS.protocol);
     app.set('server_address', SERVER_SETTINGS.address);
+    app.set('server_port', SERVER_SETTINGS.port);
     app.set('appName', SERVER_SETTINGS.app_name);
 
     // View Engine

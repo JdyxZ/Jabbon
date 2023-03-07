@@ -9,6 +9,7 @@ const {WORLD} = require("../model/model.js");
 const SERVER = require("../main/server.js");
 const DATABASE = require("../database/database.js");
 const LOCKER = require("../utils/locker.js");
+const SERVER_SETTINGS = require("../config/server_settings.js");
 require("../../public/framework.js");
 
 // Util routes
@@ -94,9 +95,22 @@ router.delete('/user/:id', async function(req, res){ // User delete
     }
 });
 
-router.get("/clients", (req,res,next) => {
+router.get("/clients", (req, res, next) => {
     res.end(JSON.stringify(SERVER.clients.keys()));
 });
+
+router.get("/server_settings", (req, res, next) => {
+    // Build response json
+    const server_settings =
+    {
+        protocol: SERVER_SETTINGS.protocol,
+        address: SERVER_SETTINGS.address,
+        port: SERVER_SETTINGS.port        
+    }
+
+    // Response
+    res.json(server_settings);
+})
 
 // Export module
 module.exports = router;
