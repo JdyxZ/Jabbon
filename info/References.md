@@ -37,6 +37,7 @@ How to redirect 404 errors (not found page): https://stackoverflow.com/questions
 GitBash configure: https://kbroman.org/github_tutorial/pages/first_time.html 
 Remove from cache in Github: https://www.atlassian.com/git/tutorials/saving-changes/gitignore#:~:text=If%20you%20want%20to%20ignore,directory%20as%20an%20ignored%20file. 
 Concat strings in EJS: https://stackoverflow.com/questions/56095635/how-to-concatenate-strings-in-an-html-attribute-using-ejs 
-
+OAuth passport tutorial: https://www.youtube.com/watch?v=Oy5ds6z4R-c&
+OAuth passport tutorial: https://www.youtube.com/watch?v=sakQbeRjgwg&list=PL4cUxeGkcC9jdm7QX143aMLAqyM-jTZ2x 
 
 # Sr.OjeteSucio

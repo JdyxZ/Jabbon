@@ -25,7 +25,7 @@ async function main()
     // Our modules
     const SERVER = require("./server.js");
     const SERVER_SETTINGS = require("../config/server_settings.js");
-    const {SESSION, SESSION_PROPERTIES} = require("../session/session.js");
+    const {SESSION, SESSION_PROPERTIES} = require("../config/session_settings.js");
 
     // Passport modules 
     require('../passport/strategies.js');

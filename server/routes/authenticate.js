@@ -6,7 +6,7 @@ const passport = require("passport");
 const router = express.Router();
 
 // Our modules
-const LOCKER = require("../session/locker.js");
+const LOCKER = require("../utils/locker.js");
 
 // Main routes
 router.get('/', LOCKER.isSessionNotAvailable, (req, res) => {
@@ -42,15 +42,15 @@ router.post('/login', LOCKER.isSessionNotAvailable, passport.authenticate("local
 }));
 
 // Google strategy
-router.post('auth/google', LOCKER.isSessionNotAvailable, passport.authenticate("google", {
+router.post('/auth/google', LOCKER.isSessionNotAvailable, passport.authenticate("google", {
    scope: ['profile'] 
-}))
+}));
 
-router.get('auth/google/callback', LOCKER.isSessionNotAvailable, passport.authenticate("google", {
+router.get('/auth/google/callback', LOCKER.isSessionNotAvailable, passport.authenticate("google", {
     successRedirect: "/canvas",
     failureRedirect: "/login",
     failureFlash: true
-}))
+}));
 
 // Export module
 module.exports = router;

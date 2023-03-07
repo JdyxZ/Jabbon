@@ -8,7 +8,7 @@ const router = express.Router();
 const {WORLD} = require("../model/model.js");
 const SERVER = require("../main/server.js");
 const DATABASE = require("../database/database.js");
-const LOCKER = require("../session/locker.js");
+const LOCKER = require("../utils/locker.js");
 require("../../public/framework.js");
 
 // Util routes

@@ -7,10 +7,10 @@ const GithubStrategy = require('passport-github2').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const TwitchStrategy = require('passport-twitch').Strategy;
-const TwitterStrategy = require('passport-twitter').Strategy;
+//const TwitterStrategy = require('passport-twitter').Strategy;
 
 // Our modules
-const LOCKER = require("../session/locker.js");
+const LOCKER = require("../utils/locker.js");
 const OAUTH_CREDENTIALS = require('../config/oauth_credentials.js');
 const {LOCAL_VERIFICATION, SOCIAL_VERIFICATION} = require("./verifications.js");
 
