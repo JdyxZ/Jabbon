@@ -39,6 +39,10 @@
                         <button type="submit"> Sign up </button>
                     </form>
 
+                    <% if (social_error.length > 0) { %>
+                        <div class="alert"><%= social_error %></div>
+                    <% } %>
+
                     <form action="/auth/google" method="post" id="google-login">
                         <button type="submit" class="oauth-login" id="google-button"></button>
                     </form>

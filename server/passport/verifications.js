@@ -153,7 +153,7 @@ const SOCIAL_VERIFICATION =
             if (status == "ERROR")
             {
                 console.log(result);
-                return done(null, false, req.flash('signup_error', 'Something wrong happened. Try again'));
+                return done(null, false, req.flash('social_error', 'Something wrong happened. Try again'));
             }
 
             // Set push query user ID to object and user id var

@@ -26,6 +26,7 @@ async function main()
     const SERVER = require("./server.js");
     const SERVER_SETTINGS = require("../config/server_settings.js");
     const {SESSION, SESSION_PROPERTIES} = require("../config/session_settings.js");
+    const globals = require("./globals.js");
 
     // Passport modules 
     require('../passport/strategies.js');
@@ -62,34 +63,8 @@ async function main()
     app.use(passport.initialize());  // Processes signup and login requests
     app.use(passport.session()); // Let passport know we are using a session context
 
-    // Global session variables
-    app.use((req, res, next) => {
-
-        // Server settings
-        app.locals.server_port = app.get("server_port");
-        app.locals.server_address = app.get("server_address");
-        app.locals.appName = app.get("appName");
-
-        // Sign up variables
-        app.locals.signup_username = req.flash('signup_username');
-        app.locals.signup_username_error = req.flash('signup_username_error');
-        app.locals.signup_password = req.flash('signup_password');
-        app.locals.signup_password_error = req.flash('signup_password_error');
-        app.locals.signup_error = req.flash('signup_error')
-
-        // Log in variables
-        app.locals.login_username = req.flash('login_username');
-        app.locals.login_password = req.flash('login_password');
-        app.locals.login_user_error = req.flash('login_user_error');
-        app.locals.login_error = req.flash('login_error');
-
-        // Session 
-        app.locals.session_status = req.flash('session_status');
-        app.locals.session_user = req.flash('session_user');
-
-        // Pass to the next middleware
-        next();
-    });
+    // Global variables
+    app.use((req, res, next) => globals(app, req, res, next));
 
     // Routers
     app.use(require("../routes/app"));
@@ -155,5 +130,7 @@ async function main()
 
 // Main execution
 main();
+
+
 
 
