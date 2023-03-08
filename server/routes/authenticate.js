@@ -8,26 +8,6 @@ const router = express.Router();
 // Our modules
 const LOCKER = require("../utils/locker.js");
 
-// Main routes
-router.get('/', LOCKER.isSessionNotAvailable, (req, res) => {
-    res.redirect("/login");
-});
-
-router.get('/login', LOCKER.isSessionNotAvailable, (req, res) => { 
-    res.render("login", {current_view: "login"});
-});
-
-router.get('/signup', LOCKER.isSessionNotAvailable, (req, res) => { 
-    res.render("signup", {current_view: "signup"});
-});
-
-router.get('/logout', LOCKER.isSessionAvailable, (req, res, next) => {
-    req.logout(function(err) {
-        if (err) return next(err);
-        res.redirect('/login');
-    });
-});
-
 // Local strategy
 router.post('/signup', LOCKER.isSessionNotAvailable, passport.authenticate("local_signup", {
     successRedirect: "/canvas",
@@ -43,10 +23,65 @@ router.post('/login', LOCKER.isSessionNotAvailable, passport.authenticate("local
 
 // Google strategy
 router.post('/auth/google', LOCKER.isSessionNotAvailable, passport.authenticate("google", {
-   scope: ['profile'] 
+    failureRedirect: "/"
 }));
 
 router.get('/auth/google/callback', LOCKER.isSessionNotAvailable, passport.authenticate("google", {
+    successRedirect: "/canvas",
+    failureRedirect: "/login",
+    failureFlash: true
+}));
+
+// Twitch strategy
+router.post('/auth/twitch', LOCKER.isSessionNotAvailable, passport.authenticate("twitch", {
+    failureRedirect: "/"
+}));
+ 
+router.get('/auth/twitch/callback', LOCKER.isSessionNotAvailable, passport.authenticate("twitch", {
+    successRedirect: "/canvas",
+    failureRedirect: "/login",
+    failureFlash: true
+}));
+
+ // Github strategy
+router.post('/auth/github', LOCKER.isSessionNotAvailable, passport.authenticate("github", {
+    failureRedirect: "/"
+}));
+ 
+router.get('/auth/github/callback', LOCKER.isSessionNotAvailable, passport.authenticate("github", {
+    successRedirect: "/canvas",
+    failureRedirect: "/login",
+    failureFlash: true
+}));
+
+// Discord strategy
+router.post('/auth/discord', LOCKER.isSessionNotAvailable, passport.authenticate("discord", {
+    failureRedirect: "/"
+}));
+ 
+router.get('/auth/discord/callback', LOCKER.isSessionNotAvailable, passport.authenticate("discord", {
+    successRedirect: "/canvas",
+    failureRedirect: "/login",
+    failureFlash: true
+}));
+
+// Twitter strategy
+router.post('/auth/twitter', LOCKER.isSessionNotAvailable, passport.authenticate("twitter", {
+    failureRedirect: "/" 
+}));
+ 
+router.get('/auth/twitter/callback', LOCKER.isSessionNotAvailable, passport.authenticate("twitter", {
+    successRedirect: "/canvas",
+    failureRedirect: "/login",
+    failureFlash: true
+}));
+
+// Facebook strategy
+router.post('/auth/facebook', LOCKER.isSessionNotAvailable, passport.authenticate("facebook", {
+    failureRedirect: "/"
+}));
+ 
+router.get('/auth/facebook/callback', LOCKER.isSessionNotAvailable, passport.authenticate("facebook", {
     successRedirect: "/canvas",
     failureRedirect: "/login",
     failureFlash: true

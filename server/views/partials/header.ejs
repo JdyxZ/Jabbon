@@ -8,17 +8,23 @@
         <link rel="stylesheet" type="text/css" href="css/error.css"/>
     <% } %>
 
-    <!-- Error CSS -->
+    <!-- Signup CSS -->
     <% if (current_view == "signup") { %>
         <link rel="stylesheet" type="text/css" href="css/signup.css"/>
     <% } %>
 
-    <!-- Error CSS -->
+    <!-- Login CSS -->
     <% if (current_view == "login") { %>
         <link rel="stylesheet" type="text/css" href="css/login.css"/>
     <% } %>
 
-    <!-- Error CSS -->
+    <!-- Auth CSS -->
+    <% if (current_view == "signup" || current_view == "login") { %>
+        <link rel="stylesheet" type="text/css" href="css/partials/auth.css"/>
+        <link rel="stylesheet" type="text/css" href="css/partials/auth_providers.css"/>
+    <% } %>
+
+    <!-- Canvas CSS -->
     <% if (current_view == "canvas") { %>
         <link rel="stylesheet" type="text/css" href="css/canvas.css"/>
     <% } %>   

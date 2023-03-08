@@ -119,13 +119,56 @@ const SOCIAL_VERIFICATION =
 {
     process: async function(req, accessToken, refreshToken, profile, done)
     {
-        // Define the attributes we want to store from profile
+        console.log(profile);
+        
+        // Declare attributes we want to store from profile info
+        let id, name, provider;
+
+        // Get profile info attributes
+        switch(profile.provider)
+        {
+            case "google":
+                id = profile.id;
+                name = profile.displayName;
+                provider = profile.provider;
+                break;
+            case "twitch":
+                id = profile.id;
+                name = profile.login;
+                provider = profile.provider;
+                break;
+            case "github":
+                id = profile.id;
+                name = profile.username;
+                provider = profile.provider;
+                break;
+            case "discord":
+                id = profile.id;
+                name = profile.username;
+                provider = profile.provider;
+                break;
+            case "twitter":
+                id = profile.id;
+                name = profile.username;
+                provider = profile.provider;
+                break;
+            case "facebook":
+                id = profile.id;
+                name = profile.displayName;
+                provider = profile.provider;
+                break;
+            default:
+                throw "ERROR: Unknown provider";
+                return done(null, false, req.flash('social_error', 'Something wrong happened. Try again.'));
+        }
+
+        // Define social object
         const social =
         {
-            id: profile.id,
-            name: profile.displayName,
-            provider: profile.provider
-        }
+            id,
+            name,
+            provider
+        };
 
         // Check user credentials
         let [status, result] = await DATABASE.validateUserSocial(social);

@@ -43,5 +43,6 @@ Another framework error 😭: https://stackoverflow.com/questions/8312459/iterat
 Query JSONs in MySQL: https://medium.com/geekculture/how-to-query-json-objects-in-mysql-dab878c37aeb 
 Include partials: https://stackoverflow.com/questions/5404830/node-js-ejs-including-a-partial 
 Polyfill objects avoiding enumerability: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty 
+Twitch API problem: https://discuss.dev.twitch.tv/t/passport-js-internaloautherror-failed-to-fetch-user-profile/25711 
 
 # Sr.OjeteSucio
