@@ -7,7 +7,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const TwitchStrategy = require('passport-twitch-new').Strategy;
 const GithubStrategy = require('passport-github2').Strategy;
 const DiscordStrategy = require('passport-discord').Strategy;
-//const TwitterStrategy = require('passport-twitter').Strategy;
+/* const TwitterStrategy = require('passport-twitter').Strategy; */
 const FacebookStrategy = require('passport-facebook').Strategy;
 
 // Our modules

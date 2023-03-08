@@ -44,5 +44,6 @@ Query JSONs in MySQL: https://medium.com/geekculture/how-to-query-json-objects-i
 Include partials: https://stackoverflow.com/questions/5404830/node-js-ejs-including-a-partial 
 Polyfill objects avoiding enumerability: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty 
 Twitch API problem: https://discuss.dev.twitch.tv/t/passport-js-internaloautherror-failed-to-fetch-user-profile/25711 
+Passport Twitter: https://medium.com/free-code-camp/how-to-set-up-twitter-oauth-using-passport-js-and-reactjs-9ffa6f49ef0 
 
 # Sr.OjeteSucio
