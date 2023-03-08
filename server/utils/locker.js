@@ -1,6 +1,7 @@
 /***************** LOCKER MIDDLEWARES *****************/
 
 const SERVER = require("../main/server.js");
+const SERVER_SETTINGS = require("../config/server_settings.js");
 require("../../public/framework.js");
 
 var LOCKER =
@@ -21,7 +22,7 @@ var LOCKER =
               return next();
           }
             
-          return res.redirect("/login");
+          return res.redirect(`${SERVER_SETTINGS.prefix}/login`);
     },
 
     isSessionNotAvailable: function(req, res, next)
@@ -47,7 +48,7 @@ var LOCKER =
             return next();
         }
 
-        return res.redirect("/canvas");
+        return res.redirect(`${SERVER_SETTINGS.prefix}/canvas`);
     },
 
     checkConnection: function(user_id)

@@ -6,6 +6,7 @@ const router = express.Router();
 
 // Our modules
 const {WORLD} = require("../model/model.js");
+const SERVER_SETTINGS = require("../config/server_settings.js");
 
 // Define a default response message
 const res_message = `Page not found. Try with one of the following: \n- /login \n- /signup \n- /canvas`;

@@ -33,7 +33,7 @@
                         <button type="submit">Go!</button>
                     </form>
 
-                    <a id="signup-redirect" href="<%=`${server_protocol == 'secure' ? 'https://' : 'http://'}${server_address}:${server_port}/signup`%>">Sign up</a>
+                    <a id="signup-redirect" href="<%=`${server_protocol == 'secure' ? 'https://' : 'http://'}${server_address}:${server_port}${server_prefix}/signup`%>">Sign up</a>
                    
                     <!--- OAUTH -->
                     <%- include('partials/oauth.ejs') %>

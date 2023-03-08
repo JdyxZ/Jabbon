@@ -40,7 +40,7 @@
                         <button type="submit">Go!</button>
                     </form>
                     
-                    <a id="login-redirect" href="<%=`${server_protocol == 'secure' ? 'https://' : 'http://'}${server_address}:${server_port}/login`%>">Log in</a>
+                    <a id="login-redirect" href="<%=`${server_protocol == 'secure' ? 'https://' : 'http://'}${server_address}:${server_port}${server_prefix}/login`%>">Log in</a>
 
                     <!--- OAUTH -->
                     <%- include('partials/oauth.ejs') %>

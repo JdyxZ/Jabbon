@@ -6,6 +6,7 @@ function globals(app, req, res, next)
     app.locals.server_protocol = app.get("server_protocol");
     app.locals.server_address = app.get("server_address");
     app.locals.server_port = app.get("server_port");
+    app.locals.server_prefix = app.get("server_prefix") === undefined ? '' : app.get("server_prefix");
     app.locals.appName = app.get("appName");
 
     // Current view
