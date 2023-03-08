@@ -118,9 +118,7 @@ const LOCAL_VERIFICATION =
 const SOCIAL_VERIFICATION = 
 {
     process: async function(req, accessToken, refreshToken, profile, done)
-    {
-        console.log(profile);
-        
+    {        
         // Declare attributes we want to store from profile info
         let id, name, provider;
 
