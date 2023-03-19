@@ -8,6 +8,7 @@ function globals(app, req, res, next)
     app.locals.server_port = app.get("server_port");
     app.locals.server_prefix = app.get("server_prefix") === undefined ? '' : app.get("server_prefix");
     app.locals.appName = app.get("appName");
+    app.locals.appRoute = app.get("appRoute");
 
     // Current view
     app.locals.current_view = app.get("current_view");

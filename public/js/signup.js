@@ -17,9 +17,6 @@ var signup = {
     {
         const alert = document.querySelector(".alert");
         if(alert)
-        {
-            console.log("here");
             alert.hide();
-        }
     },    
 }

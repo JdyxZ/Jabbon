@@ -4,7 +4,7 @@
 {
     border-radius: 25px;
     background-color: #202020;
-    width: 40em;
+    width: 30em;
     height: auto;
     overflow: hidden;
     text-align: center;
@@ -12,22 +12,17 @@
     margin: 2em 0 2em 0;
 }
 
-#username 
+#username, #password
 {
-    margin-bottom: 2em;
-}
-
-#password
-{
-     margin-bottom: 2em;
+    margin-bottom: 1.5em;
 }
 
 #login-form button 
 {
     color: white;
     transition: all 0.3s ease;
-    width: 12em;
-    height: 3.5em;
+    width: 10em;
+    height: 3em;
     border-radius: 5px;
     border-width: 0px;
     background-color: #208d70;
@@ -46,6 +41,6 @@
     display: block;
     color: #b9b9b9;
     font-family: 'Roboto';
-    font-size: 17px;
+    font-size: 15px;
     margin-bottom: 2em;
 }

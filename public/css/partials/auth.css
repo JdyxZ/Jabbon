@@ -31,14 +31,13 @@ html,body {
 #appLogo
 {
     object-fit: cover;
-    width: 40%;
+    width: 30%;
 }
 
 .label {
     color:white;
-    height: 20%;
     font-family: 'Roboto';
-    font-size: 30px;
+    font-size: 25px;
     font-weight: bold;
     padding: 0.5em 0.5em 1em 0.5em;
     overflow: hidden;
@@ -47,7 +46,7 @@ html,body {
 input {
     color: white;
     width: 80%;
-    height: 3em;
+    height: 2.5em;
     border-radius: 30px;
     border:none;
     background-color: #191919;

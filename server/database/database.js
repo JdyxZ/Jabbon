@@ -2,7 +2,7 @@
 /***************** DATABASE CRUD *****************/
 
 const mysql = require('mysql2/promise');
-const {USER_CREDENTIALS, JABBON_CREDENTIALS} = require('../config/database_credentials.js');
+const {USER_CREDENTIALS, DATABASE_CREDENTIALS} = require('../config/database_credentials.js');
 const fs = require('fs/promises');
 const {isObject, isNumber} = require("../../public/framework.js");
 
@@ -30,7 +30,7 @@ var DATABASE = {
         pool.end();
 
         // Create a pool in the created database
-        this.pool = await mysql.createPool(JABBON_CREDENTIALS);
+        this.pool = await mysql.createPool(DATABASE_CREDENTIALS);
     },
 
     /***************** USER *****************/

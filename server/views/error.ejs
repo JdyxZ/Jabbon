@@ -13,7 +13,7 @@
                 <div id="links">
                     <a href="<%=`${server_protocol == 'secure' ? 'https://' : 'http://'}${server_address}:${server_port}${server_prefix}/signup`%>">Sign up</a>
                     <a href="<%=`${server_protocol == 'secure' ? 'https://' : 'http://'}${server_address}:${server_port}${server_prefix}/login`%>">Log in</a>
-                    <a href="<%=`${server_protocol == 'secure' ? 'https://' : 'http://'}${server_address}:${server_port}${server_prefix}/canvas`%>">Canvas</a>
+                    <a href="<%=`${server_protocol == 'secure' ? 'https://' : 'http://'}${server_address}:${server_port}${server_prefix}/${appRoute}`%>">Canvas</a>
                 </div>
 
                 <p>Session status</p>

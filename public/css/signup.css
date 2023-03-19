@@ -4,35 +4,25 @@
 {
     border-radius: 25px;
     background-color: #202020;
-    width: 40em;
+    width: 30em;
     height: auto;
     overflow: hidden;
     text-align: center;
-    padding: 2em;
-    margin: 2em 0 2em 0;
+    padding: 1.5em;
+    margin: 1.5em 0 1.5em 0;
 }
 
-#username 
+#username, #password1, #password2
 {
-    margin-bottom: 2em;
-}
-
-#password1
-{
-    margin-bottom: 2em;
-}
-
-#password2
-{
-    margin-bottom: 2em;
+    margin-bottom: 1.5em;
 }
 
 #signup-form button 
 {
     color: white;
     transition: all 0.3s ease;
-    width: 12em;
-    height: 3.5em;
+    width: 10em;
+    height: 3em;
     border-radius: 5px;
     border-width: 0px;
     background-color: #208d70;
@@ -51,6 +41,6 @@
     display: block;
     color: #b9b9b9;
     font-family: 'Roboto';
-    font-size: 17px;
+    font-size: 15px;
     margin-bottom: 2em;
 }

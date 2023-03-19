@@ -46,6 +46,7 @@ async function main()
     app.set('server_port', SERVER_SETTINGS.port);
     app.set('server_prefix', SERVER_SETTINGS.server_prefix);
     app.set('appName', SERVER_SETTINGS.app_name);
+    app.set('appRoute', SERVER_SETTINGS.app_route);
 
     // View Engine
     app.set('views', path.join(__dirname, '../views'));

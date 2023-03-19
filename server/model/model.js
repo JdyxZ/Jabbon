@@ -70,6 +70,11 @@ Room.prototype.addUser = function(user)
     user.room = this.id;
 }
 
+Room.prototype.removeUser = function(user)
+{
+    delete this.people[user.id];
+}
+
 Room.prototype.toJSON = function()
 {
     const room_json =

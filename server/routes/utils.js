@@ -100,16 +100,7 @@ router.get("/clients", (req, res, next) => {
 });
 
 router.get("/server_settings", (req, res, next) => {
-    // Build response json
-    const server_settings =
-    {
-        protocol: SERVER_SETTINGS.protocol,
-        address: SERVER_SETTINGS.address,
-        port: SERVER_SETTINGS.port        
-    }
-
-    // Response
-    res.json(server_settings);
+    res.json(SERVER_SETTINGS);
 })
 
 // Export module

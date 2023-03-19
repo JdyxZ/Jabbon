@@ -4,6 +4,7 @@
     <!--- Header -->
     <%- include('partials/header.ejs') %>
 
+    <!--- Body -->
     <body>
         <div id="main">
             <div id="main-grid">
@@ -42,13 +43,9 @@
             </div>
         </div>
         
+        <!--- Footer -->
+        <%- include('partials/footer.ejs') %>
     </body>
-    <script src="./js/ejs.js"></script>
-    <script src="./framework.js"></script>
-    <script src="./js/login.js"></script>
-    <script>login.init()</script>
-    <script>
-        document.querySelector("#username").value = '<%-login_username%>';
-        document.querySelector("#password").value = '<%-login_password%>';
-    </script>
+
+    
 </html>

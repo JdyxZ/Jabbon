@@ -9,7 +9,7 @@ const {WORLD} = require("../model/model.js");
 const SERVER_SETTINGS = require("../config/server_settings.js");
 
 // Define a default response message
-const res_message = `Page not found. Try with one of the following: \n- /login \n- /signup \n- /canvas`;
+const res_message = `Page not found. Try with one of the following: \n- /login \n- /signup \n- /${SERVER_SETTINGS.app_route}`;
 
 // Error route
 router.use((req, res, next) => {

@@ -48,7 +48,7 @@ var LOCKER =
             return next();
         }
 
-        return res.redirect(`${SERVER_SETTINGS.prefix}/canvas`);
+        return res.redirect(`${SERVER_SETTINGS.prefix}/${SERVER_SETTINGS.app_route}`);
     },
 
     checkConnection: function(user_id)

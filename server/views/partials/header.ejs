@@ -3,29 +3,39 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
     <title><%=appName%></title>
 
-    <!-- Error CSS -->
     <% if (current_view == "error") { %>
+
+        <!-- Error CSS -->
         <link rel="stylesheet" type="text/css" href="css/error.css"/>
+        
     <% } %>
 
-    <!-- Signup CSS -->
     <% if (current_view == "signup") { %>
+
+        <!-- Signup CSS -->
         <link rel="stylesheet" type="text/css" href="css/signup.css"/>
+
     <% } %>
 
-    <!-- Login CSS -->
     <% if (current_view == "login") { %>
+
+        <!-- Login CSS -->
         <link rel="stylesheet" type="text/css" href="css/login.css"/>
+
     <% } %>
 
-    <!-- Auth CSS -->
     <% if (current_view == "signup" || current_view == "login") { %>
+
+        <!-- Auth CSS -->
         <link rel="stylesheet" type="text/css" href="css/partials/auth.css"/>
         <link rel="stylesheet" type="text/css" href="css/partials/auth_providers.css"/>
+
     <% } %>
 
-    <!-- Canvas CSS -->
-    <% if (current_view == "canvas") { %>
+    <% if (current_view == appRoute) { %>
+
+        <!-- App CSS -->
         <link rel="stylesheet" type="text/css" href="css/canvas.css"/>
+
     <% } %>   
 </head>

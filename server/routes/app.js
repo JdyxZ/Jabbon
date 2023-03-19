@@ -28,8 +28,8 @@ router.get('/logout', LOCKER.isSessionAvailable, (req, res, next) => {
     });
 });
 
-router.get('/canvas', LOCKER.isSessionAvailable, (req, res) => {
-    res.render("canvas", {current_view: "canvas"});
+router.get(`/${SERVER_SETTINGS.app_route}`, LOCKER.isSessionAvailable, (req, res) => {
+    res.render(`${SERVER_SETTINGS.app_route}`, {current_view: `${SERVER_SETTINGS.app_route}`});
 });
 
 module.exports = router;
