@@ -8,8 +8,8 @@
     height: auto;
     overflow: hidden;
     text-align: center;
-    padding: 2em;
-    margin: 2em 0 2em 0;
+    padding: 1.5em;
+    margin: 1.5em 0 1.5em 0;
 }
 
 #username, #password
