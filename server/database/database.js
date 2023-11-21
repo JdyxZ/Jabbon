@@ -300,7 +300,7 @@ var DATABASE = {
             }, []);
 
             // Query            
-            const result = await this.pool.query(`INSERT INTO ${this.rooms} (id, people) VALUES ? ON DUPLICATE KEY UPDATE people = VALUES(people);`, [values]);
+            const result = await this.pool.query(`INSERT INTO ${this.rooms} (id, people) VALUES ? ON DUPLICATE KEY UPDATE id = VALUES(id), people = VALUES(people);`, [values]);
 
             // Output
             return ["OK", result];
